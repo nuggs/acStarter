@@ -5,13 +5,6 @@
  * See the LICENSE file for license information.
  */
 
-	/*pid_t pid = proc_find(argv[i]);
-	if (pid == -1) {
-		printf("%s: not found\n", argv[i]);
-	} else {
-		printf("%s: %d\n", argv[i], pid);
-	}*/
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <getopt.h>
@@ -104,11 +97,6 @@ int main(int argc, char* argv[])
 
 	running = 1;
 
-	//while (1) {
-	//	printf("exe = %s\n", config->exe);
-	//	printf("location = %s\n", config->location);
-	//	printf("maplist = %s\n", config->maplist);
-	//}
 	program_loop(GAME_MODE);
 
 	free(config);
@@ -121,11 +109,6 @@ void program_loop(int mode) {
 
 	gettimeofday(&last_time, NULL);
 	while (running) {
-		printf("exe = %s\n", config->exe);
-		printf("location = %s\n", config->location);
-		printf("tracklist = %s\n", config->tracklist);
-		printf("game mode = %d\n", GAME_MODE);
-
 		gettimeofday(&new_time, NULL);
 
 		usecs = (int) (last_time.tv_usec -  new_time.tv_usec) + 1000000 / 8;
