@@ -3,37 +3,6 @@
 #include <string.h>
 #include <dirent.h>
 
-char *read_file(const char * filename) {
-	FILE *fp = fopen(filename, "r");
-	size_t file_size;
-	char *file_contents;
-
-	if (!fp)
-		return NULL;
-
-	fseek(fp, 0L, SEEK_END);
-	file_size = ftell(fp);
-	rewind(fp);
-	file_contents = (char*)malloc(sizeof(char) * (file_size + 1));
-
-	if (!file_contents) {
-		fclose(fp);
-		return NULL;
-	}
-
-	if (fread(file_contents, file_size, 1, fp) < 1) {
-		if (ferror(fp)) {
-			fclose(fp);
-			free(file_contents);
-			return NULL;
-		}
-	}
-
-	fclose(fp);
-	file_contents[file_size] = '\0';
-	return file_contents;
-}
-
 pid_t proc_find(const char* name) 
 {
     DIR* dir;
