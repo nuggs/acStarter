@@ -7,6 +7,8 @@
 #ifndef CORE_H
 #define CORE_H
 
+#include "list.h"
+
 typedef enum {
 	MODE_RACE,
 	MODE_PRACTICE,

@@ -2,8 +2,11 @@
 	/* 
 	 * The first entry here will be the defaults should you add
 	 * more tracks and don't fill in all the require fields,
-	 * it will auto populate them from the defaults.  Adjust
-	 * for your needs.
+	 * it will auto populate them from the defaults.  
+	 *
+	 * To disable practice or anything, set enabled to false and 
+	 * those will not write to the server config when starting
+	 * tracks.
 	 */
 	{
 		"name" : "710racing.com",
@@ -11,7 +14,7 @@
 		"track" : null,
 		"sun_angle" : -17,
 		"max_clients" : 18,
-		"raceovertime" : 20,
+		"race_over_time" : 20,
 		"port" : 9600,
 		"http_port" : 8081,
 		"register_to_lobby" : 1,
@@ -29,16 +32,19 @@
 		"fuel_rate" : 100,
 		"tyre_wear_rate" : 100,
 		"practice" : {
+			"enabled": true,
 			"name" : "Practice",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"qualify" : {
+			"enabled": true,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
+			"enabled": true,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -56,7 +62,7 @@
 		"track" : "monza",
 		"sun_angle" : -17,
 		"max_clients" : 24,
-		"raceovertime" : 20,
+		"race_over_time" : 20,
 		"port" : 9600,
 		"http_port" : 8081,
 		"register_to_lobby" : 1,
@@ -74,16 +80,19 @@
 		"fuel_rate" : 100,
 		"tyre_wear_rate" : 100,
 		"practice" : {
+			"enabled": true,
 			"name" : "Practice",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"qualify" : {
+			"enabled": true,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
+			"enabled": true,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -101,7 +110,7 @@
 		"track" : "silverstone",
 		"sun_angle" : -17,
 		"max_clients" : 24,
-		"raceovertime" : 20,
+		"race_over_time" : 20,
 		"port" : 9600,
 		"http_port" : 8081,
 		"register_to_lobby" : 1,
@@ -119,16 +128,19 @@
 		"fuel_rate" : 100,
 		"tyre_wear_rate" : 100,
 		"practice" : {
+			"enabled": true,
 			"name" : "Practice",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"qualify" : {
+			"enabled": true,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
+			"enabled": true,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -146,7 +158,7 @@
 		"track" : "nurburgring",
 		"sun_angle" : -17,
 		"max_clients" : 24,
-		"raceovertime" : 20,
+		"race_over_time" : 20,
 		"port" : 9600,
 		"http_port" : 8081,
 		"register_to_lobby" : 1,
@@ -164,16 +176,19 @@
 		"fuel_rate" : 100,
 		"tyre_wear_rate" : 100,
 		"practice" : {
+			"enabled": true,
 			"name" : "Practice",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"qualify" : {
+			"enabled": true,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
+			"enabled": true,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -191,7 +206,7 @@
 		"track" : "magione",
 		"sun_angle" : -17,
 		"max_clients" : 18,
-		"raceovertime" : 20,
+		"race_over_time" : 20,
 		"port" : 9600,
 		"http_port" : 8081,
 		"register_to_lobby" : 1,
@@ -209,16 +224,19 @@
 		"fuel_rate" : 100,
 		"tyre_wear_rate" : 100,
 		"practice" : {
+			"enabled": true,
 			"name" : "Practice",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"qualify" : {
+			"enabled": true,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
+			"enabled": true,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -236,7 +254,7 @@
 		"track" : "vallelunga",
 		"sun_angle" : -17,
 		"max_clients" : 22,
-		"raceovertime" : 20,
+		"race_over_time" : 20,
 		"port" : 9600,
 		"http_port" : 8081,
 		"register_to_lobby" : 1,
@@ -254,16 +272,19 @@
 		"fuel_rate" : 100,
 		"tyre_wear_rate" : 100,
 		"practice" : {
+			"enabled": true,
 			"name" : "Practice",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"qualify" : {
+			"enabled": true,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
+			"enabled": true,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -281,7 +302,7 @@
 		"track" : "mugello",
 		"sun_angle" : -17,
 		"max_clients" : 24,
-		"raceovertime" : 20,
+		"race_over_time" : 20,
 		"port" : 9600,
 		"http_port" : 8081,
 		"register_to_lobby" : 1,
@@ -299,16 +320,19 @@
 		"fuel_rate" : 100,
 		"tyre_wear_rate" : 100,
 		"practice" : {
+			"enabled": true,
 			"name" : "Practice",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"qualify" : {
+			"enabled": true,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
+			"enabled": true,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -326,7 +350,7 @@
 		"track" : "silverstone-international",
 		"sun_angle" : -17,
 		"max_clients" : 24,
-		"raceovertime" : 20,
+		"race_over_time" : 20,
 		"port" : 9600,
 		"http_port" : 8081,
 		"register_to_lobby" : 1,
@@ -344,16 +368,19 @@
 		"fuel_rate" : 100,
 		"tyre_wear_rate" : 100,
 		"practice" : {
+			"enabled": true,
 			"name" : "Practice",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"qualify" : {
+			"enabled": true,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
+			"enabled": true,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -371,7 +398,7 @@
 		"track" : "nurburgring-sprint",
 		"sun_angle" : -17,
 		"max_clients" : 24,
-		"raceovertime" : 20,
+		"race_over_time" : 20,
 		"port" : 9600,
 		"http_port" : 8081,
 		"register_to_lobby" : 1,
@@ -389,16 +416,19 @@
 		"fuel_rate" : 100,
 		"tyre_wear_rate" : 100,
 		"practice" : {
+			"enabled": true,
 			"name" : "Practice",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"qualify" : {
+			"enabled": true,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
+			"enabled": true,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -416,7 +446,7 @@
 		"track" : "imola",
 		"sun_angle" : -17,
 		"max_clients" : 24,
-		"raceovertime" : 20,
+		"race_over_time" : 20,
 		"port" : 9600,
 		"http_port" : 8081,
 		"register_to_lobby" : 1,
@@ -434,16 +464,19 @@
 		"fuel_rate" : 100,
 		"tyre_wear_rate" : 100,
 		"practice" : {
+			"enabled": true,
 			"name" : "Practice",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"qualify" : {
+			"enabled": true,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
+			"enabled": true,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
