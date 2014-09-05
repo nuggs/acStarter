@@ -47,6 +47,7 @@ struct track_data {
 
 /* global file delcarations */
 TRACK *alloc_track(void);
+void free_track(TRACK *track);
 int read_tracklist(const char *filename);
 
 #endif

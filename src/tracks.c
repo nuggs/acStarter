@@ -62,6 +62,14 @@ TRACK *alloc_track(void) {
 }
 
 void free_track(TRACK *track) {
+	free(track->name);
+	free(track->cars);
+	free(track->track);
+	free(track->password);
+	free(track->practice.name);
+	free(track->qualify.name);
+	free(track->race.name);
+	free(track);
 	return;
 }
 

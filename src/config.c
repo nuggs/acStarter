@@ -44,6 +44,6 @@ void free_config(void) {
 	free(config->exe);
 	free(config->location);
 	free(config->tracklist);
-	free(config->defaults);
+	free_track(config->defaults);
 	free(config);
 }
