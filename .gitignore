@@ -38,7 +38,7 @@ Thumbs.db
 
 # acStarter local files #
 #########################
-./cfg/race/race.cfg
-./cfg/practice/practice.cfg
-./cfg/drift/drift.cfg
+race.cfg
+practice.cfg
+drift.cfg
 
