@@ -180,7 +180,7 @@ void init_signals(void) {
 
 static void signal_handler(int signo) {
 	if (signo == SIGINT) {
-		printf("Caught Ctrl+C\n");
+		printf("\nCaught Ctrl+C\n"); /* this is bad */
 		running = 0;
 	}
 }
