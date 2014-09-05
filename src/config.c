@@ -21,7 +21,7 @@ int read_config(const char *filename) {
 	JSON_Value *root;
 	JSON_Object *config_json;
 
-	if ((root = json_parse_file(filename)) == NULL) {
+	if ((root = json_parse_file_with_comments(filename)) == NULL) {
 		return -1;
 	}
 
