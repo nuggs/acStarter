@@ -10,8 +10,9 @@
 #include <getopt.h>
 #include <string.h>
 
-#include "config.h"
 #include "parson.h"
+#include "tracks.h"
+#include "config.h"
 #include "io.h"
 
 /* global version variable */

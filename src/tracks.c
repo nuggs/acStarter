@@ -21,10 +21,10 @@ int read_tracklist(const char *filename) {
 	int i;
 
 	tracks_root = json_parse_file_with_comments(filename);
-    if (json_value_get_type(tracks_root) != JSONArray) {
+	if (json_value_get_type(tracks_root) != JSONArray) {
 		fprintf(stdout, "JSON is not an array\n");
-        return -1;
-    }
+		return -1;
+	}
 
 	tracks_array = json_value_get_array(tracks_root);
 	for (i=0;i<json_array_get_count(tracks_array);i++) {

@@ -13,6 +13,7 @@ typedef struct {
 	char *exe;
 	char *location;
 	char *tracklist;
+	struct track_data *defaults;
 } config_data;
 
 config_data *config;

@@ -77,15 +77,15 @@ int main(int argc, char* argv[]) {
 
 	if (use_drift == 1) {
 		fprintf(stdout, "Starting with drift track list\n");
-		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/drift/drift.cfg", home_dir);
+		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/drift/drift.json", home_dir);
 		GAME_MODE = MODE_DRIFT;
 	} else if (use_practice == 1) {
 		fprintf(stdout, "Starting with practice track list.\n");
-		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/practice/practice.cfg", home_dir);
+		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/practice/practice.json", home_dir);
 		GAME_MODE = MODE_PRACTICE;
 	} else {
 		fprintf(stdout, "Starting with race track list.\n");
-		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/race/race.cfg", home_dir);
+		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/race/race.json", home_dir);
 		GAME_MODE = MODE_RACE;
 	}
 
