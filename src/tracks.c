@@ -91,6 +91,7 @@ int read_tracklist(const char *filename) {
 		parse_track(tracks_object);
 	}
 
+	json_value_free(tracks_root);
 	return 0;
 }
 
@@ -142,6 +143,7 @@ int parse_track(JSON_Object *track_data) {
 		config->defaults->dynamic_track[1] 			= json_object_dotget_number(track_data, "dynamic_track.randomness");
 		config->defaults->dynamic_track[2] 			= json_object_dotget_number(track_data, "dynamic_track.lap_gain");
 		config->defaults->dynamic_track[3] 			= json_object_dotget_number(track_data, "dynamic_track.session_transfer");
+		fprintf(stdout, "Practice Details: %s\n", config->defaults->race.name);
 	} else
 		fprintf(stdout, "Loading track: %s (%g pits)\n", json_object_get_string(track_data, "track"), json_object_get_number(track_data, "max_clients"));
 

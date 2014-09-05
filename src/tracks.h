@@ -4,6 +4,12 @@
 
 typedef struct track_data TRACK;
 
+typedef struct mode_data {
+	char *name;
+	int time;
+	int wait_time;
+} race_mode;
+
 struct track_data {
 	char *name;
 	char *cars;
@@ -27,21 +33,9 @@ struct track_data {
 	int damage_multiplier;
 	int fuel_rate;
 	int tyre_wear_rate;
-	union {
-		char *name;
-		int time;
-		int wait_time;
-	} practice;
-	union {
-		char *name;
-		int time;
-		int wait_time;
-	} qualify;
-	union {
-		char *name;
-		int time;
-		int wait_time;
-	} race;
+	race_mode practice;
+	race_mode qualify;
+	race_mode race;
 	int dynamic_track[3];
 };
 

@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <getopt.h>
+#include <signal.h>
 #include <time.h>
 #include <sys/time.h>
 
@@ -17,6 +18,9 @@
 #include "tracks.h"
 
 int running = -1;
+
+/* local function declarations */
+static void signal_handler(int signo);
 
 int main(int argc, char* argv[]) {
 	char config_file[140+1], *home_dir = getenv("HOME");
@@ -70,6 +74,8 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
+	init_signals();
+
 	if ((use_race == 1 && use_practice == 1) || (use_race == 1 && use_drift == 1) || (use_practice == 1 && use_drift ==1)) {
 		fprintf(stdout, "Please only select drift, practice or race\n");
 		exit(EXIT_FAILURE);
@@ -98,19 +104,22 @@ int main(int argc, char* argv[]) {
 		fprintf(stdout, "Failed to read configuration file: %s\n", config_file);
 		exit(EXIT_FAILURE);
 	}
+
 	running = 1;
 	program_loop(GAME_MODE);
 	free_config();
-
+	printf("exited");
 	return EXIT_SUCCESS;
 }
 
 void program_loop(int mode) {
 	struct timeval last_time, new_time;
 	long secs, usecs;
+	int test = 0;
 
 	gettimeofday(&last_time, NULL);
 	while (running) {
+		test++;
 		gettimeofday(&new_time, NULL);
 
 		switch (GAME_MODE) {
@@ -155,5 +164,23 @@ void program_loop(int mode) {
 				continue;
 		}
 		gettimeofday(&last_time, NULL);
+		if (test == 20)
+			running = 0;
+	}
+}
+
+void init_signals(void) {
+	struct sigaction sigact;
+
+	sigact.sa_handler = signal_handler;
+	sigemptyset(&sigact.sa_mask);
+	sigact.sa_flags = 0;
+	sigaction(SIGINT, &sigact, (struct sigaction *)NULL);
+}
+
+static void signal_handler(int signo) {
+	if (signo == SIGINT) {
+		printf("Caught Ctrl+C\n");
+		running = 0;
 	}
 }
