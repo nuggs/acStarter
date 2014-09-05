@@ -7,5 +7,5 @@
 	 */
 	"exe" : "acServer_linux",
 	"location" : "/home/dir/acserver/",
-	"tracklist" : "/home/dir/acstarter/cfg/drift/tracklist.cfg"
+	"tracklist" : "/home/dir/acstarter/cfg/drift/tracks.json"
 }
