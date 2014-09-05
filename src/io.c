@@ -16,6 +16,7 @@ pid_t proc_find(const char* name)
     }
 
     while((ent = readdir(dir)) != NULL) {
+		FILE* fp;
         /* if endptr is not a null character, the directory is not
          * entirely numeric, so ignore it */
         long lpid = strtol(ent->d_name, &endptr, 10);
@@ -25,7 +26,7 @@ pid_t proc_find(const char* name)
 
         /* try to open the cmdline file */
         snprintf(buf, sizeof(buf), "/proc/%ld/cmdline", lpid);
-        FILE* fp = fopen(buf, "r");
+        fp = fopen(buf, "r");
 
         if (fp) {
             if (fgets(buf, sizeof(buf), fp) != NULL) {

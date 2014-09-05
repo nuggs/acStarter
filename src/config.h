@@ -10,12 +10,13 @@
 extern const char *VERSION;
 
 typedef struct {
-	const char    * exe;
-	const char    * location;
-	const char    * tracklist;
+	char *exe;
+	char *location;
+	char *tracklist;
 } config_data;
 
 config_data *config;
 int read_config(const char *filename);
+void free_config(void);
 
 #endif

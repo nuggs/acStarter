@@ -14,29 +14,29 @@
 #include "core.h"
 #include "config.h"
 #include "io.h"
+#include "tracks.h"
 
 int running = -1;
 
-int main(int argc, char* argv[]) 
-{
+int main(int argc, char* argv[]) {
 	char config_file[140+1], *home_dir = getenv("HOME");
 	int next_option, use_drift = 0, use_race = 0, use_practice = 0;
 
 	const char * usage = "Usage: %s [-h] [-p] [-r] [-v]\n"
-					   "  -h    --help               Display this usage information.\n"
-					   "  -d    --drift              Read from drift configuration.\n"
-					   "  -p    --practice           Read from practice configuration.\n"
-					   "  -r    --race               Read from race configuration (\033[37;1mdefault\033[37;0m).\n"
-					   "  -v    --version            Display version number.\n";
+			"  -h    --help               Display this usage information.\n"
+			"  -d    --drift              Read from drift configuration.\n"
+			"  -p    --practice           Read from practice configuration.\n"
+			"  -r    --race               Read from race configuration (\033[37;1mdefault\033[37;0m).\n"
+			"  -v    --version            Display version number.\n";
 
-    const struct option long_options[] = {
-        { "help",       0, NULL,   'h' },
-        { "drift",      0, NULL,   'd' },
-        { "practice",   0, NULL,   'p' },
-        { "race",       0, NULL,   'r' },
-        { "version",    0, NULL,   'v' },
-        { 0,            0, 0,       0  }
-    };
+	const struct option long_options[] = {
+		{ "help",       0, NULL,   'h' },
+		{ "drift",      0, NULL,   'd' },
+		{ "practice",   0, NULL,   'p' },
+		{ "race",       0, NULL,   'r' },
+		{ "version",    0, NULL,   'v' },
+		{ 0,            0, 0,       0  }
+	};
 
 	while((next_option = getopt_long(argc, argv, "hdprv", long_options, NULL)) != -1) {
 		switch(next_option) {
@@ -77,15 +77,15 @@ int main(int argc, char* argv[])
 
 	if (use_drift == 1) {
 		fprintf(stdout, "Starting with drift track list\n");
-		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/drift.cfg", home_dir);
+		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/drift/drift.cfg", home_dir);
 		GAME_MODE = MODE_DRIFT;
 	} else if (use_practice == 1) {
 		fprintf(stdout, "Starting with practice track list.\n");
-		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/practice.cfg", home_dir);
+		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/practice/practice.cfg", home_dir);
 		GAME_MODE = MODE_PRACTICE;
 	} else {
 		fprintf(stdout, "Starting with race track list.\n");
-		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/race.cfg", home_dir);
+		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/race/race.cfg", home_dir);
 		GAME_MODE = MODE_RACE;
 	}
 
@@ -94,12 +94,15 @@ int main(int argc, char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
+	if (read_tracklist(config->tracklist) == -1) {
+		fprintf(stdout, "Failed to read configuration file: %s\n", config_file);
+		exit(EXIT_FAILURE);
+	}
 	running = 1;
-
 	program_loop(GAME_MODE);
+	free_config();
 
-	free(config);
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
 
 void program_loop(int mode) {
@@ -110,9 +113,24 @@ void program_loop(int mode) {
 	while (running) {
 		gettimeofday(&new_time, NULL);
 
-		fprintf(stdout, "%s\n", config->exe);
-		fprintf(stdout, "%s\n", config->location);
-		fprintf(stdout, "%s\n", config->tracklist);
+		switch (GAME_MODE) {
+			case MODE_RACE:
+				fprintf(stdout, "Looping race mode\n");
+			break;
+
+			case MODE_PRACTICE:
+				fprintf(stdout, "Looping practice mode\n");
+			break;
+
+			case MODE_DRIFT:
+				fprintf(stdout, "Looping Drift mode\n");
+			break;
+
+			default:
+				fprintf(stdout, "We shouldn't be looping here...");
+				running = 0;
+			break;
+		}
 
 		usecs = (int) (last_time.tv_usec -  new_time.tv_usec) + 1000000 / 8;
 		secs  = (int) (last_time.tv_sec  -  new_time.tv_sec);

@@ -29,7 +29,7 @@ int read_config(const char *filename) {
 		return -1;
 	}
 
-	config 				= malloc(sizeof(config_data*));
+	config 				= malloc(sizeof(*config));
 	config->exe 		= strdup(json_object_get_string(config_json, "exe"));
 	config->location 	= strdup(json_object_get_string(config_json, "location"));
 	config->tracklist 	= strdup(json_object_get_string(config_json, "tracklist"));
@@ -38,6 +38,9 @@ int read_config(const char *filename) {
 	return 0;
 }
 
-int read_tracklist(const char *filename) {
-	return -1;
+void free_config(void) {
+	free(config->exe);
+	free(config->location);
+	free(config->tracklist);
+	free(config);
 }

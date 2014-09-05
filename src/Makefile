@@ -1,12 +1,12 @@
 CC = gcc
 RM = rm
 EXE = acStarter
-PROF = -O -ggdb
+PROF = -O3 $(-ggdb)
 
-C_FLAGS = $(PROF) -Wall -Wstrict-prototypes -Wpointer-arith -Wno-char-subscripts -Winline
+C_FLAGS = $(PROF) -Wall -g -pedantic
 L_FLAGS = $(PROF)
 
-C_FILES := core.c config.c io.c parson.c
+C_FILES := core.c config.c io.c parson.c tracks.c
 
 O_DIR = obj
 O_FILES := $(patsubst %.c,$(O_DIR)/%.o,$(C_FILES))
