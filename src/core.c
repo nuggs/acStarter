@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 	char config_file[140+1], *home_dir = getenv("HOME");
 	int next_option, use_drift = 0, use_race = 0, use_practice = 0;
 
-	const char * usage = "Usage: %s [-h] [-p] [-r] [-v]\n"
+	const char * usage = "Usage: %s [-h] [-d] [-p] [-r] [-v]\n"
 			"  -h    --help               Display this usage information.\n"
 			"  -d    --drift              Read from drift configuration.\n"
 			"  -p    --practice           Read from practice configuration.\n"
