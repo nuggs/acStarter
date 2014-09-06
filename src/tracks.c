@@ -33,6 +33,7 @@ TRACK *alloc_track(void) {
 	int i;
 
 	track 							= malloc(sizeof(*track));
+	track->entry_list				= NULL;
 	track->name						= NULL;
 	track->cars						= NULL;
 	track->track					= NULL;
@@ -73,6 +74,7 @@ TRACK *alloc_track(void) {
 void free_track(TRACK *track) {
 	detach_from_list(track, track_list);
 
+	free(track->entry_list);
 	free(track->name);
 	free(track->cars);
 	free(track->track);
@@ -116,6 +118,7 @@ int parse_track(JSON_Object *track_data) {
 		}
 		fprintf(stdout, "Loading track defaults\n");
 		config->defaults							= alloc_track();
+		config->defaults->entry_list				= NULL;
 		config->defaults->name						= strdup(json_object_get_string(track_data, "name"));
 		config->defaults->cars						= strdup(json_object_get_string(track_data, "cars"));
 		config->defaults->track						= NULL;
@@ -168,6 +171,7 @@ int parse_track(JSON_Object *track_data) {
 	}
 
 	track							= alloc_track();
+	track->entry_list				= strdup(json_object_get_string(track_data, "entry_list"));
 	track->name						= (json_object_get_string(track_data, "name") != NULL) ? strdup(json_object_get_string(track_data, "name")) : strdup(config->defaults->name);
 	track->cars						= (json_object_get_string(track_data, "cars") != NULL) ? strdup(json_object_get_string(track_data, "cars")) : strdup(config->defaults->cars);
 	track->track					= strdup(json_object_get_string(track_data, "track"));
@@ -257,7 +261,7 @@ int write_entry_list(void) {
 		return -1;
 	}
 
-	snprintf(buf, 4096, "%scfg/entry_list.ini", config->base_dir);
+	snprintf(buf, 4096, "%scfg/entry_list.ini", config->ac_location);
 	if ((entry_config = fopen(buf, "w")) == NULL) {
 		fprintf(stdout, "Unable to write entry list for: %s\n", current_track->track);
 		return -1;
@@ -341,8 +345,8 @@ int write_track(void) {
 	fprintf(server_config, "SESSION_TRANSFER=%d\r\n", current_track->dynamic_track[3]);
 	fclose(server_config);
 
-	if ((read_entry_list("/home/seventen/acstarter/cfg/race/entry24.json")) == -1) {
-		printf("failed to read entry_list\n");
+	if ((read_entry_list(current_track->entry_list)) == -1) {
+		printf("failed to read entry_list %s\n", current_track->entry_list);
 	}
 	return 1;
 }

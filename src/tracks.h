@@ -13,6 +13,7 @@ typedef struct mode_data {
 } race_mode;
 
 struct track_data {
+	char *entry_list;
 	char *name;
 	char *cars;
 	char *track;
