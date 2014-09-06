@@ -8,7 +8,7 @@ This is in early development, functionality may be missing
 ## About
 acStarter is a small program written in C to manage Assetto Corsa servers.
 
-## Features
+## Features(planned lol)
  * Allows multiple track lists for free join servers
   * Allows free join timed practice servers with multiple track lists
   * Allows different cars per track(any session)
