@@ -190,13 +190,8 @@ static void signal_handler(int signo) {
 }
 
 void handle_race(void) {
-	ITERATOR iterator;
-	TRACK *track = NULL;
-
 	if (current_track == NULL) {
 		current_track = track_list->first_cell->content;
 		write_track();
 	}
-
-	printf("Testing: %s\n", current_track->track);
 }

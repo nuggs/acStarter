@@ -216,6 +216,7 @@ int read_entry_list(const char *filename) {
 	JSON_Value *entry_root;
 	JSON_Array *entry_array;
 	JSON_Object *entry_object;
+	ENTRY *entry;
 	int i;
 
 	entry_root = json_parse_file_with_comments(filename);
@@ -227,7 +228,14 @@ int read_entry_list(const char *filename) {
 	entry_array = json_value_get_array(entry_root);
 	for (i=0;i<json_array_get_count(entry_array);i++) {
 		entry_object = json_array_get_object(entry_array, i);
-		parse_track(entry_object);
+		entry = malloc(sizeof(*entry));
+		entry->drivername = (json_object_get_string(entry_object, "drivername") != NULL) ? strdup(json_object_get_string(entry_object, "drivername")) : NULL;
+		entry->team = (json_object_get_string(entry_object, "team") != NULL) ? strdup(json_object_get_string(entry_object, "team")) : NULL;
+		entry->model = (json_object_get_string(entry_object, "model") != NULL) ? strdup(json_object_get_string(entry_object, "model")) : NULL;
+		entry->skin = (json_object_get_string(entry_object, "skin") != NULL) ? strdup(json_object_get_string(entry_object, "skin")) : NULL;
+		entry->guid = (json_object_get_number(entry_object, "guid") != 0) ? json_object_get_number(entry_object, "guid") : 0;
+		entry->spectator_mode = json_object_get_number(entry_object, "spectator_mode");
+		printf("Car %s(%d)[%s] loaded.\n", entry->model, i, (entry->drivername != NULL) ? entry->drivername : "No Driver");
 	}
 
 	json_value_free(entry_root);
@@ -293,7 +301,10 @@ int write_track(void) {
 	fprintf(server_config, "RANDOMNESS=%d\r\n", current_track->dynamic_track[1]);
 	fprintf(server_config, "LAP_GAIN=%d\r\n", current_track->dynamic_track[2]);
 	fprintf(server_config, "SESSION_TRANSFER=%d\r\n", current_track->dynamic_track[3]);
-
 	fclose(server_config);
+
+	if ((read_entry_list("/home/seventen/acstarter/cfg/race/entry24.json")) == -1) {
+		printf("failed to read entry_list\n");
+	}
 	return 1;
 }
