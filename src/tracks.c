@@ -252,6 +252,11 @@ int write_entry_list(void) {
 	char buf[4096];
 	int i = 0;
 
+	if ((check_server_config("entry_list.ini")) == -1) {
+		printf("write_entry_list(): check_server_config() failed\n");
+		return -1;
+	}
+
 	snprintf(buf, 4096, "%scfg/entry_list.ini", config->base_dir);
 	if ((entry_config = fopen(buf, "w")) == NULL) {
 		fprintf(stdout, "Unable to write entry list for: %s\n", current_track->track);
@@ -270,7 +275,7 @@ int write_entry_list(void) {
 	}
 	detach_iterator(&iterator);
 	fclose(entry_config);
-	return -1;
+	return 1;
 }
 
 int write_track(void) {
@@ -278,7 +283,7 @@ int write_track(void) {
 	char buf[4096];
 
 	if ((check_server_config("server_cfg.ini")) == -1) {
-		printf("check_server_config() failed\n");
+		printf("write_track(): check_server_config() failed\n");
 		return -1;
 	}
 

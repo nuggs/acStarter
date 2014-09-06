@@ -16,8 +16,15 @@
 #include "io.h"
 
 /* global version variable */
-const char *VERSION = "0.3.4";
+const char *VERSION = "0.3.6";
 
+/*
+ * checks ac_location/cfg for server_cfg.ini and entry_list.ini
+ * if it finds them it will rename them to their name followed by
+ * .bak and then remove the original files.
+ *
+ * filename: server_cfg.ini or entry_list.ini
+ */
 int check_server_config(const char *filename) {
 	FILE *server_config;
 	char buf[120], buf2[120];
