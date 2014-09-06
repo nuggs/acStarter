@@ -28,7 +28,7 @@ TRACK *alloc_track(void) {
 	TRACK *track;
 	int i;
 
-	track							= malloc(sizeof(*track));
+	track 							= malloc(sizeof(*track));
 	track->name						= NULL;
 	track->cars						= NULL;
 	track->track					= NULL;
@@ -67,6 +67,8 @@ TRACK *alloc_track(void) {
 }
 
 void free_track(TRACK *track) {
+	detach_from_list(track, track_list);
+
 	free(track->name);
 	free(track->cars);
 	free(track->track);
@@ -152,16 +154,15 @@ int parse_track(JSON_Object *track_data) {
 		config->defaults->dynamic_track[1] 			= json_object_dotget_number(track_data, "dynamic_track.randomness");
 		config->defaults->dynamic_track[2] 			= json_object_dotget_number(track_data, "dynamic_track.lap_gain");
 		config->defaults->dynamic_track[3] 			= json_object_dotget_number(track_data, "dynamic_track.session_transfer");
-		fprintf(stdout, "Practice Details: %s\n", config->defaults->race.name);
-
 		return 1;
 	}
-	
+
 	fprintf(stdout, "Loading track: %s (%g pits)\n", json_object_get_string(track_data, "track"), json_object_get_number(track_data, "max_clients"));
 	if (json_object_get_string(track_data, "track") == NULL) {
 		printf("You must specify a track, there is no default track\nTrack not loaded, loading next track\n");
 		return -1;
 	}
+
 	track							= alloc_track();
 	track->name						= (json_object_get_string(track_data, "name") != NULL) ? strdup(json_object_get_string(track_data, "name")) : strdup(config->defaults->name);
 	track->cars						= (json_object_get_string(track_data, "cars") != NULL) ? strdup(json_object_get_string(track_data, "cars")) : strdup(config->defaults->cars);
@@ -206,6 +207,9 @@ int parse_track(JSON_Object *track_data) {
 	track->dynamic_track[2] 		= (json_object_dotget_number(track_data, "dynamic_track.lap_gain") != 0) ? json_object_dotget_number(track_data, "dynamic_track.lap_gain") : config->defaults->dynamic_track[2];
 	track->dynamic_track[3] 		= (json_object_dotget_number(track_data, "dynamic_track.session_transfer") != 0) ? json_object_dotget_number(track_data, "dynamic_track.session_transfer") : config->defaults->dynamic_track[3];
 	attach_to_list(track, track_list);
-
 	return 1;
+}
+
+int write_track(void) {
+	return -1;
 }

@@ -10,12 +10,12 @@ void invalidate_cell(CELL *cell);
 LIST *alloc_list(void) {
 	LIST *list;
 
-	list			= malloc(sizeof(*list));
-	list->first_cell	= NULL;
-	list->last_cell		= NULL;
-	list->_iterators	= 0;
-	list->_valid		= 1;
-	list->_size		= 0;
+	list = malloc(sizeof(*list));
+	list->first_cell = NULL;
+	list->last_cell = NULL;
+	list->_iterators = 0;
+	list->_valid = 1;
+	list->_size = 0;
 
 	return list;
 }
@@ -60,8 +60,8 @@ void attach_to_list(void *content, LIST *list) {
 	if (found)
 		return;
 
-	cell		= alloc_cell();
-	cell->content	= content;
+	cell = alloc_cell();
+	cell->content = content;
 	cell->next_cell	= list->first_cell;
 
 	if (list->first_cell != NULL)
@@ -144,9 +144,9 @@ void invalidate_cell(CELL *cell) {
 }
 
 void *next_in_list(ITERATOR *iterator) {
-	void *content;
+	void *content = NULL;
 
-	while (iterator->cell != NULL && iterator->cell->_valid) {
+	while (iterator->cell != NULL && !iterator->cell->_valid) {
 		iterator->cell = iterator->cell->next_cell;
 	}
 

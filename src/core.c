@@ -75,8 +75,11 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	init_signals();
+	/* allocate memory for the lists */
 	track_list = alloc_list();
+
+	/* initialize signal handler */
+	init_signals();
 
 	if ((use_race == 1 && use_practice == 1) || (use_race == 1 && use_drift == 1) || (use_practice == 1 && use_drift ==1)) {
 		fprintf(stdout, "Please only select drift, practice or race\n");
