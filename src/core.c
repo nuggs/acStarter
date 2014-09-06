@@ -113,8 +113,11 @@ int main(int argc, char* argv[]) {
 
 	running = 1;
 	program_loop(GAME_MODE);
-	free_config();
 
+	free_config();
+	free_list(track_list);
+
+	fprintf(stdout, "\nProgram exited normally\n");
 	return EXIT_SUCCESS;
 }
 
@@ -181,8 +184,6 @@ void init_signals(void) {
 }
 
 static void signal_handler(int signo) {
-	if (signo == SIGINT) {
-		printf("\nCaught Ctrl+C\n"); /* this is bad */
+	if (signo == SIGINT)
 		running = 0;
-	}
 }
