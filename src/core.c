@@ -21,6 +21,7 @@ int running = -1;
 
 /* local function declarations */
 static void signal_handler(int signo);
+void init_signals(void);
 
 int main(int argc, char* argv[]) {
 	char config_file[140+1], *home_dir = getenv("HOME");
@@ -75,6 +76,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	init_signals();
+	track_list = alloc_list();
 
 	if ((use_race == 1 && use_practice == 1) || (use_race == 1 && use_drift == 1) || (use_practice == 1 && use_drift ==1)) {
 		fprintf(stdout, "Please only select drift, practice or race\n");
@@ -108,18 +110,16 @@ int main(int argc, char* argv[]) {
 	running = 1;
 	program_loop(GAME_MODE);
 	free_config();
-	printf("exited");
+
 	return EXIT_SUCCESS;
 }
 
 void program_loop(int mode) {
 	struct timeval last_time, new_time;
 	long secs, usecs;
-	int test = 0;
 
 	gettimeofday(&last_time, NULL);
 	while (running) {
-		test++;
 		gettimeofday(&new_time, NULL);
 
 		switch (GAME_MODE) {
@@ -164,8 +164,6 @@ void program_loop(int mode) {
 				continue;
 		}
 		gettimeofday(&last_time, NULL);
-		if (test == 20)
-			running = 0;
 	}
 }
 

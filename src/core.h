@@ -17,6 +17,8 @@ typedef enum {
 
 GAME_LOOP GAME_MODE; 
 time_t current_time;
+extern LIST *track_list;
+
 void program_loop(int mode);
 
 #endif
