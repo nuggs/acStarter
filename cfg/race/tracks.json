@@ -2,7 +2,11 @@
 	/* 
 	 * The first entry here will be the defaults should you add
 	 * more tracks and don't fill in all the require fields,
-	 * it will auto populate them from the defaults.  
+	 * it will auto populate them from the defaults.
+	 *
+	 * NOTE: Do not set the defaults track to anything other than
+	 * null as it will prevent the rest of the file from loading.
+	 * I may change that in the future.
 	 *
 	 * To disable practice or anything, set enabled to false and 
 	 * those will not write to the server config when starting
