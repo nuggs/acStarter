@@ -235,6 +235,7 @@ int read_entry_list(const char *filename) {
 		entry->skin = (json_object_get_string(entry_object, "skin") != NULL) ? strdup(json_object_get_string(entry_object, "skin")) : NULL;
 		entry->guid = (json_object_get_number(entry_object, "guid") != 0) ? json_object_get_number(entry_object, "guid") : 0;
 		entry->spectator_mode = json_object_get_number(entry_object, "spectator_mode");
+		attach_to_list(entry, entry_list);
 		printf("Car %s(%d)[%s] loaded.\n", entry->model, i, (entry->drivername != NULL) ? entry->drivername : "No Driver");
 	}
 
@@ -249,7 +250,7 @@ int write_track(void) {
 
 	check_server_config();
 
-	snprintf(buf, 4096, "%scfg/server_cfg.ini", config->location);
+	snprintf(buf, 4096, "%scfg/server_cfg.ini", config->ac_location);
 	if ((server_config = fopen(buf, "w")) == NULL) {
 		fprintf(stdout, "Unable to write server config for track: %s\n", current_track->track);
 		return -1;

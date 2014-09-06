@@ -10,8 +10,9 @@
 extern const char *VERSION;
 
 typedef struct {
-	char *exe;
-	char *location;
+	char *base_dir;
+	char *ac_exe;
+	char *ac_location;
 	char *tracklist;
 	struct track_data *defaults;
 } config_data;

@@ -1,11 +1,12 @@
 {
 	/*
-	 * pretty simple configuration file
-	 * exe is the name of the assetto corsa server
-	 * location is the base directory of your assetto corsa server
-	 * tracklist is the track list file
+	 * base_dir: base directory for acStarter(must end with trailing slash)
+	 * ac_exe: assetto corsa server binary name
+	 * ac_location: base directory for assetto corsa server(must end with trailing slash)
+	 * tracklist: track list for this race configuration
 	 */
-	"exe" : "acServer_linux",
-	"location" : "/home/dir/acserver/",
-	"tracklist" : "/home/dir/acstarter/cfg/practice/tracks.json"
+	"base_dir": "/home/dir/acstarter/",
+	"ac_exe": "acServer_linux",
+	"ac_location": "/home/dir/acserver/",
+	"tracklist": "/home/dir/acstarter/cfg/practice/tracks.json"
 }

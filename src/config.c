@@ -22,7 +22,7 @@ int check_server_config(void) {
 	FILE *server_config;
 	char buf[120], buf2[120];
 
-	snprintf(buf, sizeof(buf), "%scfg/server_cfg.ini", config->location);
+	snprintf(buf, sizeof(buf), "%scfg/server_cfg.ini", config->ac_location);
 	if ((server_config = fopen(buf, "r")) == NULL)
 		return 1;
 
@@ -53,8 +53,9 @@ int read_config(const char *filename) {
 	}
 
 	config 				= malloc(sizeof(*config));
-	config->exe 		= strdup(json_object_get_string(config_json, "exe"));
-	config->location 	= strdup(json_object_get_string(config_json, "location"));
+	config->base_dir	= strdup(json_object_get_string(config_json, "base_dir"));
+	config->ac_exe 		= strdup(json_object_get_string(config_json, "ac_exe"));
+	config->ac_location = strdup(json_object_get_string(config_json, "ac_location"));
 	config->tracklist 	= strdup(json_object_get_string(config_json, "tracklist"));
 	config->defaults	= NULL;
 
@@ -63,8 +64,9 @@ int read_config(const char *filename) {
 }
 
 void free_config(void) {
-	free(config->exe);
-	free(config->location);
+	free(config->base_dir);
+	free(config->ac_exe);
+	free(config->ac_location);
 	free(config->tracklist);
 	free_track(config->defaults);
 	free(config);
