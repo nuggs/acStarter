@@ -18,6 +18,17 @@
 /* global version variable */
 const char *VERSION = "0.0.1";
 
+void check_server_config(void) {
+	FILE *server_config;
+	char buf[120];
+
+	sprintf(buf, "%scfg/server_cfg.ini", config->location);
+	if ((server_config = fopen(buf, "r"))) {
+		fclose(server_config);
+		fprintf(stdout, "Found server_cfg.ini at %scfg/server_cfg.ini\n", config->location);
+	}
+}
+
 int read_config(const char *filename) {
 	JSON_Value *root;
 	JSON_Object *config_json;

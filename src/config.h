@@ -17,6 +17,7 @@ typedef struct {
 } config_data;
 
 config_data *config;
+void check_server_config(void);
 int read_config(const char *filename);
 void free_config(void);
 

@@ -104,6 +104,7 @@ int main(int argc, char* argv[]) {
 		fprintf(stdout, "Failed to read configuration file: %s\n", config_file);
 		exit(EXIT_FAILURE);
 	}
+	check_server_config();
 
 	if (read_tracklist(config->tracklist) == -1) {
 		fprintf(stdout, "Failed to read configuration file: %s\n", config_file);
