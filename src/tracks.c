@@ -20,6 +20,8 @@ TRACK *current_track = NULL;
 
 /* local function delclarations */
 int parse_track(JSON_Object *track);
+int write_entry_list(void);
+
 typedef enum {
 	TYPE_INT,
 	TYPE_ARRAY,
@@ -233,20 +235,47 @@ int read_entry_list(const char *filename) {
 		entry->team = (json_object_get_string(entry_object, "team") != NULL) ? strdup(json_object_get_string(entry_object, "team")) : NULL;
 		entry->model = (json_object_get_string(entry_object, "model") != NULL) ? strdup(json_object_get_string(entry_object, "model")) : NULL;
 		entry->skin = (json_object_get_string(entry_object, "skin") != NULL) ? strdup(json_object_get_string(entry_object, "skin")) : NULL;
-		entry->guid = (json_object_get_number(entry_object, "guid") != 0) ? json_object_get_number(entry_object, "guid") : 0;
+		entry->guid = (json_object_get_string(entry_object, "guid") != NULL) ? strdup(json_object_get_string(entry_object, "guid")) : NULL;
 		entry->spectator_mode = json_object_get_number(entry_object, "spectator_mode");
 		attach_to_list(entry, entry_list);
 		printf("Car %s(%d)[%s] loaded.\n", entry->model, i, (entry->drivername != NULL) ? entry->drivername : "No Driver");
 	}
-
+	write_entry_list();
 	json_value_free(entry_root);
 	return 0;
 }
 
+int write_entry_list(void) {
+	ITERATOR iterator;
+	ENTRY *entry;
+	FILE *entry_config;
+	char buf[4096];
+	int i = 0;
+
+	snprintf(buf, 4096, "%scfg/entry_list.ini", config->base_dir);
+	if ((entry_config = fopen(buf, "w")) == NULL) {
+		fprintf(stdout, "Unable to write entry list for: %s\n", current_track->track);
+		return -1;
+	}
+
+	attach_iterator(&iterator, entry_list);
+	while ((entry = (ENTRY *) next_in_list(&iterator)) != NULL) {
+		fprintf(entry_config, "[CAR_%d]\n", i++);
+		fprintf(entry_config, "DRIVERNAME=%s\n", (entry->drivername == NULL) ? "" : entry->drivername);
+		fprintf(entry_config, "TEAM=%s\n", (entry->team == NULL) ? "" : entry->team);
+		fprintf(entry_config, "MODEL=%s\n", (entry->model == NULL) ? "" : entry->model);
+		fprintf(entry_config, "SKIN=%s\n", (entry->skin == NULL) ? "" : entry->skin);
+		fprintf(entry_config, "GUID=%s\n", (entry->guid == NULL) ? "" : entry->guid);
+		fprintf(entry_config, "SPECTATOR_MODE=%d\n\n", entry->spectator_mode);
+	}
+	detach_iterator(&iterator);
+	fclose(entry_config);
+	printf("Wrote entry_list.ini\n");
+	return -1;
+}
 int write_track(void) {
 	FILE *server_config;
 	char buf[4096];
-	int size, i;
 
 	check_server_config();
 

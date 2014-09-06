@@ -46,7 +46,7 @@ struct entry_data {
 	char *team;
 	char *model;
 	char *skin;
-	int guid;
+	char *guid;
 	int spectator_mode;
 };
 
