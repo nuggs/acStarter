@@ -277,7 +277,10 @@ int write_track(void) {
 	FILE *server_config;
 	char buf[4096];
 
-	check_server_config();
+	if ((check_server_config("server_cfg.ini")) == -1) {
+		printf("check_server_config() failed\n");
+		return -1;
+	}
 
 	snprintf(buf, 4096, "%scfg/server_cfg.ini", config->ac_location);
 	if ((server_config = fopen(buf, "w")) == NULL) {
