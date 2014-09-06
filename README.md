@@ -19,17 +19,13 @@ acStarter is a small program written in C to manage Assetto Corsa servers.
  * Plus more that I'm likely forgetting.
 
 ## Installation
-```
-git clone git@github.com:nuggs/acStarter.git
-```
-* Compile the code from the src directory using `make`
-* Configure the files in the cfg directory
+ * `git clone git@github.com:nuggs/acStarter.git`
+ * Compile the code from the src directory using `make`
+ * Configure the files in the cfg directory
 
 ## Running
  * Launch using:
- ```
- ./acServer [-h] [-d] [-p] [-r] [-v]
- ```
+ * `./acServer [-h] [-d] [-p] [-r] [-v]`
 
 ## License
  * See LICENSE for license information.
