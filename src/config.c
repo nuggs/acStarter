@@ -16,7 +16,7 @@
 #include "io.h"
 
 /* global version variable */
-const char *VERSION = "0.0.1";
+const char *VERSION = "0.3.4";
 
 int check_server_config(void) {
 	FILE *server_config;

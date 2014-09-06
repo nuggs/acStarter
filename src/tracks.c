@@ -270,9 +270,9 @@ int write_entry_list(void) {
 	}
 	detach_iterator(&iterator);
 	fclose(entry_config);
-	printf("Wrote entry_list.ini\n");
 	return -1;
 }
+
 int write_track(void) {
 	FILE *server_config;
 	char buf[4096];
