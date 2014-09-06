@@ -3,6 +3,8 @@
 #define TRACKS_H
 
 typedef struct track_data TRACK;
+typedef struct entry_data ENTRY;
+extern TRACK *current_track;
 
 typedef struct mode_data {
 	char *name;
@@ -39,9 +41,19 @@ struct track_data {
 	int dynamic_track[3];
 };
 
+struct entry_data {
+	char *drivername;
+	char *team;
+	char *model;
+	char *skin;
+	int guid;
+	int spectator_mode;
+};
+
 /* global file delcarations */
 TRACK *alloc_track(void);
 void free_track(TRACK *track);
 int read_tracklist(const char *filename);
+int write_track(void);
 
 #endif

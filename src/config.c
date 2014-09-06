@@ -18,15 +18,26 @@
 /* global version variable */
 const char *VERSION = "0.0.1";
 
-void check_server_config(void) {
+int check_server_config(void) {
 	FILE *server_config;
-	char buf[120];
+	char buf[120], buf2[120];
 
-	sprintf(buf, "%scfg/server_cfg.ini", config->location);
-	if ((server_config = fopen(buf, "r"))) {
-		fclose(server_config);
-		fprintf(stdout, "Found server_cfg.ini at %scfg/server_cfg.ini\n", config->location);
-	}
+	snprintf(buf, sizeof(buf), "%scfg/server_cfg.ini", config->location);
+	if ((server_config = fopen(buf, "r")) == NULL)
+		return 1;
+
+	fclose(server_config);
+
+	fprintf(stdout, "Found server_cfg.ini at %s\nRenaming and backing up...\n", buf);
+	snprintf(buf2, sizeof(buf2), "%s.bak", buf);
+	if ((rename(buf, buf2)) == 0) {
+		printf("Renamed: %s\nTo: %s\n", buf, buf2);
+		remove(buf);
+		return 1;
+	} else
+		printf("Failed to rename %s", buf);
+
+	return -1;
 }
 
 int read_config(const char *filename) {

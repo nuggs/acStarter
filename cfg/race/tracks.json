@@ -482,7 +482,7 @@
 		"race" : {
 			"enabled": true,
 			"name" : "Race",
-			"laps" : 12,
+			"laps" : 2,
 			"wait_time" : 60
 		},
 		"dynamic_track" : {

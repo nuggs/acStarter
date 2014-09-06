@@ -22,6 +22,7 @@ int running = -1;
 /* local function declarations */
 static void signal_handler(int signo);
 void init_signals(void);
+void handle_race(void);
 
 int main(int argc, char* argv[]) {
 	char config_file[140+1], *home_dir = getenv("HOME");
@@ -77,6 +78,7 @@ int main(int argc, char* argv[]) {
 
 	/* allocate memory for the lists */
 	track_list = alloc_list();
+	entry_list = alloc_list();
 
 	/* initialize signal handler */
 	init_signals();
@@ -104,7 +106,6 @@ int main(int argc, char* argv[]) {
 		fprintf(stdout, "Failed to read configuration file: %s\n", config_file);
 		exit(EXIT_FAILURE);
 	}
-	check_server_config();
 
 	if (read_tracklist(config->tracklist) == -1) {
 		fprintf(stdout, "Failed to read configuration file: %s\n", config_file);
@@ -131,7 +132,7 @@ void program_loop(int mode) {
 
 		switch (GAME_MODE) {
 			case MODE_RACE:
-				fprintf(stdout, "Looping race mode\n");
+				handle_race();
 			break;
 
 			case MODE_PRACTICE:
@@ -186,4 +187,16 @@ void init_signals(void) {
 static void signal_handler(int signo) {
 	if (signo == SIGINT)
 		running = 0;
+}
+
+void handle_race(void) {
+	ITERATOR iterator;
+	TRACK *track = NULL;
+
+	if (current_track == NULL) {
+		current_track = track_list->first_cell->content;
+		write_track();
+	}
+
+	printf("Testing: %s\n", current_track->track);
 }

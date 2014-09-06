@@ -15,6 +15,8 @@
 #include "parson.h"
 
 LIST *track_list = NULL;
+LIST *entry_list = NULL;
+TRACK *current_track = NULL;
 
 /* local function delclarations */
 int parse_track(JSON_Object *track);
@@ -147,7 +149,7 @@ int parse_track(JSON_Object *track_data) {
 		}
 		if (json_object_dotget_boolean(track_data, "race.enabled") == 1) {
 			config->defaults->race.name				= strdup(json_object_dotget_string(track_data, "race.name"));
-			config->defaults->race.time				= json_object_dotget_number(track_data, "race.time");
+			config->defaults->race.time				= json_object_dotget_number(track_data, "race.laps");
 			config->defaults->race.wait_time		= json_object_dotget_number(track_data, "race.wait_time");
 		}
 		config->defaults->dynamic_track[0] 			= json_object_dotget_number(track_data, "dynamic_track.session_start");
@@ -199,7 +201,7 @@ int parse_track(JSON_Object *track_data) {
 	}
 	if (json_object_dotget_boolean(track_data, "race.enabled") == 1) {
 		track->race.name			= strdup(json_object_dotget_string(track_data, "race.name"));
-		track->race.time			= json_object_dotget_number(track_data, "race.time");
+		track->race.time			= json_object_dotget_number(track_data, "race.laps");
 		track->race.wait_time		= json_object_dotget_number(track_data, "race.wait_time");
 	}
 	track->dynamic_track[0] 		= (json_object_dotget_number(track_data, "dynamic_track.session_start") != 0) ? json_object_dotget_number(track_data, "dynamic_track.session_start") : config->defaults->dynamic_track[0];
@@ -210,6 +212,88 @@ int parse_track(JSON_Object *track_data) {
 	return 1;
 }
 
+int read_entry_list(const char *filename) {
+	JSON_Value *entry_root;
+	JSON_Array *entry_array;
+	JSON_Object *entry_object;
+	int i;
+
+	entry_root = json_parse_file_with_comments(filename);
+	if (json_value_get_type(entry_root) != JSONArray) {
+		fprintf(stdout, "JSON is not an array\n");
+		return -1;
+	}
+
+	entry_array = json_value_get_array(entry_root);
+	for (i=0;i<json_array_get_count(entry_array);i++) {
+		entry_object = json_array_get_object(entry_array, i);
+		parse_track(entry_object);
+	}
+
+	json_value_free(entry_root);
+	return 0;
+}
+
 int write_track(void) {
-	return -1;
+	FILE *server_config;
+	char buf[4096];
+	int size, i;
+
+	check_server_config();
+
+	snprintf(buf, 4096, "%scfg/server_cfg.ini", config->location);
+	if ((server_config = fopen(buf, "w")) == NULL) {
+		fprintf(stdout, "Unable to write server config for track: %s\n", current_track->track);
+		return -1;
+	}
+
+	fprintf(server_config, "[SERVER]\r\n");
+	fprintf(server_config, "NAME=%s\r\n", current_track->name);
+	fprintf(server_config, "CARS=%s\r\n", current_track->cars);
+	fprintf(server_config, "TRACK=%s\r\n", current_track->track);
+	fprintf(server_config, "SUN_ANGLE=%d\r\n", current_track->sun_angle);
+	fprintf(server_config, "MAX_CLIENTS=%d\r\n", current_track->max_clients);
+	fprintf(server_config, "RACE_OVER_TIME=%d\r\n", current_track->race_over_time);
+	fprintf(server_config, "PORT=%d\r\n", current_track->port);
+	fprintf(server_config, "HTTP_PORT=%d\r\n", current_track->http_port);
+	fprintf(server_config, "REGISTER_TO_LOBBY=%d\r\n", current_track->register_to_lobby);
+	fprintf(server_config, "PICKUP_MODE_ENABLED=%d\r\n", current_track->pickup_mode_enabled);
+	fprintf(server_config, "SLEEP_TIME=%d\r\n", current_track->sleep_time);
+	fprintf(server_config, "VOTING_QUORUM=%d\r\n", current_track->voting_quorum);
+	fprintf(server_config, "VOTE_DURATION=%d\r\n", current_track->vote_duration);
+	fprintf(server_config, "BLACKLIST_MODE=%d\r\n", current_track->blacklist_mode);
+	fprintf(server_config, "CLIENT_SEND_INTERVAL_HZ=%d\r\n", current_track->client_send_interval_hz);
+	fprintf(server_config, "USE_FLOW_CONTROL=%d\r\n", current_track->use_flow_control);
+	fprintf(server_config, "LOOP_MODE=%d\r\n", current_track->loop_mode);
+	fprintf(server_config, "PASSWORD=%s\r\n", (current_track->password != NULL) ? current_track->password : "");
+	fprintf(server_config, "ALLOWED_TYRES_OUT=%d\r\n", current_track->allowed_tyres_out);
+	fprintf(server_config, "DAMAGE_MULTIPLIER=%d\r\n", current_track->damage_multiplier);
+	fprintf(server_config, "FUEL_RATE=%d\r\n", current_track->fuel_rate);
+	fprintf(server_config, "TYRE_WEAR_RATE=%d\r\n\r\n", current_track->tyre_wear_rate);
+	if (current_track->practice.name != NULL) {
+		fprintf(server_config, "[PRACTICE]\r\n");
+		fprintf(server_config, "NAME=%s\r\n", current_track->practice.name);
+		fprintf(server_config, "TIME=%d\r\n", current_track->practice.time);
+		fprintf(server_config, "WAIT_TIME=%d\r\n\r\n", current_track->practice.wait_time);
+	}
+	if (current_track->qualify.name != NULL) {
+		fprintf(server_config, "[QUALIFY]\r\n");
+		fprintf(server_config, "NAME=%s\r\n", current_track->qualify.name);
+		fprintf(server_config, "TIME=%d\r\n", current_track->qualify.time);
+		fprintf(server_config, "WAIT_TIME=%d\r\n\r\n", current_track->qualify.wait_time);
+	}
+	if (current_track->race.name != NULL) {
+		fprintf(server_config, "[RACE]\r\n");
+		fprintf(server_config, "NAME=%s\r\n", current_track->race.name);
+		fprintf(server_config, "LAPS=%d\r\n", current_track->race.time);
+		fprintf(server_config, "WAIT_TIME=%d\r\n\r\n", current_track->race.wait_time);
+	}
+	fprintf(server_config, "[DYNAMIC_TRACK]\r\n");
+	fprintf(server_config, "SESSION_START=%d\r\n", current_track->dynamic_track[0]);
+	fprintf(server_config, "RANDOMNESS=%d\r\n", current_track->dynamic_track[1]);
+	fprintf(server_config, "LAP_GAIN=%d\r\n", current_track->dynamic_track[2]);
+	fprintf(server_config, "SESSION_TRANSFER=%d\r\n", current_track->dynamic_track[3]);
+
+	fclose(server_config);
+	return 1;
 }
