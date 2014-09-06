@@ -28,4 +28,4 @@ acStarter is a small program written in C to manage Assetto Corsa servers.
  * `./acServer [-h] [-d] [-p] [-r] [-v]`
 
 ## License
- * See LICENSE for license information.
+See LICENSE for license information.
