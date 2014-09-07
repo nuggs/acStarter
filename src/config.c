@@ -18,6 +18,13 @@
 /* global version variable */
 const char *VERSION = "0.3.6";
 
+int remove_file(const char *filename) {
+	if (remove(filename) != 0) {
+		fprintf(stdout, "remove_file: Failed to remove %s\n", filename);
+		return -1;
+	}
+	return 1;
+}
 /*
  * checks ac_location/cfg for server_cfg.ini and entry_list.ini
  * if it finds them it will rename them to their name followed by
@@ -44,7 +51,6 @@ int check_server_config(const char *filename) {
 	snprintf(buf2, sizeof(buf2), "%s.bak", buf);
 	if ((rename(buf, buf2)) == 0) {
 		printf("Renamed: %s\nTo: %s\n", buf, buf2);
-		remove(buf);
 		return 1;
 	} else
 		printf("Failed to rename %s", buf);
