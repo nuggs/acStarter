@@ -231,6 +231,7 @@ int read_entry_list(const char *filename) {
 		return -1;
 	}
 
+	fprintf(stdout, "Reading entry list: %s\n", filename);
 	entry_array = json_value_get_array(entry_root);
 	for (i=0;i<json_array_get_count(entry_array);i++) {
 		entry_object = json_array_get_object(entry_array, i);
