@@ -69,7 +69,6 @@ void remove_server_config(int file) {
 		if (remove_file(buf) == -1) {
 			fprintf(stdout, "Failed to remove: %s\n", buf);
 		}
-		fprintf(stdout, "DEBUG: Removed %s\n", buf);
 	}
 
 	if (file == REMOVE_CFG_ENTRY || file == REMOVE_CFG_BOTH) {
@@ -78,7 +77,6 @@ void remove_server_config(int file) {
 		if (remove_file(buf) == -1) {
 			fprintf(stdout, "Failed to remove: %s\n", buf);
 		}
-		fprintf(stdout, "DEBUG: Removed %s\n", buf);
 	}
 }
 

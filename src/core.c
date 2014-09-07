@@ -191,7 +191,7 @@ void handle_race(void) {
 }
 
 void cleanup() {
-	remove_server_config(REMOVE_CFG_SERVER);
+	remove_server_config(REMOVE_CFG_BOTH);
 	free_config();
 	free_list(track_list);
 	free_list(entry_list);
