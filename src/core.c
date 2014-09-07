@@ -127,11 +127,11 @@ void program_loop(int mode) {
 	if (current_track == NULL) {
 		current_track = track_list->first_cell->content;
 		write_track();
-		printf("Current Track: %s\n", current_track->track);
 	}
 
 	gettimeofday(&last_time, NULL);
 	while (running) {
+		/* may remove this, might be able to rely only on the event queue */
 		switch (GAME_MODE) {
 			case MODE_RACE:
 				handle_race();

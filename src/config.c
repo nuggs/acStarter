@@ -16,7 +16,7 @@
 #include "io.h"
 
 /* global version variable */
-const char *VERSION = "0.3.6";
+const char *VERSION = "0.3.9";
 const int REMOVE_CFG_SERVER = 0;
 const int REMOVE_CFG_ENTRY = 1;
 const int REMOVE_CFG_BOTH = 2;
