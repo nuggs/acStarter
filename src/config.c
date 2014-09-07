@@ -17,6 +17,9 @@
 
 /* global version variable */
 const char *VERSION = "0.3.6";
+const int REMOVE_CFG_SERVER = 0;
+const int REMOVE_CFG_ENTRY = 1;
+const int REMOVE_CFG_BOTH = 2;
 
 int remove_file(const char *filename) {
 	if (remove(filename) != 0) {
@@ -56,6 +59,27 @@ int check_server_config(const char *filename) {
 		printf("Failed to rename %s", buf);
 
 	return -1;
+}
+
+void remove_server_config(int file) {
+	char buf[124];
+
+	if (file == REMOVE_CFG_SERVER || file == REMOVE_CFG_BOTH) {
+		snprintf(buf, 124, "%scfg/server_cfg.ini", config->ac_location);
+		if (remove_file(buf) == -1) {
+			fprintf(stdout, "Failed to remove: %s\n", buf);
+		}
+		fprintf(stdout, "DEBUG: Removed %s\n", buf);
+	}
+
+	if (file == REMOVE_CFG_ENTRY || file == REMOVE_CFG_BOTH) {
+		memset(buf, 0, sizeof(buf));
+		snprintf(buf, 124, "%scfg/entry_list.ini", config->ac_location);
+		if (remove_file(buf) == -1) {
+			fprintf(stdout, "Failed to remove: %s\n", buf);
+		}
+		fprintf(stdout, "DEBUG: Removed %s\n", buf);
+	}
 }
 
 int read_config(const char *filename) {

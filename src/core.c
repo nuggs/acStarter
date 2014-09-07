@@ -191,19 +191,7 @@ void handle_race(void) {
 }
 
 void cleanup() {
-	char buf[124];
-
-	snprintf(buf, 124, "%scfg/server_cfg.ini", config->ac_location);
-	if (remove_file(buf) == -1) {
-		fprintf(stdout, "Failed to remove: %s\n", buf);
-	}
-
-	memset(buf, 0, sizeof(buf));
-	snprintf(buf, 124, "%scfg/entry_list.ini", config->ac_location);
-	if (remove_file(buf) == -1) {
-		fprintf(stdout, "Failed to remove: %s\n", buf);
-	}
-
+	remove_server_config(REMOVE_CFG_SERVER);
 	free_config();
 	free_list(track_list);
 	free_list(entry_list);

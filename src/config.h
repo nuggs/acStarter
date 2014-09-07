@@ -8,6 +8,9 @@
 #define CONFIG_H
 
 extern const char *VERSION;
+extern const int REMOVE_CFG_SERVER;
+extern const int REMOVE_CFG_ENTRY;
+extern const int REMOVE_CFG_BOTH;
 
 typedef struct {
 	char *base_dir;
@@ -20,6 +23,7 @@ typedef struct {
 config_data *config;
 int remove_file(const char *filename);
 int check_server_config(const char *filename);
+void remove_server_config(int file);
 int read_config(const char *filename);
 void free_config(void);
 
