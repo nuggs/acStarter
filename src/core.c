@@ -124,6 +124,12 @@ void program_loop(int mode) {
 	struct timeval last_time, new_time;
 	long secs, usecs;
 
+	if (current_track == NULL) {
+		current_track = track_list->first_cell->content;
+		write_track();
+		printf("Current Track: %s\n", current_track->track);
+	}
+
 	gettimeofday(&last_time, NULL);
 	while (running) {
 		switch (GAME_MODE) {
@@ -188,10 +194,7 @@ static void signal_handler(int signo) {
 }
 
 void handle_race(void) {
-	if (current_track == NULL) {
-		current_track = track_list->first_cell->content;
-		write_track();
-	}
+	/* do stuff here */
 }
 
 void cleanup(void) {
