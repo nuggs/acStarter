@@ -113,10 +113,7 @@ int main(int argc, char* argv[]) {
 	running = 1;
 	program_loop(GAME_MODE);
 
-	free_config();
-	free_list(track_list);
-	free_list(entry_list);
-
+	cleanup();
 	fprintf(stdout, "\nProgram exited normally\n");
 	return EXIT_SUCCESS;
 }
@@ -141,7 +138,7 @@ void program_loop(int mode) {
 			break;
 
 			default:
-				fprintf(stdout, "We shouldn't be looping here...");
+				fprintf(stdout, "We shouldn't be looping here...\n");
 				running = 0;
 			break;
 		}
@@ -191,4 +188,23 @@ void handle_race(void) {
 		current_track = track_list->first_cell->content;
 		write_track();
 	}
+}
+
+void cleanup() {
+	char buf[124];
+
+	snprintf(buf, 124, "%scfg/server_cfg.ini", config->ac_location);
+	if (remove_file(buf) == -1) {
+		fprintf(stdout, "Failed to remove: %s\n", buf);
+	}
+
+	memset(buf, 0, sizeof(buf));
+	snprintf(buf, 124, "%scfg/entry_list.ini", config->ac_location);
+	if (remove_file(buf) == -1) {
+		fprintf(stdout, "Failed to remove: %s\n", buf);
+	}
+
+	free_config();
+	free_list(track_list);
+	free_list(entry_list);
 }
