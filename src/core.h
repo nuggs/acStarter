@@ -10,6 +10,9 @@
 #include "list.h"
 #include "stack.h"
 
+/* 2, 4, 8 */
+#define PASSES_PER_SECOND 8
+
 typedef enum {
 	MODE_RACE,
 	MODE_PRACTICE,

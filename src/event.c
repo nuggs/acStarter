@@ -181,6 +181,6 @@ void init_events_track(TRACK *track) {
 	event = alloc_event();
 	event->fun = &event_track_nothing;
 	event->type = EVENT_MOBILE_NOTHING;
-	add_event_track(event, track, 2 * 60 * 4);
+	add_event_track(event, track, 2 * 60 * PASSES_PER_SECOND);
 }
 */

@@ -13,6 +13,7 @@
 #include <sys/time.h>
 
 #include "core.h"
+#include "event.h"
 #include "config.h"
 #include "io.h"
 #include "tracks.h"
@@ -125,8 +126,6 @@ void program_loop(int mode) {
 
 	gettimeofday(&last_time, NULL);
 	while (running) {
-		gettimeofday(&new_time, NULL);
-
 		switch (GAME_MODE) {
 			case MODE_RACE:
 				handle_race();
@@ -144,7 +143,11 @@ void program_loop(int mode) {
 			break;
 		}
 
-		usecs = (int) (last_time.tv_usec -  new_time.tv_usec) + 1000000 / 4;
+		heartbeat();
+
+		gettimeofday(&new_time, NULL);
+
+		usecs = (int) (last_time.tv_usec -  new_time.tv_usec) + 1000000 / PASSES_PER_SECOND;
 		secs  = (int) (last_time.tv_sec  -  new_time.tv_sec);
 
 		while (usecs < 0) {
