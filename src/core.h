@@ -15,6 +15,12 @@ typedef enum {
 	MODE_DRIFT
 } GAME_LOOP;
 
+/* I may switch to stdbool.h instead of defining it */
+typedef enum {
+	false = 0,
+	true
+} bool;
+
 GAME_LOOP GAME_MODE; 
 time_t current_time;
 extern LIST *track_list;
