@@ -8,6 +8,7 @@
 #define CORE_H
 
 #include "list.h"
+#include "stack.h"
 
 typedef enum {
 	MODE_RACE,

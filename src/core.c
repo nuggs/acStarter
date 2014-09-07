@@ -23,6 +23,7 @@ int running = -1;
 static void signal_handler(int signo);
 void init_signals(void);
 void handle_race(void);
+void cleanup(void);
 
 int main(int argc, char* argv[]) {
 	char config_file[140+1], *home_dir = getenv("HOME");
@@ -143,7 +144,7 @@ void program_loop(int mode) {
 			break;
 		}
 
-		usecs = (int) (last_time.tv_usec -  new_time.tv_usec) + 1000000 / 8;
+		usecs = (int) (last_time.tv_usec -  new_time.tv_usec) + 1000000 / 4;
 		secs  = (int) (last_time.tv_sec  -  new_time.tv_sec);
 
 		while (usecs < 0) {
@@ -190,7 +191,7 @@ void handle_race(void) {
 	}
 }
 
-void cleanup() {
+void cleanup(void) {
 	remove_server_config(REMOVE_CFG_BOTH);
 	free_config();
 	free_list(track_list);
