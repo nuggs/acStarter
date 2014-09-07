@@ -115,6 +115,7 @@ int main(int argc, char* argv[]) {
 
 	free_config();
 	free_list(track_list);
+	free_list(entry_list);
 
 	fprintf(stdout, "\nProgram exited normally\n");
 	return EXIT_SUCCESS;
@@ -134,11 +135,9 @@ void program_loop(int mode) {
 			break;
 
 			case MODE_PRACTICE:
-				fprintf(stdout, "Looping practice mode\n");
 			break;
 
 			case MODE_DRIFT:
-				fprintf(stdout, "Looping Drift mode\n");
 			break;
 
 			default:
