@@ -9,37 +9,35 @@
 #include <stdlib.h>
 
 #include "core.h"
-#include "event.h"
+#include "tracks.h"
 
 LIST *event_queue[MAX_EVENT_HASH];
-LIST *global_events = NULL;
 STACK *event_free = NULL;
+LIST *global_events = NULL;
 int current_bucket = 0;
 
-bool enqueue_event(EVENT *event, int server_pulse) {
+bool enqueue_event(EVENT *event, int system_pulses) {
 	int bucket, passes;
 
 	if (event->owner_type == EVENT_UNOWNED) {
-		fprintf(stdout, "enqueue_event: event type %d with no owner\n", event->type);
+		printf("enqueue_event: event type %d with no owner\n", event->type);
 		return false;
 	}
 
-	if (server_pulse < 1)
-		server_pulse = 1;
+	if (system_pulses < 1)
+		system_pulses = 1;
 
-	bucket = (server_pulse + current_bucket) % MAX_EVENT_HASH;
-	passes = server_pulse / MAX_EVENT_HASH;
+	bucket = (system_pulses + current_bucket) % MAX_EVENT_HASH;
+	passes = system_pulses / MAX_EVENT_HASH;
 
 	event->passes = passes;
 	event->bucket = bucket;
 
 	attach_to_list(event, event_queue[bucket]);
+
 	return true;
 }
 
-/*
- * open for expanding to other event owners in the future
- */
 void dequeue_event(EVENT *event) {
 	detach_from_list(event, event_queue[event->bucket]);
 
@@ -47,9 +45,11 @@ void dequeue_event(EVENT *event) {
 		default:
 			printf("dequeue_event: event type %d has no owner\n", event->type);
 		break;
-
 		case EVENT_OWNER_SYSTEM:
 			detach_from_list(event, global_events);
+		break;
+		case EVENT_OWNER_TRACK:
+			detach_from_list(event, event->owner.track->events);
 		break;
 	}
 
@@ -57,7 +57,7 @@ void dequeue_event(EVENT *event) {
 	push_stack(event, event_free);
 }
 
-EVENT *alloc_event() {
+EVENT *alloc_event(void) {
 	EVENT *event;
 
 	if (stack_size(event_free) <= 0)
@@ -65,9 +65,9 @@ EVENT *alloc_event() {
 	else
 		event = (EVENT *) pop_stack(event_free);
 
-	event->fun = NULL;
+	event->function = NULL;
 	event->argument = NULL;
-	/* event->owner.track = NULL;  we don't need this, tracks don't use/need events yet. */
+	event->owner.track = NULL;  
 	event->passes = 0;
 	event->bucket = 0;
 	event->owner_type = EVENT_UNOWNED;
@@ -77,7 +77,7 @@ EVENT *alloc_event() {
 }
 
 void init_event_queue(int section) {
-	/*EVENT *event; not needed yet, I like clean compiles */
+	EVENT *event;
 	int i;
 
 	if (section == 1) {
@@ -88,13 +88,15 @@ void init_event_queue(int section) {
 		event_free = alloc_stack();
 		global_events = alloc_list();
 	} else if (section == 2) {
-		/*
-		 * enqueue system events
-		 */
+		event = alloc_event();
+		event->function = &event_system_test;
+		event->argument = strdup("system test");
+		event->type = EVENT_SYSTEM_TEST;
+		add_event_system(event, 2 * 60 * PASSES_PER_SECOND);
 	}
 }
 
-void heartbeat(void) {
+void heartbeat() {
 	EVENT *event;
 	ITERATOR iterator;
 
@@ -102,12 +104,33 @@ void heartbeat(void) {
 
 	attach_iterator(&iterator, event_queue[current_bucket]);
 	while ((event = (EVENT *) next_in_list(&iterator)) != NULL) {
+		printf("%s: %d (passes: %d - bucket: %d)\n",  event->argument, event->type, event->passes, event->bucket);
 		if (event->passes-- > 0) continue;
 
-		if (!((event->fun)(event)))
+		if (!((*event->function)(event)))
 			dequeue_event(event);
 	}
 	detach_iterator(&iterator);
+}
+
+void add_event_track(EVENT *event, TRACK *track, int delay) {
+	if (event->type == EVENT_NONE) {
+		printf("add_event_track: no type\n");
+		return;
+	}
+
+	if (event->function == NULL) {
+		printf("add_event_track: event type %d has no callback function\n", event->type);
+		return;
+	}
+
+	event->owner_type   = EVENT_OWNER_TRACK;
+	event->owner.track = track;
+
+	attach_to_list(event, track->events);
+
+	if (enqueue_event(event, delay) == false)
+		printf("add_event_track: event type %d failed to be enqueued\n", event->type);
 }
 
 void add_event_system(EVENT *event, int delay) {
@@ -116,7 +139,7 @@ void add_event_system(EVENT *event, int delay) {
 		return;
 	}
 
-	if (event->fun == NULL) {
+	if (event->function == NULL) {
 		printf("add_event_system: event type %d has no callback function\n", event->type);
 		return;
 	}
@@ -128,27 +151,6 @@ void add_event_system(EVENT *event, int delay) {
 		printf("add_event_system: event type %d failed to be enqueued\n", event->type);
 }
 
-/*
- * This isn't needed yet but putting here for future reference
-void add_event_track((EVENT *event, TRACK *track, int delay) {
-	if (event->type == EVENT_NONE) {
-		printf("add_event_track: no type\n");
-		return;
-	}
-
-	if (event->fun == NULL) {
-		printf("add_event_track: event type %d has no callback function\n", event->type);
-		return;
-	}
-
-	event->owner_type = EVENT_OWNER_TRACK;
-	event->owner.track = track;
-	attach_to_list(event, track->events);
-
-	if (enqueue_event(event, delay) == false)
-		printf("add_event_track: event type %d failed to be enqueued\n", event->type);
-}
-
 EVENT *event_isset_track(TRACK *track, int type) {
 	EVENT *event;
 	ITERATOR iterator;
@@ -156,10 +158,9 @@ EVENT *event_isset_track(TRACK *track, int type) {
 	attach_iterator(&iterator, track->events);
 	while ((event = (EVENT *) next_in_list(&iterator)) != NULL) {
 		if (event->type == type)
-			break;
+		break;
 	}
 	detach_iterator(&iterator);
-
 	return event;
 }
 
@@ -179,8 +180,8 @@ void init_events_track(TRACK *track) {
 	EVENT *event;
 
 	event = alloc_event();
-	event->fun = &event_track_nothing;
-	event->type = EVENT_MOBILE_NOTHING;
-	add_event_track(event, track, 2 * 60 * PASSES_PER_SECOND);
+	event->function = &event_track_test;
+	event->type = EVENT_TRACK_TEST;
+	event->argument = strdup("track test");
+	add_event_track(event, track, 60 * PASSES_PER_SECOND);
 }
-*/

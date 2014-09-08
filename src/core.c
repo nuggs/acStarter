@@ -13,7 +13,6 @@
 #include <sys/time.h>
 
 #include "core.h"
-#include "event.h"
 #include "config.h"
 #include "io.h"
 #include "tracks.h"
@@ -82,6 +81,7 @@ int main(int argc, char* argv[]) {
 	entry_list = alloc_list();
 
 	init_signals();
+	init_event_queue(1);
 
 	if ((use_race == 1 && use_practice == 1) || (use_race == 1 && use_drift == 1) || (use_practice == 1 && use_drift ==1)) {
 		fprintf(stdout, "Please only select drift, practice or race\n");
@@ -113,6 +113,8 @@ int main(int argc, char* argv[]) {
 	}
 
 	running = 1;
+	init_event_queue(2);
+
 	program_loop(GAME_MODE);
 
 	cleanup();
@@ -121,17 +123,31 @@ int main(int argc, char* argv[]) {
 }
 
 void program_loop(int mode) {
+	ITERATOR iterator;
+	EVENT *event;
 	struct timeval last_time, new_time;
 	long secs, usecs;
 
 	if (current_track == NULL) {
 		current_track = track_list->first_cell->content;
 		write_track();
+		init_events_track(current_track);
 	}
 
 	gettimeofday(&last_time, NULL);
 	while (running) {
-		/* may remove this, might be able to rely only on the event queue */
+		heartbeat();
+	
+		if ((event = event_isset_track(current_track, 1)) != NULL)
+			printf("Track Event: %d %s(passes: %d - bucket: %d)\n", event->type, event->argument, event->passes, event->bucket);
+
+		event = NULL;
+		attach_iterator(&iterator, global_events);
+		while ((event = (EVENT *) next_in_list(&iterator)) != NULL) {
+			printf("Event found: %d %s(passes: %d - bucket: %d)\n", event->type, event->argument, event->passes, event->bucket);
+		}
+		detach_iterator(&iterator);
+		/* may remove this, might be able to rely only on the event queue 
 		switch (GAME_MODE) {
 			case MODE_RACE:
 				handle_race();
@@ -147,9 +163,7 @@ void program_loop(int mode) {
 				fprintf(stdout, "We shouldn't be looping here...\n");
 				running = 0;
 			break;
-		}
-
-		heartbeat();
+		}*/
 
 		gettimeofday(&new_time, NULL);
 

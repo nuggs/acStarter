@@ -33,6 +33,7 @@ TRACK *alloc_track(void) {
 	int i;
 
 	track 							= malloc(sizeof(*track));
+	track->events					= alloc_list();
 	track->entry_list				= NULL;
 	track->name						= NULL;
 	track->cars						= NULL;
@@ -72,7 +73,16 @@ TRACK *alloc_track(void) {
 }
 
 void free_track(TRACK *track) {
+	EVENT *events;
+	ITERATOR iterator;
+
 	detach_from_list(track, track_list);
+
+	attach_iterator(&iterator, track->events);
+	while ((events = (EVENT *) next_in_list(&iterator)) != NULL)
+		dequeue_event(events);
+	detach_iterator(&iterator);
+	free_list(track->events);
 
 	free(track->entry_list);
 	free(track->name);

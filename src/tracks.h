@@ -1,9 +1,13 @@
+/*
+ * acStarter - A simple server manager for Assetto Corsa.
+ * Copyright (c) 2014 Turncoat Tony
+ *
+ * See the LICENSE file for license information.
+ */
 
 #ifndef TRACKS_H
 #define TRACKS_H
 
-typedef struct track_data TRACK;
-typedef struct entry_data ENTRY;
 extern TRACK *current_track;
 
 typedef struct mode_data {
@@ -13,6 +17,7 @@ typedef struct mode_data {
 } race_mode;
 
 struct track_data {
+	LIST *events;
 	char *entry_list;
 	char *name;
 	char *cars;

@@ -5,15 +5,16 @@
  * See the LICENSE file for license information.
  */
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <getopt.h>
 #include <string.h>
 
+#include "core.h"
 #include "parson.h"
-#include "tracks.h"
 #include "config.h"
 #include "io.h"
+#include "tracks.h"
 
 /* global version variable */
 const char *VERSION = "0.3.9";

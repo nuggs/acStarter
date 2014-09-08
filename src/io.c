@@ -3,7 +3,7 @@
 #include <string.h>
 #include <dirent.h>
 
-pid_t proc_find(const char* name) 
+pid_t proc_find(const char* name)
 {
     DIR* dir;
     struct dirent* ent;

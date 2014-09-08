@@ -1,21 +1,25 @@
+/* file: stack.h
+ *
+ * The implementation of a stack
+ */
 
 #include <stdlib.h>
 
 #include "stack.h"
 
-typedef struct scell stack_cell;
+typedef struct stack_cell SCELL;
 
 struct stack {
-	stack_cell *cells;
+	SCELL *cells;
 	int size;
 };
 
-struct scell {
-	stack_cell *next;
+struct stack_cell {
+	SCELL *next;
 	void *content;
 };
 
-STACK *alloc_stack(void) {
+STACK *alloc_stack() {
 	STACK *stack;
 
 	stack = malloc(sizeof(*stack));
@@ -26,7 +30,7 @@ STACK *alloc_stack(void) {
 }
 
 void free_stack(STACK *stack) {
-	stack_cell *cell;
+	SCELL *cell;
 
 	while ((cell = stack->cells) != NULL) {
 		stack->cells = cell->next;
@@ -36,22 +40,22 @@ void free_stack(STACK *stack) {
 }
 
 void *pop_stack(STACK *stack) {
-	stack_cell *cell;
+	SCELL *cell;
 
 	if ((cell = stack->cells) != NULL) {
 		void *content = cell->content;
+
 		stack->cells = cell->next;
 		stack->size--;
 		free(cell);
 
 		return content;
 	}
-
 	return NULL;
 }
 
 void push_stack(void *content, STACK *stack) {
-	stack_cell *cell;
+	SCELL *cell;
 
 	cell = malloc(sizeof(*cell));
 	cell->next = stack->cells;
