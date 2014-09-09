@@ -41,7 +41,6 @@ pid_t proc_find(const char* name)
             fclose(fp);
         }
     }
-
     closedir(dir);
     return -1;
 }

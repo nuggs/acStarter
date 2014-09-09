@@ -3,7 +3,7 @@ RM = rm
 EXE = acStarter
 PROF = #-O3 $(-ggdb)
 
-C_FLAGS = $(PROF) -Wall -g -pedantic
+C_FLAGS = $(PROF)# -Wall -g -pedantic
 L_FLAGS = $(PROF)
 
 C_FILES := core.c config.c io.c list.c stack.c callbacks.c event.c parson.c tracks.c
