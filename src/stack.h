@@ -1,6 +1,12 @@
+/*
+ * acStarter - A simple server manager for Assetto Corsa.
+ * Copyright (c) 2014 Turncoat Tony
+ *
+ * See the LICENSE file for license information.
+ */
 
-#ifndef _STACK_HEADER
-#define _STACK_HEADER
+#ifndef _STACK_H
+#define _STACK_H
 
 typedef struct stack STACK;
 

@@ -7,25 +7,49 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <getopt.h>
-#include <signal.h>
 #include <time.h>
+#include <signal.h>
+#include <getopt.h>
 #include <sys/time.h>
 
+/*#include <sys/time.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <ctype.h>
+#include <time.h>
+#include <sys/ioctl.h>
+#include <errno.h>*/
+
+/* including main header file */
 #include "core.h"
 #include "config.h"
-#include "io.h"
 #include "tracks.h"
 
-int running = -1;
-fd_set fSet;
 /* local function declarations */
-static void signal_handler(int signo);
-void init_signals(void);
-void handle_race(void);
+void system_loop(int mode);
 void cleanup(void);
 
-int main(int argc, char* argv[]) {
+bool system_up = true;
+
+static void signal_handler(int signo) {
+	if (signo == SIGINT)
+		system_up = false;
+}
+
+void init_signals(void) {
+	struct sigaction sigact;
+
+	sigact.sa_handler = signal_handler;
+	sigemptyset(&sigact.sa_mask);
+	sigact.sa_flags = 0;
+	sigaction(SIGINT, &sigact, (struct sigaction *)NULL);
+}
+
+int main(int argc, char *argv[]) {
 	char config_file[140+1], *home_dir = getenv("HOME");
 	int next_option, use_drift = 0, use_race = 0, use_practice = 0;
 
@@ -77,11 +101,9 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	init_event_queue(1);
+	init_signals();
 	track_list = alloc_list();
 	entry_list = alloc_list();
-
-	init_signals();
 
 	if ((use_race == 1 && use_practice == 1) || (use_race == 1 && use_drift == 1) || (use_practice == 1 && use_drift ==1)) {
 		fprintf(stdout, "Please only select drift, practice or race\n");
@@ -90,15 +112,15 @@ int main(int argc, char* argv[]) {
 
 	if (use_drift == 1) {
 		fprintf(stdout, "Starting with drift track list\n");
-		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/drift/drift.json", home_dir);
+		snprintf(config_file, sizeof(config_file), "%s/test/cfg/drift/drift.json", home_dir);
 		GAME_MODE = MODE_DRIFT;
 	} else if (use_practice == 1) {
 		fprintf(stdout, "Starting with practice track list.\n");
-		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/practice/practice.json", home_dir);
+		snprintf(config_file, sizeof(config_file), "%s/test/cfg/practice/practice.json", home_dir);
 		GAME_MODE = MODE_PRACTICE;
 	} else {
 		fprintf(stdout, "Starting with race track list.\n");
-		snprintf(config_file, sizeof(config_file), "%s/acstarter/cfg/race/race.json", home_dir);
+		snprintf(config_file, sizeof(config_file), "%s/test/cfg/race/race.json", home_dir);
 		GAME_MODE = MODE_RACE;
 	}
 
@@ -112,21 +134,22 @@ int main(int argc, char* argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
-	init_event_queue(2);
-	running = 1;
+	current_time = time(NULL);
+	init_event_queue(1);
 
-	program_loop(GAME_MODE);
+	init_event_queue(2);
+
+	system_loop(GAME_MODE);
 
 	cleanup();
-	fprintf(stdout, "\nProgram exited normally\n");
+	printf("Program terminated successfully\n");
 	return EXIT_SUCCESS;
 }
 
-void program_loop(int mode) {
-	ITERATOR iterator;
-	EVENT *event;
-	/*struct timeval last_time, new_time;
-	long secs, usecs;*/
+void system_loop(int mode) {
+	struct timeval last_time, new_time;
+	long secs, usecs;
+	int status;
 
 	if (current_track == NULL) {
 		current_track = track_list->first_cell->content;
@@ -134,47 +157,22 @@ void program_loop(int mode) {
 		init_events_track(current_track);
 	}
 
-	//gettimeofday(&last_time, NULL);
-	while (running) {
+	gettimeofday(&last_time, NULL);
+	while (system_up) {
+		current_time = time(NULL);
+
 		heartbeat();
-	
-		if ((event = event_isset_track(current_track, 1)) != NULL)
-			printf("Track Event: %d %s(passes: %d - bucket: %d)\n", event->type, event->argument, event->passes, event->bucket);
 
-		/*event = NULL;
-		attach_iterator(&iterator, global_events);
-		while ((event = (EVENT *) next_in_list(&iterator)) != NULL) {
-			printf("Event found: %d %s(passes: %d - bucket: %d)\n", event->type, event->argument, event->passes, event->bucket);
-		}
-		detach_iterator(&iterator);*/
-		/* may remove this, might be able to rely only on the event queue 
-		switch (GAME_MODE) {
-			case MODE_RACE:
-				handle_race();
-			break;
+		gettimeofday(&new_time, NULL);
 
-			case MODE_PRACTICE:
-			break;
-
-			case MODE_DRIFT:
-			break;
-
-			default:
-				fprintf(stdout, "We shouldn't be looping here...\n");
-				running = 0;
-			break;
-		}*/
-
-		/*gettimeofday(&new_time, NULL);
-
-		usecs = (int) (last_time.tv_usec -  new_time.tv_usec) + 1000000 / PASSES_PER_SECOND;
+		/* NOTE: consider clock_nanosleep() */
+		usecs = (int) (last_time.tv_usec -  new_time.tv_usec) + 1000000 / PULSES_PER_SECOND;
 		secs  = (int) (last_time.tv_sec  -  new_time.tv_sec);
 
 		while (usecs < 0) {
 			usecs += 1000000;
 			secs  -= 1;
 		}
-
 		while (usecs >= 1000000) {
 			usecs -= 1000000;
 			secs  += 1;
@@ -189,29 +187,12 @@ void program_loop(int mode) {
 			if (select(0, NULL, NULL, NULL, &sleep_time) < 0)
 				continue;
 		}
-		gettimeofday(&last_time, NULL);*/
+		gettimeofday(&last_time, NULL);
 	}
 }
 
-void init_signals(void) {
-	struct sigaction sigact;
-
-	sigact.sa_handler = signal_handler;
-	sigemptyset(&sigact.sa_mask);
-	sigact.sa_flags = 0;
-	sigaction(SIGINT, &sigact, (struct sigaction *)NULL);
-}
-
-static void signal_handler(int signo) {
-	if (signo == SIGINT)
-		running = 0;
-}
-
-void handle_race(void) {
-	/* do stuff here */
-}
-
 void cleanup(void) {
+	printf("cleaning up...\n");
 	remove_server_config(REMOVE_CFG_BOTH);
 	free_config();
 	free_list(track_list);

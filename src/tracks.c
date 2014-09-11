@@ -102,7 +102,11 @@ int read_tracklist(const char *filename) {
 	JSON_Object *tracks_object;
 	int i;
 
-	tracks_root = json_parse_file_with_comments(filename);
+	if ((tracks_root = json_parse_file_with_comments(filename)) == NULL) {
+		printf("read_tracklist: Failed to read track file\n");
+		return -1;
+	}
+
 	if (json_value_get_type(tracks_root) != JSONArray) {
 		fprintf(stdout, "JSON is not an array\n");
 		return -1;

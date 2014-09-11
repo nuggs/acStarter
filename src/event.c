@@ -5,7 +5,10 @@
  * See the LICENSE file for license information.
  */
 
+#include <sys/types.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 #include <stdlib.h>
 
 #include "core.h"
@@ -34,7 +37,6 @@ bool enqueue_event(EVENT *event, int system_pulses) {
 	event->bucket = bucket;
 
 	attach_to_list(event, event_queue[bucket]);
-
 	return true;
 }
 
@@ -52,7 +54,6 @@ void dequeue_event(EVENT *event) {
 			detach_from_list(event, event->owner.track->events);
 		break;
 	}
-
 	free(event->argument);
 	push_stack(event, event_free);
 }
@@ -65,14 +66,13 @@ EVENT *alloc_event(void) {
 	else
 		event = (EVENT *) pop_stack(event_free);
 
-	event->function = NULL;
+	event->fun = NULL;
 	event->argument = NULL;
-	event->owner.track = NULL;  
+	event->owner.track = NULL;
 	event->passes = 0;
 	event->bucket = 0;
 	event->owner_type = EVENT_UNOWNED;
 	event->type = EVENT_NONE;
-
 	return event;
 }
 
@@ -84,19 +84,32 @@ void init_event_queue(int section) {
 		for (i = 0; i < MAX_EVENT_HASH; i++) {
 			event_queue[i] = alloc_list();
 		}
-
 		event_free = alloc_stack();
 		global_events = alloc_list();
 	} else if (section == 2) {
 		event = alloc_event();
-		event->function = &event_system_test;
-		event->argument = strdup("system test");
+		event->fun = &event_system_test;
 		event->type = EVENT_SYSTEM_TEST;
-		add_event_system(event, 2 * 60 * PASSES_PER_SECOND);
+		add_event_system(event, 60 * PULSES_PER_SECOND);
+
+		event = alloc_event();
+		event->fun = &event_system_checkac;
+		event->type = EVENT_SYSTEM_CHECKAC;
+		add_event_system(event, 30 * PULSES_PER_SECOND);
 	}
 }
 
-void heartbeat() {
+void init_events_track(TRACK *track)
+{
+  EVENT *event;
+
+  event = alloc_event();
+  event->fun = &event_track_test;
+  event->type = EVENT_TRACK_TEST;
+  add_event_track(event, track, 30 * 60 * PULSES_PER_SECOND);
+}
+
+void heartbeat(void) {
 	EVENT *event;
 	ITERATOR iterator;
 
@@ -104,13 +117,29 @@ void heartbeat() {
 
 	attach_iterator(&iterator, event_queue[current_bucket]);
 	while ((event = (EVENT *) next_in_list(&iterator)) != NULL) {
-		printf("%s: %d (passes: %d - bucket: %d)\n",  event->argument, event->type, event->passes, event->bucket);
 		if (event->passes-- > 0) continue;
 
-		if (!((*event->function)(event)))
+		if (!((*event->fun)(event)))
 			dequeue_event(event);
 	}
 	detach_iterator(&iterator);
+}
+
+void add_event_system(EVENT *event, int delay) {
+	if (event->type == EVENT_NONE) {
+		printf("add_event_system: no type\n");
+		return;
+	}
+
+	if (event->fun == NULL) {
+		printf("add_event_system: event type %d has no callback function\n", event->type);
+		return;
+	}
+	event->owner_type = EVENT_OWNER_SYSTEM;
+	attach_to_list(event, global_events);
+
+	if (enqueue_event(event, delay) == false)
+		printf("add_event_system: event type %d failed to be enqueued\n", event->type);
 }
 
 void add_event_track(EVENT *event, TRACK *track, int delay) {
@@ -119,7 +148,7 @@ void add_event_track(EVENT *event, TRACK *track, int delay) {
 		return;
 	}
 
-	if (event->function == NULL) {
+	if (event->fun == NULL) {
 		printf("add_event_track: event type %d has no callback function\n", event->type);
 		return;
 	}
@@ -133,25 +162,8 @@ void add_event_track(EVENT *event, TRACK *track, int delay) {
 		printf("add_event_track: event type %d failed to be enqueued\n", event->type);
 }
 
-void add_event_system(EVENT *event, int delay) {
-	if (event->type == EVENT_NONE) {
-		printf("add_event_system: no type\n");
-		return;
-	}
-
-	if (event->function == NULL) {
-		printf("add_event_system: event type %d has no callback function\n", event->type);
-		return;
-	}
-
-	event->owner_type = EVENT_OWNER_SYSTEM;
-	attach_to_list(event, global_events);
-
-	if (enqueue_event(event, delay) == false)
-		printf("add_event_system: event type %d failed to be enqueued\n", event->type);
-}
-
-EVENT *event_isset_track(TRACK *track, int type) {
+EVENT *event_isset_track(TRACK *track, int type)
+{
 	EVENT *event;
 	ITERATOR iterator;
 
@@ -164,7 +176,8 @@ EVENT *event_isset_track(TRACK *track, int type) {
 	return event;
 }
 
-void strip_event_track(TRACK *track, int type) {
+void strip_event_track(TRACK *track, int type)
+{
 	EVENT *event;
 	ITERATOR iterator;
 
@@ -174,14 +187,4 @@ void strip_event_track(TRACK *track, int type) {
 			dequeue_event(event);
 	}
 	detach_iterator(&iterator);
-}
-
-void init_events_track(TRACK *track) {
-	EVENT *event;
-
-	event = alloc_event();
-	event->function = &event_track_test;
-	event->type = EVENT_TRACK_TEST;
-	event->argument = strdup("track test");
-	add_event_track(event, track, 60 * PASSES_PER_SECOND);
 }

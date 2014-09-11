@@ -1,5 +1,12 @@
+/*
+ * acStarter - A simple server manager for Assetto Corsa.
+ * Copyright (c) 2014 Turncoat Tony
+ *
+ * See the LICENSE file for license information.
+ */
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "list.h"
 
@@ -13,10 +20,9 @@ LIST *alloc_list(void) {
 	list = malloc(sizeof(*list));
 	list->first_cell = NULL;
 	list->last_cell = NULL;
-	list->_iterators = 0;
-	list->_valid = 1;
-	list->_size = 0;
-
+	list->iterators = 0;
+	list->valid = 1;
+	list->size = 0;
 	return list;
 }
 
@@ -24,54 +30,50 @@ void attach_iterator(ITERATOR *iterator, LIST *list) {
 	iterator->list = list;
 
 	if (list != NULL) {
-		list->_iterators++;
+		list->iterators++;
 		iterator->cell = list->first_cell;
-	} else {
+	} else
 		iterator->cell = NULL;
-	}
 }
 
 CELL *alloc_cell(void) {
 	CELL *cell;
 
-	cell		= malloc(sizeof(*cell));
-	cell->next_cell	= NULL;
+	cell = malloc(sizeof(*cell));
+	cell->next_cell = NULL;
 	cell->prev_cell = NULL;
-	cell->content	= NULL;
-	cell->_valid	= 1;
-
+	cell->content = NULL;
+	cell->valid = 1;
 	return cell;
 }
 
 void attach_to_list(void *content, LIST *list) {
 	CELL *cell;
-	int found = 0;
+	bool found = false;
 
 	for (cell = list->first_cell; cell != NULL; cell = cell->next_cell) {
-		if (!cell->_valid)
-			continue;
+		if (!cell->valid) continue;
 
 		if (cell->content == content) {
-			found = 1;
+			found = true;
 			break;
 		}
 	}
 
 	if (found)
-		return;
+	return;
 
 	cell = alloc_cell();
 	cell->content = content;
-	cell->next_cell	= list->first_cell;
+	cell->next_cell = list->first_cell;
 
 	if (list->first_cell != NULL)
 		list->first_cell->prev_cell = cell;
-
 	if (list->last_cell == NULL)
 		list->last_cell = cell;
 
 	list->first_cell = cell;
-	list->_size++;
+	list->size++;
 }
 
 void detach_from_list(void *content, LIST *list) {
@@ -79,11 +81,12 @@ void detach_from_list(void *content, LIST *list) {
 
 	for (cell = list->first_cell; cell != NULL; cell = cell->next_cell) {
 		if (cell->content == content) {
-			if (list->_iterators > 0)
+			if (list->iterators > 0)
 				invalidate_cell(cell);
 			else
 				free_cell(cell, list);
-			list->_size--;
+
+			list->size--;
 			return;
 		}
 	}
@@ -93,19 +96,18 @@ void detach_iterator(ITERATOR *iterator) {
 	LIST *list = iterator->list;
 
 	if (list != NULL) {
-		list->_iterators--;
+		list->iterators--;
 
-		if (list->_iterators <= 0) {
+		if (list->iterators <= 0) {
 			CELL *cell, *next_cell;
 
 			for (cell = list->first_cell; cell != NULL; cell = next_cell) {
 				next_cell = cell->next_cell;
 
-				if (cell->_valid)
+				if (!cell->valid)
 					free_cell(cell, list);
 			}
-
-			if (!list->_valid)
+			if (!list->valid)
 				free_list(list);
 		}
 	}
@@ -114,8 +116,8 @@ void detach_iterator(ITERATOR *iterator) {
 void free_list(LIST *list) {
 	CELL *cell, *next_cell;
 
-	if (list->_iterators > 0) {
-		list->_valid = 0;
+	if (list->iterators > 0) {
+		list->valid = 0;
 		return;
 	}
 
@@ -129,24 +131,27 @@ void free_list(LIST *list) {
 void free_cell(CELL *cell, LIST *list) {
 	if (list->first_cell == cell)
 		list->first_cell = cell->next_cell;
+
 	if (list->last_cell == cell)
 		list->last_cell = cell->prev_cell;
+
 	if (cell->prev_cell != NULL)
 		cell->prev_cell->next_cell = cell->next_cell;
-	if (cell->next_cell != NULL)
+
+	if (cell->next_cell != NULL) 
 		cell->next_cell->prev_cell = cell->prev_cell;
 
 	free(cell);
 }
 
 void invalidate_cell(CELL *cell) {
-	cell->_valid = 0;
+	cell->valid = 0;
 }
 
 void *next_in_list(ITERATOR *iterator) {
 	void *content = NULL;
 
-	while (iterator->cell != NULL && !iterator->cell->_valid) {
+	while (iterator->cell != NULL && !iterator->cell->valid) {
 		iterator->cell = iterator->cell->next_cell;
 	}
 
@@ -154,10 +159,9 @@ void *next_in_list(ITERATOR *iterator) {
 		content = iterator->cell->content;
 		iterator->cell = iterator->cell->next_cell;
 	}
-
 	return content;
 }
 
-int size_of_list(LIST *list) {
-	return list->_size;
+int list_size(LIST *list) {
+	return list->size;
 }
