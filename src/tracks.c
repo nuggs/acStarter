@@ -365,3 +365,16 @@ int write_track(void) {
 	}
 	return 1;
 }
+
+void next_track(int mode) {
+	switch(mode) {
+		case MODE_RACE:
+		break;
+		case MODE_PRACTICE:
+		break;
+		case MODE_DRIFT:
+		break;
+		default:
+		break;
+	}
+}
