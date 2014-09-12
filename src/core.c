@@ -135,6 +135,7 @@ int main(int argc, char *argv[]) {
 
 	current_time = time(NULL);
 	init_event_queue(1);
+	init_dice();
 
 	init_event_queue(2);
 

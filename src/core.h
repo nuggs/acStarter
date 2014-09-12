@@ -11,6 +11,7 @@
 
 #include "list.h"
 #include "stack.h"
+#include "random.h"
 
 #define PULSES_PER_SECOND 4
 

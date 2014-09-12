@@ -94,6 +94,7 @@ bool event_track_raceover(EVENT *event) {
 	return false;
 }
 
+/* Used for track cycle testing */
 bool event_track_nexttrack(EVENT *event) {
 	TRACK *track;
 	pid_t pid = proc_find("acServer_linux");
