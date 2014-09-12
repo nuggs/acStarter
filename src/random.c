@@ -10,7 +10,7 @@
 #include <time.h>
 
 /* include main header file */
-#include "mud.h"
+#include "core.h"
 
 /* local seed variable, used to create pseudo random numbers */
 static unsigned int iSeed;
