@@ -95,18 +95,25 @@ void init_event_queue(int section) {
 		event = alloc_event();
 		event->fun = &event_system_checkac;
 		event->type = EVENT_SYSTEM_CHECKAC;
-		add_event_system(event, 30 * PULSES_PER_SECOND);
+		add_event_system(event, 10 * PULSES_PER_SECOND);
 	}
 }
 
 void init_events_track(TRACK *track)
 {
-  EVENT *event;
+	EVENT *event;
 
-  event = alloc_event();
-  event->fun = &event_track_test;
-  event->type = EVENT_TRACK_TEST;
-  add_event_track(event, track, 30 * 60 * PULSES_PER_SECOND);
+	event = alloc_event();
+	event->fun = &event_track_test;
+	event->type = EVENT_TRACK_TEST;
+	add_event_track(event, track, 10 * 60 * PULSES_PER_SECOND);
+
+	if (GAME_MODE == MODE_RACE) {
+		event = alloc_event();
+		event->fun = &event_track_raceover;
+		event->type = EVENT_TRACK_RACEOVER;
+		add_event_track(event, track, 60 * PULSES_PER_SECOND);
+	}
 }
 
 void heartbeat(void) {

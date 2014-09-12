@@ -4,12 +4,7 @@
  *
  * See the LICENSE file for license information.
  */
-	/*
-	 * base_dir: base directory for acStarter(must end with trailing slash)
-	 * ac_exe: assetto corsa server binary name
-	 * ac_location: base directory for assetto corsa server(must end with trailing slash)
-	 * tracklist: track list for this race configuration
-	 */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>

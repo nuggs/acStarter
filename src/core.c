@@ -194,6 +194,7 @@ void cleanup(void) {
 	printf("cleaning up...\n");
 	remove_server_config(REMOVE_CFG_BOTH);
 	free_config();
+	free_track(current_track);
 	free_list(track_list);
 	free_list(entry_list);
 }

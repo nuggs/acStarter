@@ -1,6 +1,17 @@
+/*
+ * acStarter - A simple server manager for Assetto Corsa.
+ * Copyright (c) 2014 Turncoat Tony
+ *
+ * See the LICENSE file for license information.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <time.h>
 
 #include "core.h"
@@ -19,15 +30,17 @@ bool event_system_test(EVENT *event) {
 }
 
 bool event_system_checkac(EVENT *event) {
-	char buf[128];
+	char buf[256];
 	pid_t pid = proc_find("acServer_linux");
-	int status;
+	/*int status;*/
 
 	if (pid == -1) {
 		if (fork() == 0) {
-			sprintf(buf, "%s%s -c=\"%s/cfg/server_cfg.ini\" -e=\"%s/cfg/entry_list.ini\" > ac_log", config->ac_location, config->ac_exe, config->ac_location,config->ac_location);
-			status = system(buf);
+			snprintf(buf, 256, "%s%s -c=\"%scfg/server_cfg.ini\" -e=\"%scfg/entry_list.ini\" > ac_log", config->ac_location, config->ac_exe, config->ac_location,config->ac_location);
+			/*status = system(buf);*/
+			system(buf);
 			exit(0);
+			wait(NULL);
 		}
 	}
 
@@ -35,6 +48,47 @@ bool event_system_checkac(EVENT *event) {
 	event->fun = &event_system_checkac;
 	event->type = EVENT_SYSTEM_CHECKAC;
 	add_event_system(event, 30 * PULSES_PER_SECOND);
+	return false;
+}
+
+bool event_track_raceover(EVENT *event) {
+	TRACK *track;
+	FILE *fp;
+	pid_t pid = proc_find("acServer_linux");
+	bool killed = false;
+	char buf[512];
+
+	if ((track = event->owner.track) == NULL) {
+		printf("event_track_test: No owner\n");
+		return true;
+	}
+
+	if ((fp = fopen("ac_log", "r")) == NULL) {
+		return true;
+	}
+
+	while (fgets(buf, 512, fp) != NULL) {
+		if (strstr(buf, "HasSentRaceoverPacket")) {
+			kill(pid, SIGTERM);
+			killed = true;
+			remove_server_config(REMOVE_CFG_BOTH);
+			printf("Found Raceover\n");
+		}
+	}
+
+	if (fp != NULL)
+		fclose(fp);
+
+	if (killed) {
+		remove_file("ac_log");
+		next_track(MODE_RACE);
+		return true;
+	}
+
+	event = alloc_event();
+	event->fun = &event_track_raceover;
+	event->type = EVENT_TRACK_RACEOVER;
+	add_event_track(event, track, 5 * PULSES_PER_SECOND);
 	return false;
 }
 

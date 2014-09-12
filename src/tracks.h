@@ -46,6 +46,7 @@ struct track_data {
 	race_mode qualify;
 	race_mode race;
 	int dynamic_track[3];
+	int track_number;
 };
 
 struct entry_data {
@@ -62,5 +63,6 @@ TRACK *alloc_track(void);
 void free_track(TRACK *track);
 int read_tracklist(const char *filename);
 int write_track(void);
+void next_track(int mode);
 
 #endif
