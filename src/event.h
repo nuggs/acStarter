@@ -21,7 +21,7 @@
 /* track events */
 #define EVENT_TRACK_TEST        1
 #define EVENT_TRACK_RACEOVER    2
-#define EVENT_TRACK_NEXTRACE    3
+#define EVENT_TRACK_NEXTTRACK   3
 
 typedef bool EVENT_FUN(EVENT *event);
 
@@ -53,4 +53,4 @@ bool event_system_test(EVENT *event);
 bool event_system_checkac(EVENT *event);
 bool event_track_test(EVENT *event);
 bool event_track_raceover(EVENT *event);
-bool event_track_nextrace(EVENT *event);
+bool event_track_nexttrack(EVENT *event);

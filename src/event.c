@@ -113,6 +113,11 @@ void init_events_track(TRACK *track)
 		event->fun = &event_track_raceover;
 		event->type = EVENT_TRACK_RACEOVER;
 		add_event_track(event, track, 60 * PULSES_PER_SECOND);
+
+		event = alloc_event();
+		event->fun = &event_track_nexttrack;
+		event->type = EVENT_TRACK_NEXTTRACK;
+		add_event_track(event, track, 30 * PULSES_PER_SECOND);
 	}
 }
 

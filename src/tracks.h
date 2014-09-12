@@ -63,6 +63,6 @@ TRACK *alloc_track(void);
 void free_track(TRACK *track);
 int read_tracklist(const char *filename);
 int write_track(void);
-void next_track(int mode);
+void next_track(void);
 
 #endif

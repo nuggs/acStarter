@@ -83,7 +83,7 @@ bool event_track_raceover(EVENT *event) {
 
 	if (killed) {
 		remove_file("ac_log");
-		next_track(MODE_RACE);
+		next_track();
 		return true;
 	}
 
@@ -91,6 +91,33 @@ bool event_track_raceover(EVENT *event) {
 	event->fun = &event_track_raceover;
 	event->type = EVENT_TRACK_RACEOVER;
 	add_event_track(event, track, 5 * PULSES_PER_SECOND);
+	return false;
+}
+
+bool event_track_nexttrack(EVENT *event) {
+	TRACK *track;
+	pid_t pid = proc_find("acServer_linux");
+	bool killed = false;
+
+	if ((track = event->owner.track) == NULL) {
+		printf("event_track_test: No owner\n");
+		return true;
+	}
+
+	kill(pid, SIGTERM);
+	killed = true;
+	remove_server_config(REMOVE_CFG_BOTH);
+
+	if (killed) {
+		remove_file("ac_log");
+		next_track();
+		return true;
+	}
+
+	event = alloc_event();
+	event->fun = &event_track_nexttrack;
+	event->type = EVENT_TRACK_NEXTTRACK;
+	add_event_track(event, track, 60 * PULSES_PER_SECOND);
 	return false;
 }
 
