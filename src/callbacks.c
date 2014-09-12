@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <time.h>
 
 #include "core.h"
 #include "config.h"
 #include "tracks.h"
+#include "io.h"
 
 bool event_system_test(EVENT *event) {
 	printf("Test 1: %s\n", ctime(&current_time));

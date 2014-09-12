@@ -3,11 +3,25 @@
  * Copyright (c) 2014 Turncoat Tony
  *
  * See the LICENSE file for license information.
+	* 
+	 * The first entry here will be the defaults should you add
+	 * more tracks and don't fill in all the require fields,
+	 * it will auto populate them from the defaults.
+	 *
+	 * NOTE: Do not set the defaults track to anything other than
+	 * null as it will prevent the rest of the file from loading.
+	 * I may change that in the future.
+	 *
+	 * To disable practice or anything, set enabled to false and 
+	 * those will not write to the server config when starting
+	 * tracks.
+	 *
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "core.h"
 #include "config.h"
@@ -57,12 +71,15 @@ TRACK *alloc_track(void) {
 	track->damage_multiplier		= 0;
 	track->fuel_rate				= 0;
 	track->tyre_wear_rate			= 0;
+	track->practice.enabled			= false;
 	track->practice.name			= NULL;
 	track->practice.time			= 0;
 	track->practice.wait_time		= 0;
+	track->qualify.enabled			= false;
 	track->qualify.name				= NULL;
 	track->qualify.time				= 0;
 	track->qualify.wait_time		= 0;
+	track->race.name				= false;
 	track->race.name				= NULL;
 	track->race.time				= 0;
 	track->race.wait_time			= 0;
@@ -106,7 +123,6 @@ int read_tracklist(const char *filename) {
 		printf("read_tracklist: Failed to read track file\n");
 		return -1;
 	}
-
 	if (json_value_get_type(tracks_root) != JSONArray) {
 		fprintf(stdout, "JSON is not an array\n");
 		return -1;
@@ -155,18 +171,18 @@ int parse_track(JSON_Object *track_data) {
 		config->defaults->allowed_tyres_out			= json_object_get_number(track_data, "allowed_tyres_out");
 		config->defaults->damage_multiplier			= json_object_get_number(track_data, "damage_multiplier");
 		config->defaults->fuel_rate					= json_object_get_number(track_data, "fuel_rate");
-		config->defaults->tyre_wear_rate			= json_object_get_number(track_data, "tyre_wear_rate");
-		if (json_object_dotget_boolean(track_data, "practice.enabled") == 1) {
+		config->defaults->tyre_wear_rate			= floor(json_object_get_number(track_data, "tyre_wear_rate"));
+		if (json_object_dotget_boolean(track_data, "practice.enabled") == true) {
 			config->defaults->practice.name			= strdup(json_object_dotget_string(track_data, "practice.name"));
 			config->defaults->practice.time			= json_object_dotget_number(track_data, "practice.time");
 			config->defaults->practice.wait_time	= json_object_dotget_number(track_data, "practice.wait_time");
 		}
-		if (json_object_dotget_boolean(track_data, "qualify.enabled") == 1) {
+		if (json_object_dotget_boolean(track_data, "qualify.enabled") == true) {
 			config->defaults->qualify.name			= strdup(json_object_dotget_string(track_data, "qualify.name"));
 			config->defaults->qualify.time			= json_object_dotget_number(track_data, "qualify.time");
 			config->defaults->qualify.wait_time		= json_object_dotget_number(track_data, "qualify.wait_time");
 		}
-		if (json_object_dotget_boolean(track_data, "race.enabled") == 1) {
+		if (json_object_dotget_boolean(track_data, "race.enabled") == true) {
 			config->defaults->race.name				= strdup(json_object_dotget_string(track_data, "race.name"));
 			config->defaults->race.time				= json_object_dotget_number(track_data, "race.laps");
 			config->defaults->race.wait_time		= json_object_dotget_number(track_data, "race.wait_time");
@@ -178,7 +194,7 @@ int parse_track(JSON_Object *track_data) {
 		return 1;
 	}
 
-	fprintf(stdout, "Loading track: %s (%g pits)\n", json_object_get_string(track_data, "track"), json_object_get_number(track_data, "max_clients"));
+	fprintf(stdout, "Loading track: %s (%g slots)\n", json_object_get_string(track_data, "track"), json_object_get_number(track_data, "max_clients"));
 	if (json_object_get_string(track_data, "track") == NULL) {
 		printf("You must specify a track, there is no default track\nTrack not loaded, loading next track\n");
 		return -1;
@@ -209,17 +225,17 @@ int parse_track(JSON_Object *track_data) {
 	track->damage_multiplier		= (json_object_get_number(track_data, "damage_multiplier") != 0) ? json_object_get_number(track_data, "damage_multiplier") : config->defaults->damage_multiplier;
 	track->fuel_rate				= (json_object_get_number(track_data, "fuel_rate") != 0) ? json_object_get_number(track_data, "fuel_rate") : config->defaults->fuel_rate;
 	track->tyre_wear_rate			= (json_object_get_number(track_data, "tyre_wear_rate") != 0) ? json_object_get_number(track_data, "tyre_wear_rate") : config->defaults->tyre_wear_rate;
-	if (json_object_dotget_boolean(track_data, "practice.enabled") == 1) {
+	if (json_object_dotget_boolean(track_data, "practice.enabled") == true) {
 		track->practice.name		= strdup(json_object_dotget_string(track_data, "practice.name"));
 		track->practice.time		= json_object_dotget_number(track_data, "practice.time");
 		track->practice.wait_time	= json_object_dotget_number(track_data, "practice.wait_time");
 	}
-	if (json_object_dotget_boolean(track_data, "qualify.enabled") == 1) {
+	if (json_object_dotget_boolean(track_data, "qualify.enabled") == true) {
 		track->qualify.name			= strdup(json_object_dotget_string(track_data, "qualify.name"));
 		track->qualify.time			= json_object_dotget_number(track_data, "qualify.time");
 		track->qualify.wait_time	= json_object_dotget_number(track_data, "qualify.wait_time");
 	}
-	if (json_object_dotget_boolean(track_data, "race.enabled") == 1) {
+	if (json_object_dotget_boolean(track_data, "race.enabled") == true) {
 		track->race.name			= strdup(json_object_dotget_string(track_data, "race.name"));
 		track->race.time			= json_object_dotget_number(track_data, "race.laps");
 		track->race.wait_time		= json_object_dotget_number(track_data, "race.wait_time");
@@ -230,6 +246,7 @@ int parse_track(JSON_Object *track_data) {
 	track->dynamic_track[3] 		= (json_object_dotget_number(track_data, "dynamic_track.session_transfer") != 0) ? json_object_dotget_number(track_data, "dynamic_track.session_transfer") : config->defaults->dynamic_track[3];
 	attach_to_list(track, track_list);
 	return 1;
+
 }
 
 int read_entry_list(const char *filename) {
@@ -335,19 +352,19 @@ int write_track(void) {
 	fprintf(server_config, "DAMAGE_MULTIPLIER=%d\n", current_track->damage_multiplier);
 	fprintf(server_config, "FUEL_RATE=%d\n", current_track->fuel_rate);
 	fprintf(server_config, "TYRE_WEAR_RATE=%d\n\n", current_track->tyre_wear_rate);
-	if (current_track->practice.name != NULL) {
+	if (current_track->practice.enabled == 1) {
 		fprintf(server_config, "[PRACTICE]\n");
 		fprintf(server_config, "NAME=%s\n", current_track->practice.name);
 		fprintf(server_config, "TIME=%d\n", current_track->practice.time);
 		fprintf(server_config, "WAIT_TIME=%d\n\n", current_track->practice.wait_time);
 	}
-	if (current_track->qualify.name != NULL) {
+	if (current_track->qualify.enabled == 1) {
 		fprintf(server_config, "[QUALIFY]\n");
 		fprintf(server_config, "NAME=%s\n", current_track->qualify.name);
 		fprintf(server_config, "TIME=%d\n", current_track->qualify.time);
 		fprintf(server_config, "WAIT_TIME=%d\n\n", current_track->qualify.wait_time);
 	}
-	if (current_track->race.name != NULL) {
+	if (current_track->race.enabled == 1) {
 		fprintf(server_config, "[RACE]\n");
 		fprintf(server_config, "NAME=%s\n", current_track->race.name);
 		fprintf(server_config, "LAPS=%d\n", current_track->race.time);

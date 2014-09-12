@@ -11,6 +11,7 @@
 extern TRACK *current_track;
 
 typedef struct mode_data {
+	bool enabled;
 	char *name;
 	int time;
 	int wait_time;
