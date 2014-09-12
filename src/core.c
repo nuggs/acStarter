@@ -11,6 +11,8 @@
 #include <signal.h>
 #include <getopt.h>
 #include <sys/time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 /*#include <sys/time.h>
 #include <sys/socket.h>
@@ -36,8 +38,17 @@ void cleanup(void);
 bool system_up = true;
 
 static void signal_handler(int signo) {
-	if (signo == SIGINT)
-		system_up = false;
+	pid_t p;
+	switch(signo) {
+		case SIGINT:
+			system_up = false;
+		break;
+		case SIGCHLD:
+			do {
+				p = waitpid(-1, NULL, WNOHANG);
+			} while (p != (pid_t)0 && p != (pid_t)-1);
+		break;
+	}
 }
 
 void init_signals(void) {
@@ -45,8 +56,9 @@ void init_signals(void) {
 
 	sigact.sa_handler = signal_handler;
 	sigemptyset(&sigact.sa_mask);
-	sigact.sa_flags = 0;
+	sigact.sa_flags = SA_NOCLDSTOP | SA_RESTART | SA_SIGINFO | SA_NOCLDWAIT;
 	sigaction(SIGINT, &sigact, (struct sigaction *)NULL);
+	sigaction(SIGCHLD, &sigact, (struct sigaction *)NULL);
 }
 
 int main(int argc, char *argv[]) {

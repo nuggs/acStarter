@@ -40,7 +40,6 @@ bool event_system_checkac(EVENT *event) {
 			/*status = system(buf);*/
 			system(buf);
 			exit(0);
-			wait(NULL);
 		}
 	}
 
