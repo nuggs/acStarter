@@ -29,15 +29,18 @@ bool event_system_test(EVENT *event) {
 	return false;
 }
 
+/* 
+ * Check every thirty seconds if the server is running,
+ * if it's not, we restart it.
+ * The ac_log will get created at each boot.
+ */
 bool event_system_checkac(EVENT *event) {
 	char buf[256];
 	pid_t pid = proc_find("acServer_linux");
-	/*int status;*/
 
 	if (pid == -1) {
 		if (fork() == 0) {
 			snprintf(buf, 256, "%s%s -c=\"%scfg/server_cfg.ini\" -e=\"%scfg/entry_list.ini\" > ac_log", config->ac_location, config->ac_exe, config->ac_location,config->ac_location);
-			/*status = system(buf);*/
 			system(buf);
 			exit(0);
 		}
