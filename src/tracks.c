@@ -380,10 +380,16 @@ int write_track(void) {
 void next_track(int mode) {
 	ITERATOR iterator;
 	TRACK *track;
+	EVENT *events;
 	int next_track = current_track->track_number-1;
 
 	switch(mode) {
 		case MODE_RACE:
+			attach_iterator(&iterator, current_track->events);
+			while ((events = (EVENT *) next_in_list(&iterator)) != NULL)
+				dequeue_event(events);
+			detach_iterator(&iterator);
+			free_list(current_track->events);
 			attach_iterator(&iterator, track_list);
 			while ((track = (TRACK *) next_in_list(&iterator)) != NULL) {
 				if (next_track == 0) {
