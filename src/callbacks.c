@@ -34,16 +34,6 @@
 #include "tracks.h"
 #include "io.h"
 
-bool event_system_test(EVENT *event) {
-	printf("Test 1: %s\n", ctime(&current_time));
-
-	event = alloc_event();
-	event->fun = &event_system_test;
-	event->type = EVENT_SYSTEM_TEST;
-	add_event_system(event, 10 * 60 * PULSES_PER_SECOND);
-	return false;
-}
-
 /* 
  * Check every thirty seconds if the server is running,
  * if it's not, we restart it.
@@ -51,7 +41,7 @@ bool event_system_test(EVENT *event) {
  */
 bool event_system_checkac(EVENT *event) {
 	char buf[256];
-	pid_t pid = proc_find("acServer_linux");
+	pid_t pid = proc_find(config->ac_exe);
 
 	if (pid == -1) {
 		if (fork() == 0) {
@@ -71,12 +61,12 @@ bool event_system_checkac(EVENT *event) {
 bool event_track_raceover(EVENT *event) {
 	TRACK *track;
 	FILE *fp;
-	pid_t pid = proc_find("acServer_linux");
+	pid_t pid = proc_find(config->ac_exe);
 	bool killed = false;
 	char buf[4096]; /* Well, kick me in the dick if this isn't big enough */
 
 	if ((track = event->owner.track) == NULL) {
-		printf("event_track_test: No owner\n");
+		printf("event_track_raceover: No owner\n");
 		return true;
 	}
 
@@ -112,10 +102,10 @@ bool event_track_raceover(EVENT *event) {
 /* Just return true, no need to enqueue another event */
 bool event_track_endpractice(EVENT *event) {
 	TRACK *track;
-	pid_t pid = proc_find("acServer_linux");
+	pid_t pid = proc_find(config->ac_exe);
 
 	if ((track = event->owner.track) == NULL) {
-		printf("event_track_test: No owner\n");
+		printf("event_track_endpractice: No owner\n");
 		return true;
 	}
 
@@ -129,11 +119,11 @@ bool event_track_endpractice(EVENT *event) {
 /* Used for track cycle testing */
 bool event_track_nexttrack(EVENT *event) {
 	TRACK *track;
-	pid_t pid = proc_find("acServer_linux");
+	pid_t pid = proc_find(config->ac_exe);
 	bool killed = false;
 
 	if ((track = event->owner.track) == NULL) {
-		printf("event_track_test: No owner\n");
+		printf("event_track_nexttrack: No owner\n");
 		return true;
 	}
 
@@ -154,19 +144,3 @@ bool event_track_nexttrack(EVENT *event) {
 	return false;
 }
 
-bool event_track_test(EVENT *event) {
-	TRACK *track;
-
-	if ((track = event->owner.track) == NULL) {
-		printf("event_track_test: No owner\n");
-		return true;
-	}
-
-	printf("Track %s: %s\n", track->track, ctime(&current_time));
-
-	event = alloc_event();
-	event->fun = &event_track_test;
-	event->type = EVENT_TRACK_TEST;
-	add_event_track(event, track, 60 * 60 * PULSES_PER_SECOND);
-	return false;
-}

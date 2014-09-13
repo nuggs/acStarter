@@ -103,11 +103,6 @@ void init_event_queue(int section) {
 		global_events = alloc_list();
 	} else if (section == 2) {
 		event = alloc_event();
-		event->fun = &event_system_test;
-		event->type = EVENT_SYSTEM_TEST;
-		add_event_system(event, 60 * PULSES_PER_SECOND);
-
-		event = alloc_event();
 		event->fun = &event_system_checkac;
 		event->type = EVENT_SYSTEM_CHECKAC;
 		add_event_system(event, 10 * PULSES_PER_SECOND);
@@ -117,11 +112,6 @@ void init_event_queue(int section) {
 void init_events_track(TRACK *track)
 {
 	EVENT *event;
-
-	event = alloc_event();
-	event->fun = &event_track_test;
-	event->type = EVENT_TRACK_TEST;
-	add_event_track(event, track, 10 * 60 * PULSES_PER_SECOND);
 
 	switch(GAME_MODE) {
 		case MODE_RACE:

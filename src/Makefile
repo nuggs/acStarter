@@ -1,7 +1,7 @@
 CC = gcc
 RM = rm
 EXE = acStarter
-PROF = #-O3 $(-ggdb)
+PROF = #-O3 -ggdb
 
 C_FLAGS = $(PROF) $(INCC) -Wall -g -pedantic
 L_FLAGS = $(PROF) $(INCL) -lm

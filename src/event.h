@@ -33,14 +33,13 @@
 #define EVENT_NONE              0
 
 /* system events */
-#define EVENT_SYSTEM_TEST       1
-#define EVENT_SYSTEM_CHECKAC    2
+#define EVENT_SYSTEM_CHECKAC    1
 
 /* track events */
-#define EVENT_TRACK_TEST        1
-#define EVENT_TRACK_RACEOVER    2
-#define EVENT_TRACK_ENDPRACTICE 3
-#define EVENT_TRACK_NEXTTRACK   4
+#define EVENT_TRACK_RACEOVER    1
+#define EVENT_TRACK_ENDPRACTICE 2
+/* Used for testing track cycling should always be last */
+#define EVENT_TRACK_NEXTTRACK   3
 
 typedef bool EVENT_FUN(EVENT *event);
 
@@ -68,9 +67,7 @@ void add_event_track(EVENT *event, TRACK *track, int delay);
 void strip_event_track(TRACK *track, int type);
 
 /* event callbacks */
-bool event_system_test(EVENT *event);
 bool event_system_checkac(EVENT *event);
-bool event_track_test(EVENT *event);
 bool event_track_raceover(EVENT *event);
 bool event_track_endpractice(EVENT *event);
 bool event_track_nexttrack(EVENT *event);
