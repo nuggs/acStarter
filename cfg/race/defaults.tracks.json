@@ -13,6 +13,7 @@
 	 * tracks.
 	 */
 	{
+		"skins":"/home/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/location/to/acstarter/cfg/race/entry18.json",
 		"name" : "710racing.com",
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -62,6 +63,7 @@
 		}
 	},
 	{
+		"skins":"/home/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/location/to/acstarter/cfg/race/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -111,6 +113,7 @@
 		}
 	},
 	{
+		"skins":"/home/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/location/to/acstarter/cfg/race/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -160,6 +163,7 @@
 		}
 	},
 	{
+		"skins":"/home/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/location/to/acstarter/cfg/race/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -209,6 +213,7 @@
 		}
 	},
 	{
+		"skins":"/home/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/location/to/acstarter/cfg/race/entry18.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -258,6 +263,7 @@
 		}
 	},
 	{
+		"skins":"/home/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/location/to/acstarter/cfg/race/entry22.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -307,6 +313,7 @@
 		}
 	},
 	{
+		"skins":"/home/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/location/to/acstarter/cfg/race/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -356,6 +363,7 @@
 		}
 	},
 	{
+		"skins":"/home/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/location/to/acstarter/cfg/race/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -405,6 +413,7 @@
 		}
 	},
 	{
+		"skins":"/home/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/location/to/acstarter/cfg/race/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -454,6 +463,7 @@
 		}
 	},
 	{
+		"skins":"/home/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/location/to/acstarter/cfg/race/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",

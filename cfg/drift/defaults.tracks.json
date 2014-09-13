@@ -64,7 +64,7 @@
 	},
 	{
 		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
-		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
+		"entry_list": "/home/home/to/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
 		"track" : "monza",
@@ -114,7 +114,7 @@
 	},
 	{
 		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
-		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
+		"entry_list": "/home/home/to/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
 		"track" : "silverstone",
@@ -164,7 +164,7 @@
 	},
 	{
 		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
-		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
+		"entry_list": "/home/home/to/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
 		"track" : "nurburgring",
@@ -214,7 +214,7 @@
 	},
 	{
 		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
-		"entry_list": "/home/seventen/acstarter/cfg/drift/entry18.json",
+		"entry_list": "/home/home/to/acstarter/cfg/drift/entry18.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
 		"track" : "magione",
@@ -264,7 +264,7 @@
 	},
 	{
 		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
-		"entry_list": "/home/seventen/acstarter/cfg/drift/entry22.json",
+		"entry_list": "/home/home/to/acstarter/cfg/drift/entry22.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
 		"track" : "vallelunga",
@@ -314,7 +314,7 @@
 	},
 	{
 		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
-		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
+		"entry_list": "/home/home/to/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
 		"track" : "mugello",
@@ -364,7 +364,7 @@
 	},
 	{
 		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
-		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
+		"entry_list": "/home/home/to/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
 		"track" : "silverstone-international",
@@ -414,7 +414,7 @@
 	},
 	{
 		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
-		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
+		"entry_list": "/home/home/to/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
 		"track" : "nurburgring-sprint",
@@ -464,7 +464,7 @@
 	},
 	{
 		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
-		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
+		"entry_list": "/home/home/to/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
 		"track" : "imola",
