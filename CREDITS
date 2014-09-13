@@ -2,5 +2,5 @@ acStarter - A simple server manager for Assetto Corsa.
 Copyright (c) 2014 Turncoat Tony
 ===============================================================================
 
-list/stack - Brian Graversen
-proc_find  - John Ledbetter and Yuvaraj
+Brian Graversen - random/event/list/stack
+John Ledbetter and Yuvaraj - proc_find
