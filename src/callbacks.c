@@ -58,7 +58,7 @@ bool event_track_raceover(EVENT *event) {
 	FILE *fp;
 	pid_t pid = proc_find("acServer_linux");
 	bool killed = false;
-	char buf[512];
+	char buf[4096]; /* Well, kick me in the dick if this isn't big enough */
 
 	if ((track = event->owner.track) == NULL) {
 		printf("event_track_test: No owner\n");
@@ -69,7 +69,7 @@ bool event_track_raceover(EVENT *event) {
 		return true;
 	}
 
-	while (fgets(buf, 512, fp) != NULL) {
+	while (fgets(buf, 4096, fp) != NULL) {
 		if (strstr(buf, "HasSentRaceoverPacket")) {
 			kill(pid, SIGTERM);
 			killed = true;
