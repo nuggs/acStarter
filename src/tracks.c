@@ -259,7 +259,10 @@ int read_entry_list(const char *filename) {
 		entry->drivername = (json_object_get_string(entry_object, "drivername") != NULL) ? strdup(json_object_get_string(entry_object, "drivername")) : NULL;
 		entry->team = (json_object_get_string(entry_object, "team") != NULL) ? strdup(json_object_get_string(entry_object, "team")) : NULL;
 		entry->model = (json_object_get_string(entry_object, "model") != NULL) ? strdup(json_object_get_string(entry_object, "model")) : NULL;
-		entry->skin = (json_object_get_string(entry_object, "skin") != NULL) ? strdup(json_object_get_string(entry_object, "skin")) : NULL;
+		if (strcmp(json_object_get_string(entry_object, "skin"), "random") == 0)
+			entry->skin = strdup(random_skin(entry->model));
+		else
+			entry->skin = (json_object_get_string(entry_object, "skin") != NULL) ? strdup(json_object_get_string(entry_object, "skin")) : NULL;
 		entry->guid = (json_object_get_string(entry_object, "guid") != NULL) ? strdup(json_object_get_string(entry_object, "guid")) : NULL;
 		entry->spectator_mode = json_object_get_number(entry_object, "spectator_mode");
 		attach_to_list(entry, entry_list);
