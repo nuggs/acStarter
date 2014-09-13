@@ -1,0 +1,45 @@
+[
+	{
+		"car":"bmw_m3_gt2",
+		"skins": [
+			"ADVAN",
+			"Aspen_White",
+			"Azurite_Black",
+			"BWM_Motorsport",
+			"Digigrafet",
+			"DSD",
+			"Endless",
+			"Falken",
+			"Falken Azenis",
+			"Gulf",
+			"Gulf2",
+			"KunosRacing",
+			"Nvidia",
+			"Ozoshi",
+			"Red_Bull"
+		]
+	},
+	{
+		"car":"bmw_z4_gt3",
+		"skins": [
+			"bmw_motorsport_2012",
+			"bmw_motorsport_2013_black",
+			"bmw_motorsport_2013_white",
+			"marc_vds_2013",
+			"walkenhorst_motorsport"
+		]
+	},
+	{
+		"car":"mclaren_mp412c_gt3",
+		"skins": [
+			"2012-Gulf_Racing",
+			"2012-United_Autosports",
+			"2013-ART_GrandPrix",
+			"2013-Hexis_Racing",
+			"2013-Official_McLaren",
+			"2013-Sebastien_Loeb_Racing",
+			"F1_west",
+			"NestleAfterEight"
+		]
+	}
+]

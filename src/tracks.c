@@ -13,6 +13,7 @@
 #include "core.h"
 #include "config.h"
 #include "tracks.h"
+#include "cars.h"
 #include "parson.h"
 
 LIST *track_list = NULL;
@@ -22,12 +23,6 @@ TRACK *current_track = NULL;
 /* local function delclarations */
 int parse_track(JSON_Object *track, int number);
 int write_entry_list(void);
-
-typedef enum {
-	TYPE_INT,
-	TYPE_ARRAY,
-	TYPE_STRING
-} TRACK_VAL_TYPE;
 
 TRACK *alloc_track(void) {
 	TRACK *track;
@@ -370,6 +365,10 @@ int write_track(void) {
 	fprintf(server_config, "LAP_GAIN=%d\n", current_track->dynamic_track[2]);
 	fprintf(server_config, "SESSION_TRANSFER=%d\n", current_track->dynamic_track[3]);
 	fclose(server_config);
+
+	if ((read_car_skins("/home/seventen/acstarter/cfg/skins/skins.json")) == -1) {
+		printf("failed to read car skins\n");
+	}
 
 	if ((read_entry_list(current_track->entry_list)) == -1) {
 		printf("failed to read entry_list %s\n", current_track->entry_list);

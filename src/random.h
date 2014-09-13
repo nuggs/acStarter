@@ -1,11 +1,11 @@
-/* file          : random.h
- * date          : May 5th, 2003
- * version       : 0.1
+/*
+ * acStarter - A simple server manager for Assetto Corsa.
+ * Copyright (c) 2014 Turncoat Tony
  *
- * This is the prototype declaration file for random.c
+ * See the LICENSE file for license information.
  */
 
-int  random_range      ( int a, int b );
-int  random_percent    ( void );
-int  roll_dice         ( int amount, int size );
-void init_dice         ( void );
+int random_range(int a, int b);
+int random_percent(void);
+int roll_dice(int amount, int size);
+void init_dice(void);

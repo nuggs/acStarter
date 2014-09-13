@@ -103,6 +103,7 @@ int main(int argc, char *argv[]) {
 	init_signals();
 	track_list = alloc_list();
 	entry_list = alloc_list();
+	skin_list = alloc_list();
 
 	if ((use_race == 1 && use_practice == 1) || (use_race == 1 && use_drift == 1) || (use_practice == 1 && use_drift ==1)) {
 		fprintf(stdout, "Please only select drift, practice or race\n");

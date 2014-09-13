@@ -31,6 +31,7 @@ time_t current_time;
 extern LIST *track_list;
 extern LIST *entry_list;
 extern LIST *global_events;
+extern LIST *skin_list;
 extern time_t current_time;
 
 #include "event.h"

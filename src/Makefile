@@ -6,7 +6,7 @@ PROF = #-O3 $(-ggdb)
 C_FLAGS = $(PROF) $(INCC) -Wall -g -pedantic
 L_FLAGS = $(PROF) $(INCL) -lm
 
-C_FILES := core.c config.c io.c list.c stack.c callbacks.c event.c tracks.c parson.c random.c
+C_FILES := core.c config.c io.c list.c stack.c callbacks.c event.c cars.c tracks.c parson.c random.c
 
 O_DIR = obj
 O_FILES := $(patsubst %.c,$(O_DIR)/%.o,$(C_FILES))
