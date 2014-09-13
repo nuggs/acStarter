@@ -198,4 +198,5 @@ void cleanup(void) {
 	free_track(current_track);
 	free_list(track_list);
 	free_list(entry_list);
+	free_list(skin_list);
 }
