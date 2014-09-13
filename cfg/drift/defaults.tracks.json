@@ -13,6 +13,7 @@
 	 * tracks.
 	 */
 	{
+		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/location/to/acstarter/cfg/drift/entry18.json",
 		"name" : "710racing.com",
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -43,13 +44,13 @@
 			"wait_time" : 60
 		},
 		"qualify" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -62,6 +63,7 @@
 		}
 	},
 	{
+		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -92,13 +94,13 @@
 			"wait_time" : 60
 		},
 		"qualify" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -111,6 +113,7 @@
 		}
 	},
 	{
+		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -141,13 +144,13 @@
 			"wait_time" : 60
 		},
 		"qualify" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -160,6 +163,7 @@
 		}
 	},
 	{
+		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -190,13 +194,13 @@
 			"wait_time" : 60
 		},
 		"qualify" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -209,6 +213,7 @@
 		}
 	},
 	{
+		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/seventen/acstarter/cfg/drift/entry18.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -239,13 +244,13 @@
 			"wait_time" : 60
 		},
 		"qualify" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -258,6 +263,7 @@
 		}
 	},
 	{
+		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/seventen/acstarter/cfg/drift/entry22.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -288,13 +294,13 @@
 			"wait_time" : 60
 		},
 		"qualify" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -307,6 +313,7 @@
 		}
 	},
 	{
+		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -337,13 +344,13 @@
 			"wait_time" : 60
 		},
 		"qualify" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -356,6 +363,7 @@
 		}
 	},
 	{
+		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -386,13 +394,13 @@
 			"wait_time" : 60
 		},
 		"qualify" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -405,6 +413,7 @@
 		}
 	},
 	{
+		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -435,13 +444,13 @@
 			"wait_time" : 60
 		},
 		"qualify" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
@@ -454,6 +463,7 @@
 		}
 	},
 	{
+		"skins":"/home/location/to/acstarter/cfg/skins/skins.json",
 		"entry_list": "/home/seventen/acstarter/cfg/drift/entry24.json",
 		"name" : null,
 		"cars" : "bmw_m3_gt2;bmw_z4_gt3;mclaren_mp412c_gt3",
@@ -484,13 +494,13 @@
 			"wait_time" : 60
 		},
 		"qualify" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Qualify",
 			"time" : 10,
 			"wait_time" : 60
 		},
 		"race" : {
-			"enabled": true,
+			"enabled": false,
 			"name" : "Race",
 			"laps" : 12,
 			"wait_time" : 60
