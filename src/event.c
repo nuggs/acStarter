@@ -108,17 +108,33 @@ void init_events_track(TRACK *track)
 	event->type = EVENT_TRACK_TEST;
 	add_event_track(event, track, 10 * 60 * PULSES_PER_SECOND);
 
-	if (GAME_MODE == MODE_RACE) {
-		event = alloc_event();
-		event->fun = &event_track_raceover;
-		event->type = EVENT_TRACK_RACEOVER;
-		add_event_track(event, track, 60 * PULSES_PER_SECOND);
+	switch(GAME_MODE) {
+		case MODE_RACE:
+			event = alloc_event();
+			event->fun = &event_track_raceover;
+			event->type = EVENT_TRACK_RACEOVER;
+			add_event_track(event, track, 60 * PULSES_PER_SECOND);
 
-		/* For testing track cycling *
-		event = alloc_event();
-		event->fun = &event_track_nexttrack;
-		event->type = EVENT_TRACK_NEXTTRACK;
-		add_event_track(event, track, 30 * PULSES_PER_SECOND);*/
+			/* For testing track cycling *
+			event = alloc_event();
+			event->fun = &event_track_nexttrack;
+			event->type = EVENT_TRACK_NEXTTRACK;
+			add_event_track(event, track, 30 * PULSES_PER_SECOND);*/
+		break;
+
+		case MODE_PRACTICE:
+			event = alloc_event();
+			event->fun = &event_track_endpractice;
+			event->type = EVENT_TRACK_ENDPRACTICE;
+			add_event_track(event, track, track->practice.time * 60 * PULSES_PER_SECOND);
+		break;
+
+		case MODE_DRIFT:
+		break;
+
+		default:
+			printf("init_events_track: Whoooa ho ho, we shouldn't be here\n");
+		break;
 	}
 }
 

@@ -94,6 +94,23 @@ bool event_track_raceover(EVENT *event) {
 	return false;
 }
 
+/* Just return true, no need to enqueue another event */
+bool event_track_endpractice(EVENT *event) {
+	TRACK *track;
+	pid_t pid = proc_find("acServer_linux");
+
+	if ((track = event->owner.track) == NULL) {
+		printf("event_track_test: No owner\n");
+		return true;
+	}
+
+	kill(pid, SIGTERM);
+	remove_server_config(REMOVE_CFG_BOTH);
+	remove_file("ac_log");
+	next_track();
+	return true;
+}
+
 /* Used for track cycle testing */
 bool event_track_nexttrack(EVENT *event) {
 	TRACK *track;
