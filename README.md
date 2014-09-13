@@ -17,14 +17,14 @@ acStarter is a small program written in C to manage Assetto Corsa servers.
  * Restarts the server if it crashes
  * Support for drifting, practice or race sessions
  * Allows randomized skin selection
-  * These Depending on how many you have, MAX_SKINS may need adjustment in cars.h
+  * These depending on how many you have, MAX_SKINS may need adjustment in cars.h
  * Plus more that I'm likely forgetting.
 
 ## Installation
  * `git clone git@github.com:nuggs/acStarter.git`
  * Compile the code from the src directory using `make`
  * Configure the files in the cfg directory
- * Copy acStarter to your base Assetto Corsa directory(s) or else it won't read in surfaces.ini
+ * Copy acStarter to your base Assetto Corsa server directory(s) or else it won't read in surfaces.ini
 
 ## Notice: At the moment, the program expects configuration to be in /home/$USER/acstarter
 
