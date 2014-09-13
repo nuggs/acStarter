@@ -376,6 +376,7 @@ int write_track(void) {
 	return 1;
 }
 
+/* this is a hack of a function */
 void next_track(void) {
 	ITERATOR iterator;
 	TRACK *track;

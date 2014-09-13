@@ -78,7 +78,7 @@ const char *random_skin(const char *car) {
 	attach_iterator(&iterator, skin_list);
 	while ((skin = (CAR_SKINS *) next_in_list(&iterator)) != NULL) {
 		if (strcmp(car, skin->car) == 0) {
-			for (i = 0; i < 15; i++) {
+			for (i = 0; i < MAX_SKINS; i++) {
 				if (skin->skin[i] != NULL) {
 					max_skin = i;
 				}
