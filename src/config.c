@@ -17,7 +17,7 @@
 #include "tracks.h"
 
 /* global version variable */
-const char *VERSION = "0.4.7";
+const char *VERSION = "0.5.4";
 const int REMOVE_CFG_SERVER = 0;
 const int REMOVE_CFG_ENTRY = 1;
 const int REMOVE_CFG_BOTH = 2;
