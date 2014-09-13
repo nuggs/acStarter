@@ -14,8 +14,8 @@ acStarter is a small program written in C to manage Assetto Corsa servers.
   * Allows different cars per track(any session)
   * Allows different amount of laps per track
   * Allow different max clients per track
-  * Allows randomized skin selection
-   * These Depending on how many you have, MAX_SKINS may need adjustment in cars.h
+ * Allows randomized skin selection
+  * These Depending on how many you have, MAX_SKINS may need adjustment in cars.h
  * Restarts the server if it crashes
  * Support for drifting, practice or race sessions
  * Plus more that I'm likely forgetting.
