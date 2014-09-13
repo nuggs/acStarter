@@ -130,6 +130,14 @@ void init_events_track(TRACK *track)
 		break;
 
 		case MODE_DRIFT:
+			/*
+			 * reusing the same event for this because why not?
+			 * drift is basically practice session with different cars
+			 */
+			event = alloc_event();
+			event->fun = &event_track_endpractice;
+			event->type = EVENT_TRACK_ENDPRACTICE;
+			add_event_track(event, track, track->practice.time * 60 * PULSES_PER_SECOND);
 		break;
 
 		default:
