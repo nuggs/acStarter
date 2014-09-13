@@ -107,9 +107,9 @@ bool event_track_nexttrack(EVENT *event) {
 
 	kill(pid, SIGTERM);
 	killed = true;
-	remove_server_config(REMOVE_CFG_BOTH);
 
 	if (killed) {
+		remove_server_config(REMOVE_CFG_BOTH);
 		remove_file("ac_log");
 		next_track();
 		return true;

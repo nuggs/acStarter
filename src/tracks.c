@@ -30,6 +30,7 @@ TRACK *alloc_track(void) {
 
 	track 							= malloc(sizeof(*track));
 	track->events					= alloc_list();
+	track->skins					= NULL;
 	track->entry_list				= NULL;
 	track->name						= NULL;
 	track->cars						= NULL;
@@ -83,6 +84,7 @@ void free_track(TRACK *track) {
 	detach_iterator(&iterator);
 	free_list(track->events);
 
+	free(track->skins);
 	free(track->entry_list);
 	free(track->name);
 	free(track->cars);
@@ -130,6 +132,7 @@ int parse_track(JSON_Object *track_data, int number) {
 		}
 		fprintf(stdout, "Loading track defaults\n");
 		config->defaults							= alloc_track();
+		config->defaults->skins						= NULL;
 		config->defaults->entry_list				= NULL;
 		config->defaults->name						= strdup(json_object_get_string(track_data, "name"));
 		config->defaults->cars						= strdup(json_object_get_string(track_data, "cars"));
@@ -186,6 +189,7 @@ int parse_track(JSON_Object *track_data, int number) {
 	}
 
 	track							= alloc_track();
+	track->skins					= (json_object_get_string(track_data, "skins") != NULL) ? strdup(json_object_get_string(track_data, "skins")) : NULL;
 	track->entry_list				= strdup(json_object_get_string(track_data, "entry_list"));
 	track->name						= (json_object_get_string(track_data, "name") != NULL) ? strdup(json_object_get_string(track_data, "name")) : strdup(config->defaults->name);
 	track->cars						= (json_object_get_string(track_data, "cars") != NULL) ? strdup(json_object_get_string(track_data, "cars")) : strdup(config->defaults->cars);
@@ -253,13 +257,13 @@ int read_entry_list(const char *filename) {
 
 	fprintf(stdout, "Reading entry list: %s\n", filename);
 	entry_array = json_value_get_array(entry_root);
-	for (i=0;i<json_array_get_count(entry_array);i++) {
+	for (i=0; i < json_array_get_count(entry_array); i++) {
 		entry_object = json_array_get_object(entry_array, i);
 		entry = malloc(sizeof(*entry));
 		entry->drivername = (json_object_get_string(entry_object, "drivername") != NULL) ? strdup(json_object_get_string(entry_object, "drivername")) : NULL;
 		entry->team = (json_object_get_string(entry_object, "team") != NULL) ? strdup(json_object_get_string(entry_object, "team")) : NULL;
 		entry->model = (json_object_get_string(entry_object, "model") != NULL) ? strdup(json_object_get_string(entry_object, "model")) : NULL;
-		if (strcmp(json_object_get_string(entry_object, "skin"), "random") == 0)
+		if ((json_object_get_string(entry_object, "skin") != NULL) && strcmp(json_object_get_string(entry_object, "skin"), "random") == 0)
 			entry->skin = strdup(random_skin(entry->model));
 		else
 			entry->skin = (json_object_get_string(entry_object, "skin") != NULL) ? strdup(json_object_get_string(entry_object, "skin")) : NULL;
@@ -369,8 +373,10 @@ int write_track(void) {
 	fprintf(server_config, "SESSION_TRANSFER=%d\n", current_track->dynamic_track[3]);
 	fclose(server_config);
 
-	if ((read_car_skins("/home/seventen/acstarter/cfg/skins/skins.json")) == -1) {
-		printf("failed to read car skins\n");
+	if (current_track->skins != NULL) {
+		if ((read_car_skins(current_track->skins)) == -1) {
+			printf("failed to read car skins\n");
+		}
 	}
 
 	if ((read_entry_list(current_track->entry_list)) == -1) {
@@ -412,6 +418,8 @@ void next_track(void) {
 		}
 		detach_iterator(&iterator);
 	}
+	free_list(entry_list);
+	entry_list = alloc_list();
 	write_track();
 	init_events_track(current_track);
 	printf("New track: %s\n", current_track->track);

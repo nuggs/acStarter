@@ -19,6 +19,7 @@ typedef struct mode_data {
 
 struct track_data {
 	LIST *events;
+	char *skins;
 	char *entry_list;
 	char *name;
 	char *cars;
