@@ -4,6 +4,8 @@
  *
  * See the LICENSE file for license information.
  */
+#ifndef EVENT_H
+#define EVENT_H
 
 #define MAX_EVENT_HASH        128
 
@@ -54,3 +56,5 @@ bool event_system_checkac(EVENT *event);
 bool event_track_test(EVENT *event);
 bool event_track_raceover(EVENT *event);
 bool event_track_nexttrack(EVENT *event);
+
+#endif

@@ -1,6 +1,8 @@
-/* file: list.h
+/*
+ * acStarter - A simple server manager for Assetto Corsa.
+ * Copyright (c) 2014 Turncoat Tony
  *
- * Headerfile for a basic double-linked list
+ * See the LICENSE file for license information.
  */
 
 #ifndef _LIST_H
