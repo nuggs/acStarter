@@ -162,19 +162,22 @@ int parse_track(JSON_Object *track_data, int number) {
 			config->defaults->practice.name			= strdup(json_object_dotget_string(track_data, "practice.name"));
 			config->defaults->practice.time			= json_object_dotget_number(track_data, "practice.time");
 			config->defaults->practice.wait_time	= json_object_dotget_number(track_data, "practice.wait_time");
-		}
+		} else
+			config->defaults->practice.enabled		= false;
 		if (json_object_dotget_boolean(track_data, "qualify.enabled") == true) {
 			config->defaults->qualify.enabled		= true;
 			config->defaults->qualify.name			= strdup(json_object_dotget_string(track_data, "qualify.name"));
 			config->defaults->qualify.time			= json_object_dotget_number(track_data, "qualify.time");
 			config->defaults->qualify.wait_time		= json_object_dotget_number(track_data, "qualify.wait_time");
-		}
+		} else
+			config->defaults->qualify.enabled		= false;
 		if (json_object_dotget_boolean(track_data, "race.enabled") == true) {
 			config->defaults->race.enabled			= true;
 			config->defaults->race.name				= strdup(json_object_dotget_string(track_data, "race.name"));
 			config->defaults->race.time				= json_object_dotget_number(track_data, "race.laps");
 			config->defaults->race.wait_time		= json_object_dotget_number(track_data, "race.wait_time");
-		}
+		} else
+			config->defaults->race.enabled			= false;
 		config->defaults->dynamic_track[0] 			= json_object_dotget_number(track_data, "dynamic_track.session_start");
 		config->defaults->dynamic_track[1] 			= json_object_dotget_number(track_data, "dynamic_track.randomness");
 		config->defaults->dynamic_track[2] 			= json_object_dotget_number(track_data, "dynamic_track.lap_gain");
@@ -219,19 +222,22 @@ int parse_track(JSON_Object *track_data, int number) {
 		track->practice.name		= strdup(json_object_dotget_string(track_data, "practice.name"));
 		track->practice.time		= json_object_dotget_number(track_data, "practice.time");
 		track->practice.wait_time	= json_object_dotget_number(track_data, "practice.wait_time");
-	}
+	} else
+		track->practice.enabled		= false;
 	if (json_object_dotget_boolean(track_data, "qualify.enabled") == true) {
 		track->qualify.enabled		= true;
 		track->qualify.name			= strdup(json_object_dotget_string(track_data, "qualify.name"));
 		track->qualify.time			= json_object_dotget_number(track_data, "qualify.time");
 		track->qualify.wait_time	= json_object_dotget_number(track_data, "qualify.wait_time");
-	}
+	} else
+		track->qualify.enabled		= false;
 	if (json_object_dotget_boolean(track_data, "race.enabled") == true) {
 		track->race.enabled			= true;
 		track->race.name			= strdup(json_object_dotget_string(track_data, "race.name"));
 		track->race.time			= json_object_dotget_number(track_data, "race.laps");
 		track->race.wait_time		= json_object_dotget_number(track_data, "race.wait_time");
-	}
+	} else
+		track->race.enabled			= false;
 	track->dynamic_track[0] 		= (json_object_dotget_number(track_data, "dynamic_track.session_start") != 0) ? json_object_dotget_number(track_data, "dynamic_track.session_start") : config->defaults->dynamic_track[0];
 	track->dynamic_track[1] 		= (json_object_dotget_number(track_data, "dynamic_track.randomness") != 0) ? json_object_dotget_number(track_data, "dynamic_track.randomness") : config->defaults->dynamic_track[1];
 	track->dynamic_track[2] 		= (json_object_dotget_number(track_data, "dynamic_track.lap_gain") != 0) ? json_object_dotget_number(track_data, "dynamic_track.lap_gain") : config->defaults->dynamic_track[2];
