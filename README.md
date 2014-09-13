@@ -25,6 +25,7 @@ acStarter is a small program written in C to manage Assetto Corsa servers.
  * Compile the code from the src directory using `make`
  * Configure the files in the cfg directory
  * Copy acStarter to your base Assetto Corsa directory(s) or else it won't read in surfaces.ini
+
 ## Notice: At the moment, the program expects configuration to be in /home/$USER/acstarter
 
 ## Running
