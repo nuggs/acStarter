@@ -17,6 +17,7 @@
 #include "core.h"
 #include "config.h"
 #include "tracks.h"
+#include "cars.h"
 
 /* local function declarations */
 void system_loop(int mode);
@@ -192,11 +193,19 @@ void system_loop(int mode) {
 }
 
 void cleanup(void) {
+	CAR_SKINS *skins;
+	ITERATOR iterator;
+
 	printf("cleaning up...\n");
 	remove_server_config(REMOVE_CFG_BOTH);
 	free_config();
 	free_track(current_track);
 	free_list(track_list);
 	free_list(entry_list);
+
+	attach_iterator(&iterator, skin_list);
+	while ((skins = (CAR_SKINS *) next_in_list(&iterator)) != NULL)
+		free_skin(skins);
+	detach_iterator(&iterator);
 	free_list(skin_list);
 }

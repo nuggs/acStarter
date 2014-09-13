@@ -26,6 +26,17 @@ CAR_SKINS *alloc_skin(void) {
 	return skin;
 }
 
+void free_skin(CAR_SKINS *skin) {
+	int i = 0;
+
+	detach_from_list(skin, skin_list);
+	free(skin->car);
+	for (i = 0; i < MAX_SKINS; i++) {
+		if (skin->skin[i] != NULL)
+			free(skin->skin[i]);
+	}
+}
+
 int read_car_skins(const char *filename) {
 	JSON_Value *skin_root;
 	JSON_Array *skin_array, *skins_array;
