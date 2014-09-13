@@ -1,45 +1,14 @@
+/*
+ * acStarter - A simple server manager for Assetto Corsa.
+ * Copyright (c) 2014 Turncoat Tony
+ *
+ * See the LICENSE file for license information.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
-
-/*pid_t proc_find(const char* name)
-{
-    DIR* dir;
-    struct dirent* ent;
-    char* endptr;
-    char buf[512];
-
-    if (!(dir = opendir("/proc"))) {
-        perror("can't open /proc");
-        return -1;
-    }
-
-    while((ent = readdir(dir)) != NULL) {
-		FILE* fp;
-        long lpid = strtol(ent->d_name, &endptr, 10);
-        if (*endptr != '\0') {
-            continue;
-        }
-
-        snprintf(buf, sizeof(buf), "/proc/%ld/cmdline", lpid);
-        fp = fopen(buf, "r");
-
-        if (fp) {
-            if (fgets(buf, sizeof(buf), fp) != NULL) {
-                char* first = strtok(buf, " ");
-                if (!strcmp(first, name)) {
-                    fclose(fp);
-                    closedir(dir);
-                    return (pid_t)lpid;
-                }
-            }
-            fclose(fp);
-        }
-    }
-    closedir(dir);
-    return -1;
-}*/
 
 pid_t proc_find(const char* name) 
 {
