@@ -16,7 +16,7 @@
 ##
 
 $stdout.sync = true
-json = open("skins.json", "a")
+json = open("skins.json", "w+")
 
 print "Generating JSON"
 
