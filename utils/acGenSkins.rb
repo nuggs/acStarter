@@ -18,8 +18,11 @@
 $stdout.sync = true
 json = open("skins.json", "a")
 
+print "Generating JSON"
+
 json.puts "["
 Dir.glob('*').each do|f|
+	print "."
 	if File.directory? f
 		json.puts(sprintf("%-4s{\n%-8s\"car\":\"%s\",\n", "", "", f))
 		json.puts(sprintf("%-8s\"skins\":[\n", ""))
@@ -34,3 +37,5 @@ Dir.glob('*').each do|f|
 	end
 end
 json.puts "]"
+
+puts "\nFinished generating JSON"
