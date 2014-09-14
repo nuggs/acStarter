@@ -5,6 +5,15 @@
 # If you know Ruby and want to touch this up, feel free to do so
 # It sometimes adds extra }, in the json and you have to go through and remove the
 # last comma in each array and for the last entry in the file.
+#
+# To use this file, place it in your assetto corsa content/car directory and run
+# ruby acGenSkins.rb from your command line(Need a Ruby aware cmd prompt)
+# It should spit some text out to your screen and generate the skins.json file
+#
+# Make sure you go through the file and remove the extra commas at the end of the
+# arrays and for the last object in the json file.  Validate the json at
+# http://jsonlint.com to make sure it cleaned it up properly
+##
 
 json = open("skins.json", "a")
 
