@@ -27,7 +27,7 @@
 #ifndef CARS_H
 #define CARS_H
 
-#define MAX_SKINS 15
+#define MAX_SKINS 27
 
 typedef struct car_skins {
 	char *car;

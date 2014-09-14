@@ -36,7 +36,7 @@ CAR_SKINS *alloc_skin(void) {
 
 	skin = malloc(sizeof(*skin));
 	skin->car = NULL;
-	for (i = 0; i < 15; i++)
+	for (i = 0; i < MAX_SKINS; i++)
 		skin->skin[i] = NULL;
 	return skin;
 }
