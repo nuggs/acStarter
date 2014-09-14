@@ -51,6 +51,9 @@ static void signal_handler(int signo) {
 				p = waitpid(-1, NULL, WNOHANG);
 			} while (p != (pid_t)0 && p != (pid_t)-1);
 		break;
+		case SIGTERM:
+			system_up = false;
+		break;
 	}
 }
 
@@ -62,6 +65,7 @@ void init_signals(void) {
 	sigact.sa_flags = SA_NOCLDSTOP | SA_RESTART | SA_SIGINFO | SA_NOCLDWAIT;
 	sigaction(SIGINT, &sigact, (struct sigaction *)NULL);
 	sigaction(SIGCHLD, &sigact, (struct sigaction *)NULL);
+	sigaction(SIGTERM, &sigact, (struct sigaction *)NULL);
 }
 
 int main(int argc, char *argv[]) {
