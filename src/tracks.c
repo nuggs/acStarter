@@ -152,51 +152,51 @@ int parse_track(JSON_Object *track_data, int number) {
 		config->defaults->name						= strdup(json_object_get_string(track_data, "name"));
 		config->defaults->cars						= strdup(json_object_get_string(track_data, "cars"));
 		config->defaults->track						= NULL;
-		config->defaults->sun_angle					= json_object_get_number(track_data, "sun_angle");
-		config->defaults->max_clients				= json_object_get_number(track_data, "max_clients");
-		config->defaults->race_over_time			= json_object_get_number(track_data, "race_over_time");
-		config->defaults->port						= json_object_get_number(track_data, "port");
-		config->defaults->http_port					= json_object_get_number(track_data, "http_port");
-		config->defaults->register_to_lobby			= json_object_get_number(track_data, "register_to_lobby");
-		config->defaults->pickup_mode_enabled		= json_object_get_number(track_data, "pickup_mode_enabled");
-		config->defaults->sleep_time				= json_object_get_number(track_data, "sleep_time");
-		config->defaults->voting_quorum				= json_object_get_number(track_data, "voting_quorum");
-		config->defaults->vote_duration				= json_object_get_number(track_data, "vote_duration");
-		config->defaults->blacklist_mode			= json_object_get_number(track_data, "blacklist_mode");
-		config->defaults->client_send_interval_hz	= json_object_get_number(track_data, "client_send_interval_hz");
-		config->defaults->use_flow_control			= json_object_get_number(track_data, "use_flow_control");
-		config->defaults->loop_mode					= json_object_get_number(track_data, "loop_mode");
+		config->defaults->sun_angle					= floor(json_object_get_number(track_data, "sun_angle"));
+		config->defaults->max_clients				= floor(json_object_get_number(track_data, "max_clients"));
+		config->defaults->race_over_time			= floor(json_object_get_number(track_data, "race_over_time"));
+		config->defaults->port						= floor(json_object_get_number(track_data, "port"));
+		config->defaults->http_port					= floor(json_object_get_number(track_data, "http_port"));
+		config->defaults->register_to_lobby			= floor(json_object_get_number(track_data, "register_to_lobby"));
+		config->defaults->pickup_mode_enabled		= floor(json_object_get_number(track_data, "pickup_mode_enabled"));
+		config->defaults->sleep_time				= floor(json_object_get_number(track_data, "sleep_time"));
+		config->defaults->voting_quorum				= floor(json_object_get_number(track_data, "voting_quorum"));
+		config->defaults->vote_duration				= floor(json_object_get_number(track_data, "vote_duration"));
+		config->defaults->blacklist_mode			= floor(json_object_get_number(track_data, "blacklist_mode"));
+		config->defaults->client_send_interval_hz	= floor(json_object_get_number(track_data, "client_send_interval_hz"));
+		config->defaults->use_flow_control			= floor(json_object_get_number(track_data, "use_flow_control"));
+		config->defaults->loop_mode					= floor(json_object_get_number(track_data, "loop_mode"));
 		if (json_object_get_string(track_data, "password") != NULL)
 			config->defaults->password				= strdup(json_object_get_string(track_data, "password"));
-		config->defaults->allowed_tyres_out			= json_object_get_number(track_data, "allowed_tyres_out");
-		config->defaults->damage_multiplier			= json_object_get_number(track_data, "damage_multiplier");
-		config->defaults->fuel_rate					= json_object_get_number(track_data, "fuel_rate");
+		config->defaults->allowed_tyres_out			= floor(json_object_get_number(track_data, "allowed_tyres_out"));
+		config->defaults->damage_multiplier			= floor(json_object_get_number(track_data, "damage_multiplier"));
+		config->defaults->fuel_rate					= floor(json_object_get_number(track_data, "fuel_rate"));
 		config->defaults->tyre_wear_rate			= floor(json_object_get_number(track_data, "tyre_wear_rate"));
 		if (json_object_dotget_boolean(track_data, "practice.enabled") == true) {
 			config->defaults->practice.enabled		= true;
 			config->defaults->practice.name			= strdup(json_object_dotget_string(track_data, "practice.name"));
-			config->defaults->practice.time			= json_object_dotget_number(track_data, "practice.time");
-			config->defaults->practice.wait_time	= json_object_dotget_number(track_data, "practice.wait_time");
+			config->defaults->practice.time			= floor(json_object_dotget_number(track_data, "practice.time"));
+			config->defaults->practice.wait_time	= floor(json_object_dotget_number(track_data, "practice.wait_time"));
 		} else
 			config->defaults->practice.enabled		= false;
 		if (json_object_dotget_boolean(track_data, "qualify.enabled") == true) {
 			config->defaults->qualify.enabled		= true;
 			config->defaults->qualify.name			= strdup(json_object_dotget_string(track_data, "qualify.name"));
-			config->defaults->qualify.time			= json_object_dotget_number(track_data, "qualify.time");
-			config->defaults->qualify.wait_time		= json_object_dotget_number(track_data, "qualify.wait_time");
+			config->defaults->qualify.time			= floor(json_object_dotget_number(track_data, "qualify.time"));
+			config->defaults->qualify.wait_time		= floor(json_object_dotget_number(track_data, "qualify.wait_time"));
 		} else
 			config->defaults->qualify.enabled		= false;
 		if (json_object_dotget_boolean(track_data, "race.enabled") == true) {
 			config->defaults->race.enabled			= true;
 			config->defaults->race.name				= strdup(json_object_dotget_string(track_data, "race.name"));
-			config->defaults->race.time				= json_object_dotget_number(track_data, "race.laps");
-			config->defaults->race.wait_time		= json_object_dotget_number(track_data, "race.wait_time");
+			config->defaults->race.time				= floor(json_object_dotget_number(track_data, "race.laps"));
+			config->defaults->race.wait_time		= floor(json_object_dotget_number(track_data, "race.wait_time"));
 		} else
 			config->defaults->race.enabled			= false;
-		config->defaults->dynamic_track[0] 			= json_object_dotget_number(track_data, "dynamic_track.session_start");
-		config->defaults->dynamic_track[1] 			= json_object_dotget_number(track_data, "dynamic_track.randomness");
-		config->defaults->dynamic_track[2] 			= json_object_dotget_number(track_data, "dynamic_track.lap_gain");
-		config->defaults->dynamic_track[3] 			= json_object_dotget_number(track_data, "dynamic_track.session_transfer");
+		config->defaults->dynamic_track[0] 			= floor(json_object_dotget_number(track_data, "dynamic_track.session_start"));
+		config->defaults->dynamic_track[1] 			= floor(json_object_dotget_number(track_data, "dynamic_track.randomness"));
+		config->defaults->dynamic_track[2] 			= floor(json_object_dotget_number(track_data, "dynamic_track.lap_gain"));
+		config->defaults->dynamic_track[3] 			= floor(json_object_dotget_number(track_data, "dynamic_track.session_transfer"));
 		return 1;
 	}
 
@@ -212,51 +212,51 @@ int parse_track(JSON_Object *track_data, int number) {
 	track->name						= (json_object_get_string(track_data, "name") != NULL) ? strdup(json_object_get_string(track_data, "name")) : strdup(config->defaults->name);
 	track->cars						= (json_object_get_string(track_data, "cars") != NULL) ? strdup(json_object_get_string(track_data, "cars")) : strdup(config->defaults->cars);
 	track->track					= strdup(json_object_get_string(track_data, "track"));
-	track->sun_angle				= (json_object_get_number(track_data, "sun_angle") != 0) ? json_object_get_number(track_data, "sun_angle") : config->defaults->sun_angle;
-	track->max_clients				= (json_object_get_number(track_data, "max_clients") != 0) ? json_object_get_number(track_data, "max_clients") : config->defaults->max_clients;
-	track->race_over_time			= (json_object_get_number(track_data, "race_over_time") != 0) ? json_object_get_number(track_data, "race_over_time") : config->defaults->race_over_time;
-	track->port						= (json_object_get_number(track_data, "port") != 0) ? json_object_get_number(track_data, "port") : config->defaults->port;
-	track->http_port				= (json_object_get_number(track_data, "http_port") != 0) ? json_object_get_number(track_data, "http_port") : config->defaults->http_port;
-	track->register_to_lobby		= (json_object_get_number(track_data, "register_to_lobby") != 0) ? json_object_get_number(track_data, "register_to_lobby") : config->defaults->register_to_lobby;
-	track->pickup_mode_enabled		= (json_object_get_number(track_data, "pickup_mode_enabled") != 0) ? json_object_get_number(track_data, "pickup_mode_enabled") : config->defaults->pickup_mode_enabled;
-	track->sleep_time				= (json_object_get_number(track_data, "sleep_time") != 0) ? json_object_get_number(track_data, "sleep_time") : config->defaults->sleep_time;
-	track->voting_quorum			= (json_object_get_number(track_data, "voting_quorum") != 0) ? json_object_get_number(track_data, "voting_quorum") : config->defaults->voting_quorum;
-	track->vote_duration			= (json_object_get_number(track_data, "vote_duration") != 0) ? json_object_get_number(track_data, "vote_duration") : config->defaults->vote_duration;
-	track->blacklist_mode			= (json_object_get_number(track_data, "blacklist_mode") != 0) ? json_object_get_number(track_data, "blacklist_mode") : config->defaults->blacklist_mode;
-	track->client_send_interval_hz	= (json_object_get_number(track_data, "client_send_interval_hz") != 0) ? json_object_get_number(track_data, "client_send_interval_hz") : config->defaults->client_send_interval_hz;
-	track->use_flow_control			= (json_object_get_number(track_data, "use_flow_control") != 0) ? json_object_get_number(track_data, "use_flow_control") : config->defaults->use_flow_control;
-	track->loop_mode				= (json_object_get_number(track_data, "loop_mode") != 0) ? json_object_get_number(track_data, "loop_mode") : config->defaults->loop_mode;
+	track->sun_angle				= (json_object_get_number(track_data, "sun_angle") != 0) ? floor(json_object_get_number(track_data, "sun_angle")) : config->defaults->sun_angle;
+	track->max_clients				= (json_object_get_number(track_data, "max_clients") != 0) ? floor(json_object_get_number(track_data, "max_clients")) : config->defaults->max_clients;
+	track->race_over_time			= (json_object_get_number(track_data, "race_over_time") != 0) ? floor(json_object_get_number(track_data, "race_over_time")) : config->defaults->race_over_time;
+	track->port						= (json_object_get_number(track_data, "port") != 0) ? floor(json_object_get_number(track_data, "port")) : config->defaults->port;
+	track->http_port				= (json_object_get_number(track_data, "http_port") != 0) ? floor(json_object_get_number(track_data, "http_port")) : config->defaults->http_port;
+	track->register_to_lobby		= (json_object_get_number(track_data, "register_to_lobby") != 0) ? floor(json_object_get_number(track_data, "register_to_lobby")) : config->defaults->register_to_lobby;
+	track->pickup_mode_enabled		= (json_object_get_number(track_data, "pickup_mode_enabled") != 0) ? floor(json_object_get_number(track_data, "pickup_mode_enabled")) : config->defaults->pickup_mode_enabled;
+	track->sleep_time				= (json_object_get_number(track_data, "sleep_time") != 0) ? floor(json_object_get_number(track_data, "sleep_time")) : config->defaults->sleep_time;
+	track->voting_quorum			= (json_object_get_number(track_data, "voting_quorum") != 0) ? floor(json_object_get_number(track_data, "voting_quorum")) : config->defaults->voting_quorum;
+	track->vote_duration			= (json_object_get_number(track_data, "vote_duration") != 0) ? floor(json_object_get_number(track_data, "vote_duration")) : config->defaults->vote_duration;
+	track->blacklist_mode			= (json_object_get_number(track_data, "blacklist_mode") != 0) ? floor(json_object_get_number(track_data, "blacklist_mode")) : config->defaults->blacklist_mode;
+	track->client_send_interval_hz	= (json_object_get_number(track_data, "client_send_interval_hz") != 0) ? floor(json_object_get_number(track_data, "client_send_interval_hz")) : config->defaults->client_send_interval_hz;
+	track->use_flow_control			= (json_object_get_number(track_data, "use_flow_control") != 0) ? floor(json_object_get_number(track_data, "use_flow_control")) : config->defaults->use_flow_control;
+	track->loop_mode				= (json_object_get_number(track_data, "loop_mode") != 0) ? floor(json_object_get_number(track_data, "loop_mode")) : config->defaults->loop_mode;
 	if (json_object_get_string(track_data, "password") != NULL)
 		track->password				= strdup(json_object_get_string(track_data, "password"));
-	track->allowed_tyres_out		= (json_object_get_number(track_data, "allowed_tyres_out") != 0) ? json_object_get_number(track_data, "allowed_tyres_out") : config->defaults->allowed_tyres_out;
-	track->damage_multiplier		= (json_object_get_number(track_data, "damage_multiplier") != 0) ? json_object_get_number(track_data, "damage_multiplier") : config->defaults->damage_multiplier;
-	track->fuel_rate				= (json_object_get_number(track_data, "fuel_rate") != 0) ? json_object_get_number(track_data, "fuel_rate") : config->defaults->fuel_rate;
-	track->tyre_wear_rate			= (json_object_get_number(track_data, "tyre_wear_rate") != 0) ? json_object_get_number(track_data, "tyre_wear_rate") : config->defaults->tyre_wear_rate;
+	track->allowed_tyres_out		= (json_object_get_number(track_data, "allowed_tyres_out") != 0) ? floor(json_object_get_number(track_data, "allowed_tyres_out")) : config->defaults->allowed_tyres_out;
+	track->damage_multiplier		= (json_object_get_number(track_data, "damage_multiplier") != 0) ? floor(json_object_get_number(track_data, "damage_multiplier")) : config->defaults->damage_multiplier;
+	track->fuel_rate				= (json_object_get_number(track_data, "fuel_rate") != 0) ? floor(json_object_get_number(track_data, "fuel_rate")) : config->defaults->fuel_rate;
+	track->tyre_wear_rate			= (json_object_get_number(track_data, "tyre_wear_rate") != 0) ? floor(json_object_get_number(track_data, "tyre_wear_rate")) : config->defaults->tyre_wear_rate;
 	if (json_object_dotget_boolean(track_data, "practice.enabled") == true) {
 		track->practice.enabled		= true;
 		track->practice.name		= strdup(json_object_dotget_string(track_data, "practice.name"));
-		track->practice.time		= json_object_dotget_number(track_data, "practice.time");
-		track->practice.wait_time	= json_object_dotget_number(track_data, "practice.wait_time");
+		track->practice.time		= floor(json_object_dotget_number(track_data, "practice.time"));
+		track->practice.wait_time	= floor(json_object_dotget_number(track_data, "practice.wait_time"));
 	} else
 		track->practice.enabled		= false;
 	if (json_object_dotget_boolean(track_data, "qualify.enabled") == true) {
 		track->qualify.enabled		= true;
 		track->qualify.name			= strdup(json_object_dotget_string(track_data, "qualify.name"));
-		track->qualify.time			= json_object_dotget_number(track_data, "qualify.time");
-		track->qualify.wait_time	= json_object_dotget_number(track_data, "qualify.wait_time");
+		track->qualify.time			= floor(json_object_dotget_number(track_data, "qualify.time"));
+		track->qualify.wait_time	= floor(json_object_dotget_number(track_data, "qualify.wait_time"));
 	} else
 		track->qualify.enabled		= false;
 	if (json_object_dotget_boolean(track_data, "race.enabled") == true) {
 		track->race.enabled			= true;
 		track->race.name			= strdup(json_object_dotget_string(track_data, "race.name"));
-		track->race.time			= json_object_dotget_number(track_data, "race.laps");
-		track->race.wait_time		= json_object_dotget_number(track_data, "race.wait_time");
+		track->race.time			= floor(json_object_dotget_number(track_data, "race.laps"));
+		track->race.wait_time		= floor(json_object_dotget_number(track_data, "race.wait_time"));
 	} else
 		track->race.enabled			= false;
-	track->dynamic_track[0] 		= (json_object_dotget_number(track_data, "dynamic_track.session_start") != 0) ? json_object_dotget_number(track_data, "dynamic_track.session_start") : config->defaults->dynamic_track[0];
-	track->dynamic_track[1] 		= (json_object_dotget_number(track_data, "dynamic_track.randomness") != 0) ? json_object_dotget_number(track_data, "dynamic_track.randomness") : config->defaults->dynamic_track[1];
-	track->dynamic_track[2] 		= (json_object_dotget_number(track_data, "dynamic_track.lap_gain") != 0) ? json_object_dotget_number(track_data, "dynamic_track.lap_gain") : config->defaults->dynamic_track[2];
-	track->dynamic_track[3] 		= (json_object_dotget_number(track_data, "dynamic_track.session_transfer") != 0) ? json_object_dotget_number(track_data, "dynamic_track.session_transfer") : config->defaults->dynamic_track[3];
+	track->dynamic_track[0] 		= (json_object_dotget_number(track_data, "dynamic_track.session_start") != 0) ? floor(json_object_dotget_number(track_data, "dynamic_track.session_start")) : config->defaults->dynamic_track[0];
+	track->dynamic_track[1] 		= (json_object_dotget_number(track_data, "dynamic_track.randomness") != 0) ? floor(json_object_dotget_number(track_data, "dynamic_track.randomness")) : config->defaults->dynamic_track[1];
+	track->dynamic_track[2] 		= (json_object_dotget_number(track_data, "dynamic_track.lap_gain") != 0) ? floor(json_object_dotget_number(track_data, "dynamic_track.lap_gain")) : config->defaults->dynamic_track[2];
+	track->dynamic_track[3] 		= (json_object_dotget_number(track_data, "dynamic_track.session_transfer") != 0) ? floor(json_object_dotget_number(track_data, "dynamic_track.session_transfer")) : config->defaults->dynamic_track[3];
 	track->track_number				= number;
 	attach_to_list(track, track_list);
 	return 1;
@@ -289,7 +289,7 @@ int read_entry_list(const char *filename) {
 		else
 			entry->skin = (json_object_get_string(entry_object, "skin") != NULL) ? strdup(json_object_get_string(entry_object, "skin")) : NULL;
 		entry->guid = (json_object_get_string(entry_object, "guid") != NULL) ? strdup(json_object_get_string(entry_object, "guid")) : NULL;
-		entry->spectator_mode = json_object_get_number(entry_object, "spectator_mode");
+		entry->spectator_mode = floor(json_object_get_number(entry_object, "spectator_mode"));
 		attach_to_list(entry, entry_list);
 		printf("Car %s(%d)[%s] loaded.\n", entry->model, i, (entry->drivername != NULL) ? entry->drivername : "No Driver");
 	}
