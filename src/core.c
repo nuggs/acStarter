@@ -39,6 +39,7 @@ void system_loop(int mode);
 void cleanup(void);
 
 bool system_up = true;
+bool quiet_mode = false;
 
 static void signal_handler(int signo) {
 	pid_t p;
@@ -72,23 +73,25 @@ int main(int argc, char *argv[]) {
 	char config_file[140+1], *home_dir = getenv("HOME");
 	int next_option, use_drift = 0, use_race = 0, use_practice = 0;
 
-	const char * usage = "Usage: %s [-h] [-d] [-p] [-r] [-v]\n"
-			"  -h    --help               Display this usage information.\n"
-			"  -d    --drift              Read from drift configuration.\n"
-			"  -p    --practice           Read from practice configuration.\n"
-			"  -r    --race               Read from race configuration (\033[37;1mdefault\033[37;0m).\n"
-			"  -v    --version            Display version number.\n";
+	const char * usage = "Usage: %s [-h] [-d] [-p] [-r] [-q] [-v]\n"
+			"  -h    --help               Display this usage information\n"
+			"  -d    --drift              Read from drift configuration\n"
+			"  -p    --practice           Read from practice configuration\n"
+			"  -r    --race               Read from race configuration (\033[37;1mdefault\033[37;0m)\n"
+			"  -q    --quiet              Don't display logging to console\n"
+			"  -v    --version            Display version\n";
 
 	const struct option long_options[] = {
 		{ "help",       0, NULL,   'h' },
 		{ "drift",      0, NULL,   'd' },
 		{ "practice",   0, NULL,   'p' },
 		{ "race",       0, NULL,   'r' },
+		{ "quiet",      0, NULL,   'q' },
 		{ "version",    0, NULL,   'v' },
 		{ 0,            0, 0,       0  }
 	};
 
-	while((next_option = getopt_long(argc, argv, "hdprv", long_options, NULL)) != -1) {
+	while((next_option = getopt_long(argc, argv, "hdprqv", long_options, NULL)) != -1) {
 		switch(next_option) {
 			case 'h':
 				printf(usage, argv[0]);
@@ -105,6 +108,10 @@ int main(int argc, char *argv[]) {
 
 			case 'r':
 				use_race = 1;
+			break;
+
+			case 'q':
+				quiet_mode = true;
 			break;
 
 			case 'v':
@@ -186,7 +193,7 @@ void system_loop(int mode) {
 		gettimeofday(&new_time, NULL);
 
 		/* NOTE: consider clock_nanosleep() */
-		usecs = (int) (last_time.tv_usec -  new_time.tv_usec) + 1000000 / PULSES_PER_SECOND;
+		usecs = (int) (last_time.tv_usec -  new_time.tv_usec) + 1000000 / PPS;
 		secs  = (int) (last_time.tv_sec  -  new_time.tv_sec);
 
 		while (usecs < 0) {

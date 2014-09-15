@@ -8,6 +8,11 @@
 #ifndef IO_H
 #define IO_H
 
+typedef struct log_data {
+	char *name;
+	char *location;
+} log_data;
+
 /* function declarations */
 pid_t proc_find(const char* name);
 

@@ -33,6 +33,7 @@ typedef struct {
 	char *ac_exe;
 	char *ac_location;
 	char *tracklist;
+	char *logs;
 	struct track_data *defaults;
 } config_data;
 

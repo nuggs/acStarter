@@ -54,7 +54,7 @@ bool event_system_checkac(EVENT *event) {
 	event = alloc_event();
 	event->fun = &event_system_checkac;
 	event->type = EVENT_SYSTEM_CHECKAC;
-	add_event_system(event, 30 * PULSES_PER_SECOND);
+	add_event_system(event, 30 * PPS);
 	return false;
 }
 
@@ -95,7 +95,7 @@ bool event_track_raceover(EVENT *event) {
 	event = alloc_event();
 	event->fun = &event_track_raceover;
 	event->type = EVENT_TRACK_RACEOVER;
-	add_event_track(event, track, 5 * PULSES_PER_SECOND);
+	add_event_track(event, track, 5 * PPS);
 	return false;
 }
 
@@ -140,7 +140,7 @@ bool event_track_nexttrack(EVENT *event) {
 	event = alloc_event();
 	event->fun = &event_track_nexttrack;
 	event->type = EVENT_TRACK_NEXTTRACK;
-	add_event_track(event, track, 60 * PULSES_PER_SECOND);
+	add_event_track(event, track, 60 * PPS);
 	return false;
 }
 

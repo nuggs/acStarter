@@ -105,7 +105,7 @@ void init_event_queue(int section) {
 		event = alloc_event();
 		event->fun = &event_system_checkac;
 		event->type = EVENT_SYSTEM_CHECKAC;
-		add_event_system(event, 10 * PULSES_PER_SECOND);
+		add_event_system(event, 10 * PPS);
 	}
 }
 
@@ -118,20 +118,20 @@ void init_events_track(TRACK *track)
 			event = alloc_event();
 			event->fun = &event_track_raceover;
 			event->type = EVENT_TRACK_RACEOVER;
-			add_event_track(event, track, 60 * PULSES_PER_SECOND);
+			add_event_track(event, track, 60 * PPS);
 
 			/* For testing track cycling *
 			event = alloc_event();
 			event->fun = &event_track_nexttrack;
 			event->type = EVENT_TRACK_NEXTTRACK;
-			add_event_track(event, track, 30 * PULSES_PER_SECOND);*/
+			add_event_track(event, track, 30 * PPS);*/
 		break;
 
 		case MODE_PRACTICE:
 			event = alloc_event();
 			event->fun = &event_track_endpractice;
 			event->type = EVENT_TRACK_ENDPRACTICE;
-			add_event_track(event, track, track->practice.time * 60 * PULSES_PER_SECOND);
+			add_event_track(event, track, track->practice.time * 60 * PPS);
 		break;
 
 		case MODE_DRIFT:
@@ -142,7 +142,7 @@ void init_events_track(TRACK *track)
 			event = alloc_event();
 			event->fun = &event_track_endpractice;
 			event->type = EVENT_TRACK_ENDPRACTICE;
-			add_event_track(event, track, track->practice.time * 60 * PULSES_PER_SECOND);
+			add_event_track(event, track, track->practice.time * 60 * PPS);
 		break;
 
 		default:

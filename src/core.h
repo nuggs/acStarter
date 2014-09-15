@@ -28,7 +28,12 @@
 #include "stack.h"
 #include "random.h"
 
-#define PULSES_PER_SECOND 4
+#define SYSLOG 0
+#define NETLOG 1
+#define ERROR 2
+#define DEBUG 3
+
+#define PPS 4
 
 typedef struct event_data EVENT;
 typedef struct track_data TRACK;
@@ -48,7 +53,10 @@ extern LIST *entry_list;
 extern LIST *global_events;
 extern LIST *skin_list;
 extern time_t current_time;
+extern bool quiet_mode;
 
 #include "event.h"
+
+void ac_log(int type, const char *txt, ...);
 
 #endif

@@ -75,7 +75,7 @@ int read_car_skins(const char *filename) {
 		if (skins_array != NULL) {
 			for (x = 0; x < json_array_get_count(skins_array); x++) {
 				skins->skin[x] = (json_array_get_string(skins_array, x) != NULL) ? strdup(json_array_get_string(skins_array, x)) : NULL;
-				printf("Skin %s [%s] loaded.\n", skins->car, skins->skin[x]);
+				ac_log(SYSLOG, "Skin %s [%s] loaded.\n", skins->car, skins->skin[x]);
 			}
 		}
 		attach_to_list(skins, skin_list);

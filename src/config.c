@@ -32,7 +32,7 @@
 #include "tracks.h"
 
 /* global version variable */
-const char *VERSION = "0.5.4";
+const char *VERSION = "0.5.7";
 const int REMOVE_CFG_SERVER = 0;
 const int REMOVE_CFG_ENTRY = 1;
 const int REMOVE_CFG_BOTH = 2;
@@ -97,6 +97,17 @@ void remove_server_config(int file) {
 	}
 }
 
+config_data *alloc_config(void) {
+	config				= malloc(sizeof(*config));
+	config->base_dir	= NULL;
+	config->ac_exe 		= NULL;
+	config->ac_location = NULL;
+	config->tracklist 	= NULL;
+	config->logs		= NULL;
+	config->defaults	= NULL;
+	return config;
+}
+
 int read_config(const char *filename) {
 	JSON_Value *root;
 	JSON_Object *config_json;
@@ -109,12 +120,12 @@ int read_config(const char *filename) {
 		return -1;
 	}
 
-	config 				= malloc(sizeof(*config));
+	config 				= alloc_config();
 	config->base_dir	= strdup(json_object_get_string(config_json, "base_dir"));
 	config->ac_exe 		= strdup(json_object_get_string(config_json, "ac_exe"));
 	config->ac_location = strdup(json_object_get_string(config_json, "ac_location"));
 	config->tracklist 	= strdup(json_object_get_string(config_json, "tracklist"));
-	config->defaults	= NULL;
+	config->logs		= strdup(json_object_get_string(config_json, "logs"));
 
 	json_value_free(root);
 	return 0;
@@ -125,6 +136,7 @@ void free_config(void) {
 	free(config->ac_exe);
 	free(config->ac_location);
 	free(config->tracklist);
+	free(config->logs);
 	free_track(config->defaults);
 	free(config);
 }
