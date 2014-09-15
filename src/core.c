@@ -170,7 +170,7 @@ int main(int argc, char *argv[]) {
 	system_loop(GAME_MODE);
 
 	cleanup();
-	printf("Program terminated successfully\n");
+	ac_log(SYSLOG, "Program terminated successfully\n");
 	return EXIT_SUCCESS;
 }
 
@@ -222,7 +222,7 @@ void cleanup(void) {
 	CAR_SKINS *skins;
 	ITERATOR iterator;
 
-	printf("cleaning up...\n");
+	ac_log(SYSLOG, "cleaning up...\n");
 	remove_server_config(REMOVE_CFG_BOTH);
 	free_config();
 	free_track(current_track);

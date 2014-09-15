@@ -61,7 +61,7 @@ int read_car_skins(const char *filename) {
 
 	skin_root = json_parse_file_with_comments(filename);
 	if (json_value_get_type(skin_root) != JSONArray) {
-		fprintf(stdout, "JSON is not an array\n");
+		ac_log(ERROR, "JSON is not an array\n");
 		return -1;
 	}
 

@@ -119,11 +119,11 @@ int read_tracklist(const char *filename) {
 	int i;
 
 	if ((tracks_root = json_parse_file_with_comments(filename)) == NULL) {
-		printf("read_tracklist: Failed to read track file\n");
+		ac_log(ERROR, "read_tracklist: Failed to read track file\n");
 		return -1;
 	}
 	if (json_value_get_type(tracks_root) != JSONArray) {
-		fprintf(stdout, "JSON is not an array\n");
+		ac_log(ERROR, "JSON is not an array\n");
 		return -1;
 	}
 
@@ -142,10 +142,10 @@ int parse_track(JSON_Object *track_data, int number) {
 
 	if (json_object_get_string(track_data, "track") == NULL) {
 		if (config->defaults != NULL) {
-			printf("Defaults already populated, config has missing or null \"track\" key\n");
+			ac_log(ERROR, "Defaults already populated, config has missing or null \"track\" key\n");
 			return -1;
 		}
-		fprintf(stdout, "Loading track defaults\n");
+		ac_log(SYSLOG, "Loading track defaults\n");
 		config->defaults							= alloc_track();
 		config->defaults->skins						= NULL;
 		config->defaults->entry_list				= NULL;
@@ -200,9 +200,9 @@ int parse_track(JSON_Object *track_data, int number) {
 		return 1;
 	}
 
-	fprintf(stdout, "Loading track: %s (%g slots)\n", json_object_get_string(track_data, "track"), json_object_get_number(track_data, "max_clients"));
+	ac_log(SYSLOG, "Loading track: %s (%g slots)\n", json_object_get_string(track_data, "track"), json_object_get_number(track_data, "max_clients"));
 	if (json_object_get_string(track_data, "track") == NULL) {
-		printf("You must specify a track, there is no default track\nTrack not loaded, loading next track\n");
+		ac_log(ERROR, "You must specify a track, there is no default track\nTrack not loaded, loading next track\n");
 		return -1;
 	}
 
@@ -272,11 +272,11 @@ int read_entry_list(const char *filename) {
 
 	entry_root = json_parse_file_with_comments(filename);
 	if (json_value_get_type(entry_root) != JSONArray) {
-		fprintf(stdout, "JSON is not an array\n");
+		ac_log(ERROR, "JSON is not an array\n");
 		return -1;
 	}
 
-	fprintf(stdout, "Reading entry list: %s\n", filename);
+	ac_log(SYSLOG, "Reading entry list: %s\n", filename);
 	entry_array = json_value_get_array(entry_root);
 	for (i=0; i < json_array_get_count(entry_array); i++) {
 		entry_object = json_array_get_object(entry_array, i);
@@ -291,7 +291,7 @@ int read_entry_list(const char *filename) {
 		entry->guid = (json_object_get_string(entry_object, "guid") != NULL) ? strdup(json_object_get_string(entry_object, "guid")) : NULL;
 		entry->spectator_mode = floor(json_object_get_number(entry_object, "spectator_mode"));
 		attach_to_list(entry, entry_list);
-		printf("Car %s(%d)[%s] loaded.\n", entry->model, i, (entry->drivername != NULL) ? entry->drivername : "No Driver");
+		ac_log(SYSLOG, "Car %s(%d)[%s] loaded.\n", entry->model, i, (entry->drivername != NULL) ? entry->drivername : "No Driver");
 	}
 	write_entry_list();
 	json_value_free(entry_root);
@@ -306,13 +306,13 @@ int write_entry_list(void) {
 	int i = 0;
 
 	if ((check_server_config("entry_list.ini")) == -1) {
-		printf("write_entry_list(): check_server_config() failed\n");
+		ac_log(ERROR, "write_entry_list(): check_server_config() failed\n");
 		return -1;
 	}
 
 	snprintf(buf, 4096, "%scfg/entry_list.ini", config->ac_location);
 	if ((entry_config = fopen(buf, "w")) == NULL) {
-		fprintf(stdout, "Unable to write entry list for: %s\n", current_track->track);
+		ac_log(ERROR, "Unable to write entry list for: %s\n", current_track->track);
 		return -1;
 	}
 
@@ -336,13 +336,13 @@ int write_track(void) {
 	char buf[4096];
 
 	if ((check_server_config("server_cfg.ini")) == -1) {
-		printf("write_track(): check_server_config() failed\n");
+		ac_log(ERROR, "write_track(): check_server_config() failed\n");
 		return -1;
 	}
 
 	snprintf(buf, 4096, "%scfg/server_cfg.ini", config->ac_location);
 	if ((server_config = fopen(buf, "w")) == NULL) {
-		fprintf(stdout, "Unable to write server config for track: %s\n", current_track->track);
+		ac_log(ERROR, "Unable to write server config for track: %s\n", current_track->track);
 		return -1;
 	}
 
@@ -396,12 +396,12 @@ int write_track(void) {
 
 	if (current_track->skins != NULL) {
 		if ((read_car_skins(current_track->skins)) == -1) {
-			printf("failed to read car skins\n");
+			ac_log(ERROR, "failed to read car skins\n");
 		}
 	}
 
 	if ((read_entry_list(current_track->entry_list)) == -1) {
-		printf("failed to read entry_list %s\n", current_track->entry_list);
+		ac_log(ERROR, "failed to read entry_list %s\n", current_track->entry_list);
 	}
 	return 1;
 }
@@ -443,5 +443,5 @@ void next_track(void) {
 	entry_list = alloc_list();
 	write_track();
 	init_events_track(current_track);
-	printf("New track: %s\n", current_track->track);
+	ac_log(SYSLOG, "New track: %s\n", current_track->track);
 }

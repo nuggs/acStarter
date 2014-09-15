@@ -39,7 +39,7 @@ const int REMOVE_CFG_BOTH = 2;
 
 int remove_file(const char *filename) {
 	if (remove(filename) != 0) {
-		fprintf(stdout, "remove_file: Failed to remove %s\n", filename);
+		ac_log(SYSLOG, "remove_file: Failed to remove %s\n", filename);
 		return -1;
 	}
 	return 1;
@@ -57,7 +57,7 @@ int check_server_config(const char *filename) {
 	char buf[120], buf2[120];
 
 	if (filename == NULL) {
-		fprintf(stdout, "check_server_config: filename is NULL\n");
+		ac_log(ERROR, "check_server_config: filename is NULL\n");
 		return -1;
 	}
 
@@ -70,11 +70,10 @@ int check_server_config(const char *filename) {
 	fprintf(stdout, "Found %s at %s\nRenaming and backing up...\n", buf, filename);
 	snprintf(buf2, sizeof(buf2), "%s.bak", buf);
 	if ((rename(buf, buf2)) == 0) {
-		printf("Renamed: %s\nTo: %s\n", buf, buf2);
+		ac_log(SYSLOG, "Renamed: %s\nTo: %s\n", buf, buf2);
 		return 1;
 	} else
-		printf("Failed to rename %s", buf);
-
+		ac_log(SYSLOG, "Failed to rename %s", buf);
 	return -1;
 }
 
@@ -84,7 +83,7 @@ void remove_server_config(int file) {
 	if (file == REMOVE_CFG_SERVER || file == REMOVE_CFG_BOTH) {
 		snprintf(buf, 124, "%scfg/server_cfg.ini", config->ac_location);
 		if (remove_file(buf) == -1) {
-			fprintf(stdout, "Failed to remove: %s\n", buf);
+			ac_log(ERROR, "Failed to remove: %s\n", buf);
 		}
 	}
 
@@ -92,7 +91,7 @@ void remove_server_config(int file) {
 		memset(buf, 0, sizeof(buf));
 		snprintf(buf, 124, "%scfg/entry_list.ini", config->ac_location);
 		if (remove_file(buf) == -1) {
-			fprintf(stdout, "Failed to remove: %s\n", buf);
+			ac_log(ERROR, "Failed to remove: %s\n", buf);
 		}
 	}
 }

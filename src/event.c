@@ -38,7 +38,7 @@ bool enqueue_event(EVENT *event, int system_pulses) {
 	int bucket, passes;
 
 	if (event->owner_type == EVENT_UNOWNED) {
-		printf("enqueue_event: event type %d with no owner\n", event->type);
+		ac_log(ERROR, "enqueue_event: event type %d with no owner\n", event->type);
 		return false;
 	}
 
@@ -60,7 +60,7 @@ void dequeue_event(EVENT *event) {
 
 	switch(event->owner_type) {
 		default:
-			printf("dequeue_event: event type %d has no owner\n", event->type);
+			ac_log(ERROR, "dequeue_event: event type %d has no owner\n", event->type);
 		break;
 		case EVENT_OWNER_SYSTEM:
 			detach_from_list(event, global_events);
@@ -146,7 +146,7 @@ void init_events_track(TRACK *track)
 		break;
 
 		default:
-			printf("init_events_track: Whoooa ho ho, we shouldn't be here\n");
+			ac_log(ERROR, "init_events_track: Whoooa ho ho, we shouldn't be here\n");
 		break;
 	}
 }
@@ -169,29 +169,29 @@ void heartbeat(void) {
 
 void add_event_system(EVENT *event, int delay) {
 	if (event->type == EVENT_NONE) {
-		printf("add_event_system: no type\n");
+		ac_log(ERROR, "add_event_system: no type\n");
 		return;
 	}
 
 	if (event->fun == NULL) {
-		printf("add_event_system: event type %d has no callback function\n", event->type);
+		ac_log(ERROR, "add_event_system: event type %d has no callback function\n", event->type);
 		return;
 	}
 	event->owner_type = EVENT_OWNER_SYSTEM;
 	attach_to_list(event, global_events);
 
 	if (enqueue_event(event, delay) == false)
-		printf("add_event_system: event type %d failed to be enqueued\n", event->type);
+		ac_log(ERROR, "add_event_system: event type %d failed to be enqueued\n", event->type);
 }
 
 void add_event_track(EVENT *event, TRACK *track, int delay) {
 	if (event->type == EVENT_NONE) {
-		printf("add_event_track: no type\n");
+		ac_log(ERROR, "add_event_track: no type\n");
 		return;
 	}
 
 	if (event->fun == NULL) {
-		printf("add_event_track: event type %d has no callback function\n", event->type);
+		ac_log(ERROR, "add_event_track: event type %d has no callback function\n", event->type);
 		return;
 	}
 
@@ -201,7 +201,7 @@ void add_event_track(EVENT *event, TRACK *track, int delay) {
 	attach_to_list(event, track->events);
 
 	if (enqueue_event(event, delay) == false)
-		printf("add_event_track: event type %d failed to be enqueued\n", event->type);
+		ac_log(ERROR, "add_event_track: event type %d failed to be enqueued\n", event->type);
 }
 
 EVENT *event_isset_track(TRACK *track, int type)

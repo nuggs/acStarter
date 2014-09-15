@@ -66,7 +66,7 @@ bool event_track_raceover(EVENT *event) {
 	char buf[4096]; /* Well, kick me in the dick if this isn't big enough */
 
 	if ((track = event->owner.track) == NULL) {
-		printf("event_track_raceover: No owner\n");
+		ac_log(ERROR,"event_track_raceover: No owner\n");
 		return true;
 	}
 
@@ -79,7 +79,6 @@ bool event_track_raceover(EVENT *event) {
 			kill(pid, SIGTERM);
 			killed = true;
 			remove_server_config(REMOVE_CFG_BOTH);
-			printf("Found Raceover\n");
 		}
 	}
 
@@ -105,7 +104,7 @@ bool event_track_endpractice(EVENT *event) {
 	pid_t pid = proc_find(config->ac_exe);
 
 	if ((track = event->owner.track) == NULL) {
-		printf("event_track_endpractice: No owner\n");
+		ac_log(ERROR,"event_track_endpractice: No owner\n");
 		return true;
 	}
 
@@ -123,7 +122,7 @@ bool event_track_nexttrack(EVENT *event) {
 	bool killed = false;
 
 	if ((track = event->owner.track) == NULL) {
-		printf("event_track_nexttrack: No owner\n");
+		ac_log(ERROR, "event_track_nexttrack: No owner\n");
 		return true;
 	}
 

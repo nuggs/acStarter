@@ -96,7 +96,7 @@ pid_t proc_find(const char *name)  {
 
 		if (fp) {
 			if ((fscanf(fp, "%ld (%[^)]) %c", &pid, pname, &state)) != 3) {
-				printf("fscanf failed \n");
+				ac_log(ERROR, "fscanf failed \n");
 				fclose(fp);
 				closedir(dir);
 				return -1; 

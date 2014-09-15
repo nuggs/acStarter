@@ -45,3 +45,7 @@ server_cfg.ini
 acStarter
 ac_log
 tracks.json
+syslog
+netlog
+debug
+error
