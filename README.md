@@ -1,5 +1,8 @@
 acStarter
 ======
+##### THIS IS NO LONGER MAINTAINED.  A REWRITE IS BEING WORKED ON.
+##### USE AT YOUR OWN RISK.
+
 ##### A simple server manager for Assetto Corsa.
 
 #### Warning
