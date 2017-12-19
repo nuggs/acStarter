@@ -35,25 +35,6 @@
 #endif
 #include "Event.h"
 
-void foo()
-{
-    std::cout << "hello from foo\n";
-}
-
-void done()
-{
-    std::cout << "Done!\n";
-}
-
-struct bar
-{
-    void hello()
-        { std::cout << "Hello from bar::hello\n";
-		bar b;
-        auto now = std::chrono::system_clock::now();
-        Events::add(std::bind(&bar::hello, b), now + std::chrono::seconds(6));}
-};
-
 int main(int argc, char *argv[]) {
     int next_option, use_drift = 0, use_race = 0, use_practice = 0;
 
@@ -92,13 +73,6 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
-
-    auto now = std::chrono::system_clock::now();
-    bar b;
-
-    Events::add(foo, now + std::chrono::seconds(2));
-    Events::add(std::bind(&bar::hello, b), now + std::chrono::seconds(4));
-    Events::add(done, now + std::chrono::seconds(6));
 
     std::cout << "Starting stuff" << std::endl;
 
