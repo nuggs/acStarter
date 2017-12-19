@@ -1,0 +1,14 @@
+EXECUTABLE_NAME = acStarter.exe
+
+SRC_FILES = Core.cpp
+
+$(EXECUTABLE_NAME) : $(SRC_FILES)
+	cl /EHsc /Fe$(EXECUTABLE_NAME) $(SRC_FILES)
+	del *.obj
+
+acstarter: $(EXECUTABLE_NAME)
+
+clean:
+	@if exist $(EXECUTABLE_NAME) del $(EXECUTABLE_NAME)
+
+all: clean acstarter
