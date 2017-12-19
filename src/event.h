@@ -1,6 +1,6 @@
 /*
  * acStarter - A simple server manager for Assetto Corsa.
- * Copyright (c) 2014 Turncoat Tony
+ * Copyright (c) 2014-2017 Turncoat Tony
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -20,56 +20,58 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef EVENT_H
-#define EVENT_H
-
-#define MAX_EVENT_HASH        128
-
-#define EVENT_UNOWNED           0
-#define EVENT_OWNER_NONE        1
-#define EVENT_OWNER_SYSTEM      2
-#define EVENT_OWNER_TRACK       3
-
-#define EVENT_NONE              0
-
-/* system events */
-#define EVENT_SYSTEM_CHECKAC    1
-
-/* track events */
-#define EVENT_TRACK_RACEOVER    1
-#define EVENT_TRACK_ENDPRACTICE 2
-/* Used for testing track cycling should always be last */
-#define EVENT_TRACK_NEXTTRACK   3
-
-typedef bool EVENT_FUN(EVENT *event);
-
-struct event_data {
-	EVENT_FUN *fun;
-	char *argument;
-	short int passes;
-	short int type;
-	short int owner_type;
-	short int bucket;
-
-	union {
-		TRACK *track;
-	} owner;
-};
-
-EVENT *alloc_event(void);
-void dequeue_event(EVENT *event);
-void init_event_queue(int section);
-void init_events_track(TRACK *track);
-void heartbeat(void);
-void add_event_system(EVENT *event, int delay);
-EVENT *event_isset_track(TRACK *track, int type);
-void add_event_track(EVENT *event, TRACK *track, int delay);
-void strip_event_track(TRACK *track, int type);
-
-/* event callbacks */
-bool event_system_checkac(EVENT *event);
-bool event_track_raceover(EVENT *event);
-bool event_track_endpractice(EVENT *event);
-bool event_track_nexttrack(EVENT *event);
-
+#include <functional>
+#include <queue>
+#include <chrono>
+#ifdef ACS_LINUX
+#   include <sys/time.h>
+#elif defined(ACS_WIN32) // We have to include <Windows.h> before this file.
+#   include <time.h>  // for `time_t` and `struct timeval`
 #endif
+
+namespace Events {
+    struct Event {
+        typedef std::function<void()> callback_type;
+        typedef std::chrono::time_point<std::chrono::system_clock> time_type;
+
+        Event(const callback_type &callback, const time_type &when) : callback_(callback), when_(when) {
+        }
+        void operator()() const { callback_(); }
+
+        callback_type       callback_;
+        time_type           when_;
+    };
+
+    struct event_less {
+        bool operator()(const Event &first, const Event &second) {
+            return (second.when_ < first.when_);
+        }
+    };
+
+    std::priority_queue<Event, std::vector<Event>, event_less> event_queue;
+
+    void add(const Event::callback_type &callback, const time_t &when) {
+        auto real_when = std::chrono::system_clock::from_time_t(when);
+
+        event_queue.emplace(callback, real_when);
+    }
+
+    void add(const Event::callback_type &callback, const timeval &when) {
+        auto real_when = std::chrono::system_clock::from_time_t(when.tv_sec) + std::chrono::microseconds(when.tv_usec);
+
+        event_queue.emplace(callback, real_when);
+    }
+
+    void add(const Event::callback_type &callback, const std::chrono::time_point<std::chrono::system_clock> &when) {
+        event_queue.emplace(callback, when);
+    }
+
+    void timer() {
+        Event::time_type now = std::chrono::system_clock::now();
+
+        while (!event_queue.empty() && (event_queue.top().when_ < now)) {
+            event_queue.top()();
+            event_queue.pop();
+        }
+    }
+}
