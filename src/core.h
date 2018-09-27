@@ -22,41 +22,21 @@
 #ifndef CORE_H
 #define CORE_H
 
-#include <stdbool.h>
+namespace acStarter {
+    typedef enum {
+        MODE_RACE,
+        MODE_PRACTICE,
+        MODE_DRIFT
+    } GAME_MODE;
 
-#include "list.h"
-#include "stack.h"
-#include "random.h"
+    typedef enum {
+        SYSLOG,
+        NETLOG,
+        ERROR,
+        DEBUG
+    }
 
-#define SYSLOG 0
-#define NETLOG 1
-#define ERROR 2
-#define DEBUG 3
-
-#define PPS 4
-
-typedef struct event_data EVENT;
-typedef struct track_data TRACK;
-typedef struct entry_data ENTRY;
-
-typedef enum {
-	MODE_RACE,
-	MODE_PRACTICE,
-	MODE_DRIFT
-} GAME_LOOP;
-
-GAME_LOOP GAME_MODE;
-time_t current_time;
-
-extern LIST *track_list;
-extern LIST *entry_list;
-extern LIST *global_events;
-extern LIST *skin_list;
-extern time_t current_time;
-extern bool quiet_mode;
-
-#include "event.h"
-
-void ac_log(int type, const char *txt, ...);
+    void ac_log(int type, const char *txt, ...);
+}
 
 #endif

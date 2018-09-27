@@ -80,7 +80,7 @@ pid_t proc_find(const char *name)  {
 	long  pid;
 	char pname[100] = {0,};
 	char state;
-	FILE *fp=NULL; 
+	FILE *fp=NULL;
 
 	if (!(dir = opendir("/proc"))) {
 		perror("can't open /proc");
@@ -99,7 +99,7 @@ pid_t proc_find(const char *name)  {
 				ac_log(ERROR, "fscanf failed \n");
 				fclose(fp);
 				closedir(dir);
-				return -1; 
+				return -1;
 			}
 			if (!strcmp(pname, name)) {
 				fclose(fp);
