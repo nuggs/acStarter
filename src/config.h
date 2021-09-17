@@ -37,7 +37,7 @@ typedef struct {
 	struct track_data *defaults;
 } config_data;
 
-config_data *config;
+extern config_data *config;
 int remove_file(const char *filename);
 int check_server_config(const char *filename);
 void remove_server_config(int file);

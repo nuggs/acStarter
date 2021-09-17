@@ -36,6 +36,7 @@ const char *VERSION = "0.5.7";
 const int REMOVE_CFG_SERVER = 0;
 const int REMOVE_CFG_ENTRY = 1;
 const int REMOVE_CFG_BOTH = 2;
+config_data *config;
 
 int remove_file(const char *filename) {
 	if (remove(filename) != 0) {

@@ -45,8 +45,8 @@ typedef enum {
 	MODE_DRIFT
 } GAME_LOOP;
 
-GAME_LOOP GAME_MODE;
-time_t current_time;
+extern GAME_LOOP GAME_MODE;
+extern time_t current_time;
 
 extern LIST *track_list;
 extern LIST *entry_list;

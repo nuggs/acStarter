@@ -38,6 +38,8 @@
 void system_loop(int mode);
 void cleanup(void);
 
+GAME_LOOP GAME_MODE;
+time_t current_time;
 bool system_up = true;
 bool quiet_mode = false;
 
