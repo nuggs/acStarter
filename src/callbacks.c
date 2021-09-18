@@ -40,12 +40,12 @@
  * The ac_log will get created at each boot.
  */
 bool event_system_checkac(EVENT *event) {
-	char buf[256];
+	char buf[512];
 	pid_t pid = proc_find(config->ac_exe);
 
 	if (pid == -1) {
 		if (fork() == 0) {
-			snprintf(buf, 256, "%s%s -c=\"%scfg/server_cfg.ini\" -e=\"%scfg/entry_list.ini\" > ac_log", config->ac_location, config->ac_exe, config->ac_location,config->ac_location);
+			snprintf(buf, 512, "%s%s -c=\"%scfg/server_cfg.ini\" -e=\"%scfg/entry_list.ini\" > ac_log", config->ac_location, config->ac_exe, config->ac_location,config->ac_location);
 			system(buf);
 			exit(0);
 		}
