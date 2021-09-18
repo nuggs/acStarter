@@ -53,11 +53,11 @@ void free_skin(CAR_SKINS *skin) {
 }
 
 int read_car_skins(const char *filename) {
-	JSON_Value *skin_root;
-	JSON_Array *skin_array, *skins_array;
-	JSON_Object *skin_object;
-	CAR_SKINS *skins;
-	int i, x;
+	JSON_Value *skin_root = NULL;
+	JSON_Array *skin_array, *skins_array = NULL;
+	JSON_Object *skin_object = NULL;
+	CAR_SKINS *skins = NULL;
+	int i, x, skin_count = 0;
 
 	skin_root = json_parse_file_with_comments(filename);
 	if (json_value_get_type(skin_root) != JSONArray) {
@@ -67,7 +67,8 @@ int read_car_skins(const char *filename) {
 
 	fprintf(stdout, "Reading car skins: %s\n", filename);
 	skin_array = json_value_get_array(skin_root);
-	for (i=0; i < json_array_get_count(skin_array); i++) {
+        skin_count = json_array_get_count(skin_array);
+	for (i=0; i < skin_count; i++) {
 		skin_object = json_array_get_object(skin_array, i);
 		skins = alloc_skin();
 		skins->car = (json_object_get_string(skin_object, "car") != NULL) ? strdup(json_object_get_string(skin_object, "car")) : NULL;
