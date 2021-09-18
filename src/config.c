@@ -55,7 +55,7 @@ int remove_file(const char *filename) {
  */
 int check_server_config(const char *filename) {
 	FILE *server_config;
-	char buf[120], buf2[120];
+	char buf[128], buf2[128];
 
 	if (filename == NULL) {
 		ac_log(ERROR, "check_server_config: filename is NULL\n");
@@ -69,7 +69,7 @@ int check_server_config(const char *filename) {
 	fclose(server_config);
 
 	fprintf(stdout, "Found %s at %s\nRenaming and backing up...\n", buf, filename);
-	snprintf(buf2, sizeof(buf2), "%s.bak", buf);
+	snprintf(buf2, sizeof(buf2) + 4, "%s.bak", buf);
 	if ((rename(buf, buf2)) == 0) {
 		ac_log(SYSLOG, "Renamed: %s\nTo: %s\n", buf, buf2);
 		return 1;
