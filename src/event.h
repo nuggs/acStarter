@@ -41,35 +41,37 @@
 /* Used for testing track cycling should always be last */
 #define EVENT_TRACK_NEXTTRACK   3
 
-typedef bool EVENT_FUN(EVENT *event);
+/* lol */
+struct event_data;
+typedef bool EVENT_FUN(struct event_data *event);
 
 struct event_data {
-	EVENT_FUN *fun;
-	char *argument;
-	short int passes;
-	short int type;
-	short int owner_type;
-	short int bucket;
+    EVENT_FUN *fun;
+    char *argument;
+    short int passes;
+    short int type;
+    short int owner_type;
+    short int bucket;
 
-	union {
-		TRACK *track;
-	} owner;
+    union {
+        struct track_data *track;
+    } owner;
 };
 
-EVENT *alloc_event(void);
-void dequeue_event(EVENT *event);
+struct event_data *alloc_event(void);
+void dequeue_event(struct event_data *event);
 void init_event_queue(int section);
-void init_events_track(TRACK *track);
+void init_events_track(struct track_data *track);
 void heartbeat(void);
-void add_event_system(EVENT *event, int delay);
-EVENT *event_isset_track(TRACK *track, int type);
-void add_event_track(EVENT *event, TRACK *track, int delay);
-void strip_event_track(TRACK *track, int type);
+void add_event_system(struct event_data *event, int delay);
+struct event_data *event_isset_track(struct track_data *track, int type);
+void add_event_track(struct event_data *event, struct track_data *track, int delay);
+void strip_event_track(struct track_data *track, int type);
 
 /* event callbacks */
-bool event_system_checkac(EVENT *event);
-bool event_track_raceover(EVENT *event);
-bool event_track_endpractice(EVENT *event);
-bool event_track_nexttrack(EVENT *event);
+bool event_system_checkac(struct event_data *event);
+bool event_track_raceover(struct event_data *event);
+bool event_track_endpractice(struct event_data *event);
+bool event_track_nexttrack(struct event_data *event);
 
 #endif

@@ -29,13 +29,13 @@
 
 #define MAX_SKINS 27
 
-typedef struct car_skins {
-	char *car;
-	char *skin[MAX_SKINS];
-} CAR_SKINS;
+struct car_skins {
+    char *car;
+    char *skin[MAX_SKINS];
+};
 
 int read_car_skins(const char *filename);
 const char *random_skin(const char *car);
-void free_skin(CAR_SKINS *skin);
+void free_skin(struct car_skins *skin);
 
 #endif

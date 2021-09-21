@@ -35,17 +35,13 @@
 
 #define PPS 4
 
-typedef struct event_data EVENT;
-typedef struct track_data TRACK;
-typedef struct entry_data ENTRY;
-
-typedef enum {
+enum game_loop {
 	MODE_RACE,
 	MODE_PRACTICE,
 	MODE_DRIFT
-} GAME_LOOP;
+};
 
-extern GAME_LOOP GAME_MODE;
+extern enum game_loop game_mode;
 extern time_t current_time;
 
 extern LIST *track_list;

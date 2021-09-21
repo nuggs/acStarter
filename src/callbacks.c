@@ -39,7 +39,7 @@
  * if it's not, we restart it.
  * The ac_log will get created at each boot.
  */
-bool event_system_checkac(EVENT *event) {
+bool event_system_checkac(struct event_data *event) {
 	char buf[512];
 	pid_t pid = proc_find(config->ac_exe);
 
@@ -58,8 +58,8 @@ bool event_system_checkac(EVENT *event) {
 	return false;
 }
 
-bool event_track_raceover(EVENT *event) {
-	TRACK *track;
+bool event_track_raceover(struct event_data *event) {
+	struct track_data *track;
 	FILE *fp;
 	pid_t pid = proc_find(config->ac_exe);
 	bool killed = false;
@@ -99,8 +99,8 @@ bool event_track_raceover(EVENT *event) {
 }
 
 /* Just return true, no need to enqueue another event */
-bool event_track_endpractice(EVENT *event) {
-	TRACK *track;
+bool event_track_endpractice(struct event_data *event) {
+	struct track_data *track;
 	pid_t pid = proc_find(config->ac_exe);
 
 	if ((track = event->owner.track) == NULL) {
@@ -116,8 +116,8 @@ bool event_track_endpractice(EVENT *event) {
 }
 
 /* Used for track cycle testing */
-bool event_track_nexttrack(EVENT *event) {
-	TRACK *track;
+bool event_track_nexttrack(struct event_data *event) {
+	struct track_data *track;
 	pid_t pid = proc_find(config->ac_exe);
 	bool killed = false;
 

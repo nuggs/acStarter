@@ -30,11 +30,11 @@
 
 LIST *skin_list;
 
-CAR_SKINS *alloc_skin(void) {
-    CAR_SKINS *skin;
+struct car_skins *alloc_skin(void) {
+    struct car_skins *skin;
     int i = 0;
 
-    if (skin = malloc(sizeof(*skin)) == NULL) {
+    if ((skin = malloc(sizeof(struct car_skins *))) == NULL) {
         ac_log(ERROR, "alloc_skin(): Failed to allocate memory\n");
         return NULL;
     }
@@ -45,7 +45,7 @@ CAR_SKINS *alloc_skin(void) {
     return skin;
 }
 
-void free_skin(CAR_SKINS *skin) {
+void free_skin(struct car_skins *skin) {
     int i = 0;
 
     detach_from_list(skin, skin_list);
@@ -60,7 +60,7 @@ int read_car_skins(const char *filename) {
     JSON_Value *skin_root = NULL;
     JSON_Array *skin_array, *skins_array = NULL;
     JSON_Object *skin_object = NULL;
-    CAR_SKINS *skins = NULL;
+    struct car_skins *skins = NULL;
     int i, x, skin_count = 0;
 
     skin_root = json_parse_file_with_comments(filename);
@@ -90,13 +90,13 @@ int read_car_skins(const char *filename) {
 }
 
 const char *random_skin(const char *car) {
-    CAR_SKINS *skin = NULL;
+    struct car_skins *skin = NULL;
     ITERATOR iterator;
     bool found = false;
     int i = 0, max_skin = 0;
 
     attach_iterator(&iterator, skin_list);
-    while ((skin = (CAR_SKINS *) next_in_list(&iterator)) != NULL) {
+    while ((skin = (struct car_skins *) next_in_list(&iterator)) != NULL) {
         if (strcmp(car, skin->car) == 0) {
             for (i = 0; i < MAX_SKINS; i++) {
                 if (skin->skin[i] != NULL) {
@@ -114,3 +114,4 @@ const char *random_skin(const char *car) {
 
     return NULL;
 }
+
