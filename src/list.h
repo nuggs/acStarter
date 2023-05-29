@@ -24,18 +24,18 @@
 #define _LIST_H
 
 typedef struct cell {
-	struct cell *next_cell;
-	struct cell *prev_cell;
-	void *content;
-	int valid;
+    struct cell *next_cell;
+    struct cell *prev_cell;
+    void *content;
+    int valid;
 } CELL;
 
 typedef struct list {
-	CELL *first_cell;
-	CELL *last_cell;
-	int iterators;
-	int size;
-	int valid;
+    CELL *first_cell;
+    CELL *last_cell;
+    int iterators;
+    int size;
+    int valid;
 } LIST;
 
 typedef struct iterator {

@@ -39,11 +39,11 @@ const int REMOVE_CFG_BOTH = 2;
 config_data *config;
 
 int remove_file(const char *filename) {
-	if (remove(filename) != 0) {
-		ac_log(SYSLOG, "remove_file: Failed to remove %s\n", filename);
-		return -1;
-	}
-	return 1;
+    if (remove(filename) != 0) {
+        ac_log(SYSLOG, "remove_file: Failed to remove %s\n", filename);
+        return -1;
+    }
+    return 1;
 }
 
 /*
@@ -54,89 +54,89 @@ int remove_file(const char *filename) {
  * filename: server_cfg.ini or entry_list.ini
  */
 int check_server_config(const char *filename) {
-	FILE *server_config;
-	char buf[128], buf2[128];
+    FILE *server_config;
+    char buf[128], buf2[128];
 
-	if (filename == NULL) {
-		ac_log(ERROR, "check_server_config: filename is NULL\n");
-		return -1;
-	}
+    if (filename == NULL) {
+        ac_log(ERROR, "check_server_config: filename is NULL\n");
+        return -1;
+    }
 
-	snprintf(buf, sizeof(buf), "%scfg/%s", config->ac_location, filename);
-	if ((server_config = fopen(buf, "r")) == NULL)
-		return 1;
+    snprintf(buf, sizeof(buf), "%scfg/%s", config->ac_location, filename);
+    if ((server_config = fopen(buf, "r")) == NULL)
+        return 1;
 
-	fclose(server_config);
+    fclose(server_config);
 
-	fprintf(stdout, "Found %s at %s\nRenaming and backing up...\n", buf, filename);
-	snprintf(buf2, sizeof(buf2) + 4, "%s.bak", buf);
-	if ((rename(buf, buf2)) == 0) {
-		ac_log(SYSLOG, "Renamed: %s\nTo: %s\n", buf, buf2);
-		return 1;
-	} else
-		ac_log(SYSLOG, "Failed to rename %s", buf);
-	return -1;
+    fprintf(stdout, "Found %s at %s\nRenaming and backing up...\n", buf, filename);
+    snprintf(buf2, sizeof(buf2) + 4, "%s.bak", buf);
+    if ((rename(buf, buf2)) == 0) {
+        ac_log(SYSLOG, "Renamed: %s\nTo: %s\n", buf, buf2);
+        return 1;
+    } else
+        ac_log(SYSLOG, "Failed to rename %s", buf);
+    return -1;
 }
 
 void remove_server_config(int file) {
-	char buf[124];
+    char buf[124];
 
-	if (file == REMOVE_CFG_SERVER || file == REMOVE_CFG_BOTH) {
-		snprintf(buf, 124, "%scfg/server_cfg.ini", config->ac_location);
-		if (remove_file(buf) == -1) {
-			ac_log(ERROR, "Failed to remove: %s\n", buf);
-		}
-	}
+    if (file == REMOVE_CFG_SERVER || file == REMOVE_CFG_BOTH) {
+        snprintf(buf, 124, "%scfg/server_cfg.ini", config->ac_location);
+        if (remove_file(buf) == -1) {
+            ac_log(ERROR, "Failed to remove: %s\n", buf);
+        }
+    }
 
-	if (file == REMOVE_CFG_ENTRY || file == REMOVE_CFG_BOTH) {
-		memset(buf, 0, sizeof(buf));
-		snprintf(buf, 124, "%scfg/entry_list.ini", config->ac_location);
-		if (remove_file(buf) == -1) {
-			ac_log(ERROR, "Failed to remove: %s\n", buf);
-		}
-	}
+    if (file == REMOVE_CFG_ENTRY || file == REMOVE_CFG_BOTH) {
+        memset(buf, 0, sizeof(buf));
+        snprintf(buf, 124, "%scfg/entry_list.ini", config->ac_location);
+        if (remove_file(buf) == -1) {
+            ac_log(ERROR, "Failed to remove: %s\n", buf);
+        }
+    }
 }
 
 config_data *alloc_config(void) {
-	config				= malloc(sizeof(*config));
-	config->base_dir	= NULL;
-	config->ac_exe 		= NULL;
-	config->ac_location = NULL;
-	config->tracklist 	= NULL;
-	config->logs		= NULL;
-	config->defaults	= NULL;
-	return config;
+    config              = malloc(sizeof(*config));
+    config->base_dir    = NULL;
+    config->ac_exe      = NULL;
+    config->ac_location = NULL;
+    config->tracklist   = NULL;
+    config->logs        = NULL;
+    config->defaults    = NULL;
+    return config;
 }
 
 int read_config(const char *filename) {
-	JSON_Value *root;
-	JSON_Object *config_json;
+    JSON_Value *root;
+    JSON_Object *config_json;
 
-	if ((root = json_parse_file_with_comments(filename)) == NULL) {
-		return -1;
-	}
+    if ((root = json_parse_file_with_comments(filename)) == NULL) {
+        return -1;
+    }
 
-	if ((config_json = json_value_get_object(root)) == NULL) {
-		return -1;
-	}
+    if ((config_json = json_value_get_object(root)) == NULL) {
+        return -1;
+    }
 
-	config 				= alloc_config();
-	config->base_dir	= strdup(json_object_get_string(config_json, "base_dir"));
-	config->ac_exe 		= strdup(json_object_get_string(config_json, "ac_exe"));
-	config->ac_location = strdup(json_object_get_string(config_json, "ac_location"));
-	config->tracklist 	= strdup(json_object_get_string(config_json, "tracklist"));
-	config->logs		= strdup(json_object_get_string(config_json, "logs"));
+    config              = alloc_config();
+    config->base_dir    = strdup(json_object_get_string(config_json, "base_dir"));
+    config->ac_exe      = strdup(json_object_get_string(config_json, "ac_exe"));
+    config->ac_location = strdup(json_object_get_string(config_json, "ac_location"));
+    config->tracklist   = strdup(json_object_get_string(config_json, "tracklist"));
+    config->logs        = strdup(json_object_get_string(config_json, "logs"));
 
-	json_value_free(root);
-	return 0;
+    json_value_free(root);
+    return 0;
 }
 
 void free_config(void) {
-	free(config->base_dir);
-	free(config->ac_exe);
-	free(config->ac_location);
-	free(config->tracklist);
-	free(config->logs);
-	free_track(config->defaults);
-	free(config);
+    free(config->base_dir);
+    free(config->ac_exe);
+    free(config->ac_location);
+    free(config->tracklist);
+    free(config->logs);
+    free_track(config->defaults);
+    free(config);
 }

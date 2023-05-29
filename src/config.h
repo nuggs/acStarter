@@ -29,12 +29,12 @@ extern const int REMOVE_CFG_ENTRY;
 extern const int REMOVE_CFG_BOTH;
 
 typedef struct {
-	char *base_dir;
-	char *ac_exe;
-	char *ac_location;
-	char *tracklist;
-	char *logs;
-	struct track_data *defaults;
+    char *base_dir;
+    char *ac_exe;
+    char *ac_location;
+    char *tracklist;
+    char *logs;
+    struct track_data *defaults;
 } config_data;
 
 extern config_data *config;

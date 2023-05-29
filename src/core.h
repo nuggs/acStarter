@@ -36,9 +36,9 @@
 #define PPS 4
 
 enum game_loop {
-	MODE_RACE,
-	MODE_PRACTICE,
-	MODE_DRIFT
+    MODE_RACE,
+    MODE_PRACTICE,
+    MODE_DRIFT
 };
 
 extern enum game_loop game_mode;

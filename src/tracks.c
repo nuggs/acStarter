@@ -184,7 +184,7 @@ int parse_track(JSON_Object *track_data, int number) {
             config->defaults->qualify.enabled = true;
             config->defaults->qualify.name = strdup(json_object_dotget_string(track_data, "qualify.name"));
             config->defaults->qualify.time = floor(json_object_dotget_number(track_data, "qualify.time"));
-            config->defaults->qualify.wait_time	= floor(json_object_dotget_number(track_data, "qualify.wait_time"));
+            config->defaults->qualify.wait_time = floor(json_object_dotget_number(track_data, "qualify.wait_time"));
         } else
             config->defaults->qualify.enabled = false;
         if (json_object_dotget_boolean(track_data, "race.enabled") == true) {

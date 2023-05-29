@@ -9,8 +9,8 @@
 #define IO_H
 
 struct log_data {
-	char *name;
-	char *location;
+    char *name;
+    char *location;
 };
 
 /* function declarations */
