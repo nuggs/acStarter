@@ -40,106 +40,109 @@
  * The ac_log will get created at each boot.
  */
 bool event_system_checkac(struct event_data *event) {
-	char buf[512];
-	pid_t pid = proc_find(config->ac_exe);
+    pid_t pid = proc_find(config->ac_exe);
 
-	if (pid == -1) {
-		if (fork() == 0) {
-			snprintf(buf, 512, "%s%s -c=\"%scfg/server_cfg.ini\" -e=\"%scfg/entry_list.ini\" > ac_log", config->ac_location, config->ac_exe, config->ac_location,config->ac_location);
-			system(buf);
-			exit(0);
-		}
-	}
+    if (pid == -1) {
+        if (fork() == 0) {
+            char buf[512];
+            snprintf(buf, 512, "%s%s -c=\"%scfg/server_cfg.ini\" -e=\"%scfg/entry_list.ini\" > ac_log", config->ac_location, config->ac_exe, config->ac_location,config->ac_location);
+            system(buf);
+            exit(0);
+        }
+    }
 
-	event = alloc_event();
-	event->fun = &event_system_checkac;
-	event->type = EVENT_SYSTEM_CHECKAC;
-	add_event_system(event, 30 * PPS);
-	return false;
+    event = alloc_event();
+    event->fun = &event_system_checkac;
+    event->type = EVENT_SYSTEM_CHECKAC;
+    add_event_system(event, 30 * PPS);
+    return false;
 }
 
 bool event_track_raceover(struct event_data *event) {
-	struct track_data *track;
-	FILE *fp;
-	pid_t pid = proc_find(config->ac_exe);
-	bool killed = false;
-	char buf[4096]; /* Well, kick me in the dick if this isn't big enough */
+    struct track_data *track;
 
-	if ((track = event->owner.track) == NULL) {
-		ac_log(ERROR,"event_track_raceover: No owner\n");
-		return true;
-	}
+    if ((track = event->owner.track) == NULL) {
+        ac_log(ERROR,"event_track_raceover: No owner\n");
+        return true;
+    }
 
-	if ((fp = fopen("ac_log", "r")) == NULL) {
-		return true;
-	}
+    FILE *fp;
+    if ((fp = fopen("ac_log", "r")) == NULL) {
+        return true;
+    }
 
-	while (fgets(buf, 4096, fp) != NULL) {
-		if (strstr(buf, "HasSentRaceoverPacket")) {
-			kill(pid, SIGTERM);
-			killed = true;
-			remove_server_config(REMOVE_CFG_BOTH);
-		}
-	}
+    char buf[4096]; /* Well, kick me in the dick if this isn't big enough */
+    pid_t pid = proc_find(config->ac_exe);
+    bool killed = false;
+    while (fgets(buf, 4096, fp) != NULL) {
+        if (strstr(buf, "HasSentRaceoverPacket")) {
+            kill(pid, SIGTERM);
+            killed = true;
+            remove_server_config(REMOVE_CFG_BOTH);
+        }
+    }
 
-	if (fp != NULL)
-		fclose(fp);
+    if (fp != NULL)
+        fclose(fp);
 
-	if (killed) {
-		remove_file("ac_log");
-		next_track();
-		return true;
-	}
+    if (killed) {
+        remove_file("ac_log");
+        next_track();
+        return true;
+    }
 
-	event = alloc_event();
-	event->fun = &event_track_raceover;
-	event->type = EVENT_TRACK_RACEOVER;
-	add_event_track(event, track, 5 * PPS);
-	return false;
+    event = alloc_event();
+    event->fun = &event_track_raceover;
+    event->type = EVENT_TRACK_RACEOVER;
+    add_event_track(event, track, 5 * PPS);
+    return false;
 }
 
 /* Just return true, no need to enqueue another event */
 bool event_track_endpractice(struct event_data *event) {
-	struct track_data *track;
-	pid_t pid = proc_find(config->ac_exe);
+    struct track_data *track;
 
-	if ((track = event->owner.track) == NULL) {
-		ac_log(ERROR,"event_track_endpractice: No owner\n");
-		return true;
-	}
+    if ((track = event->owner.track) == NULL) {
+        ac_log(ERROR,"event_track_endpractice: No owner\n");
+        return true;
+    }
 
-	kill(pid, SIGTERM);
-	remove_server_config(REMOVE_CFG_BOTH);
-	remove_file("ac_log");
-	next_track();
-	return true;
+    /* kill the executable so we can restart the server. */
+    pid_t pid = proc_find(config->ac_exe);
+    kill(pid, SIGTERM);
+
+    remove_server_config(REMOVE_CFG_BOTH);
+    remove_file("ac_log");
+    next_track();
+    return true;
 }
 
 /* Used for track cycle testing */
 bool event_track_nexttrack(struct event_data *event) {
-	struct track_data *track;
-	pid_t pid = proc_find(config->ac_exe);
-	bool killed = false;
+    struct track_data *track;
 
-	if ((track = event->owner.track) == NULL) {
-		ac_log(ERROR, "event_track_nexttrack: No owner\n");
-		return true;
-	}
+    if ((track = event->owner.track) == NULL) {
+        ac_log(ERROR, "event_track_nexttrack: No owner\n");
+        return true;
+    }
 
-	kill(pid, SIGTERM);
-	killed = true;
+    pid_t pid = proc_find(config->ac_exe);
+    kill(pid, SIGTERM);
 
-	if (killed) {
-		remove_server_config(REMOVE_CFG_BOTH);
-		remove_file("ac_log");
-		next_track();
-		return true;
-	}
+    bool killed = false;
+    killed = true;
 
-	event = alloc_event();
-	event->fun = &event_track_nexttrack;
-	event->type = EVENT_TRACK_NEXTTRACK;
-	add_event_track(event, track, 60 * PPS);
-	return false;
+    if (killed) {
+        remove_server_config(REMOVE_CFG_BOTH);
+        remove_file("ac_log");
+        next_track();
+        return true;
+    }
+
+    event = alloc_event();
+    event->fun = &event_track_nexttrack;
+    event->type = EVENT_TRACK_NEXTTRACK;
+    add_event_track(event, track, 60 * PPS);
+    return false;
 }
 

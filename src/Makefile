@@ -2,9 +2,9 @@ CC = gcc
 RM = rm
 EXE = acStarter
 PROF = #-O3 -ggdb
-C90 = -pedantic
+C89 = #-ansi -pedantic
 
-C_FLAGS = $(PROF) $(INCC) -Wall -g
+C_FLAGS = $(PROF) $(INCC) $(C89) -Wall -g
 L_FLAGS = $(PROF) $(INCL) -lm
 
 C_FILES := core.c config.c io.c list.c stack.c callbacks.c event.c cars.c tracks.c parson.c random.c
